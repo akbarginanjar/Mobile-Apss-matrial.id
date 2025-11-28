@@ -10,7 +10,7 @@ class PilihToko extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: dark2,
-      surfaceTintColor: Colors.white,
+      surfaceTintColor: dark2,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),

@@ -1,4 +1,5 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
+import 'package:mobile_balanja_id/balanja_app/views/semua_produk_screen/screen.dart';
 import 'package:mobile_balanja_id/expreship_app/helpers/constant.dart';
 import 'package:mobile_balanja_id/expreship_app/views/home/screen.dart';
 
@@ -73,14 +74,14 @@ class MenuHomeScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Image.asset(
-                              'assets/jasa_konstruksi.jpg',
+                              'assets/toko-matrial.png',
                             ),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 2),
-                    Text('Jasa Konstruksi', style: TextStyle(fontSize: 10, color: textdark)),
+                    Text('Mitra Supplier', style: TextStyle(fontSize: 10, color: textdark)),
                   ],
                 ),
               ),
@@ -107,14 +108,14 @@ class MenuHomeScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Image.asset(
-                              'assets/toko_matrial.jpg',
+                              'assets/toko-matrial.png',
                             ),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 2),
-                    Text('Toko Matrial', style: TextStyle(fontSize: 10, color: textdark)),
+                    Text('Mitra Jasa', style: TextStyle(fontSize: 10, color: textdark)),
                   ],
                 ),
               ),
@@ -141,7 +142,43 @@ class MenuHomeScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Image.asset(
-                              'assets/produk_matrial.jpg',
+                              'assets/toko-matrial.png',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text('Mitra Toko', style: TextStyle(fontSize: 10, color: textdark)),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Column(
+                  children: [
+                    InkWell(
+                      borderRadius: BorderRadius.circular(
+                        30.0,
+                      ), // Sesuaikan dengan bentuk yang diinginkan
+                      onTap: () {
+                        Get.to(SemuaProdukScreen());
+                      },
+                      child: SizedBox(
+                        height: 65,
+                        width: 65,
+                        child: Card(
+                          surfaceTintColor: dark2,
+                          color: dark2,
+                          elevation: 10,
+                          shadowColor: Colors.black45,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              'assets/produk-matrial.png',
                             ),
                           ),
                         ),
@@ -149,6 +186,74 @@ class MenuHomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text('Produk Matrial', style: TextStyle(fontSize: 10, color: textdark)),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Column(
+                  children: [
+                    InkWell(
+                      borderRadius: BorderRadius.circular(
+                        30.0,
+                      ), // Sesuaikan dengan bentuk yang diinginkan
+                      onTap: () {},
+                      child: SizedBox(
+                        height: 65,
+                        width: 65,
+                        child: Card(
+                          surfaceTintColor: dark2,
+                          color: dark2,
+                          elevation: 10,
+                          shadowColor: Colors.black45,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              'assets/jasa-konstruksi.png',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text('Pelatihan', style: TextStyle(fontSize: 10, color: textdark)),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Column(
+                  children: [
+                    InkWell(
+                      borderRadius: BorderRadius.circular(
+                        30.0,
+                      ), // Sesuaikan dengan bentuk yang diinginkan
+                      onTap: () {},
+                      child: SizedBox(
+                        height: 65,
+                        width: 65,
+                        child: Card(
+                          surfaceTintColor: dark2,
+                          color: dark2,
+                          elevation: 10,
+                          shadowColor: Colors.black45,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              'assets/jasa-konstruksi.png',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text('Sertifikasi', style: TextStyle(fontSize: 10, color: textdark)),
                   ],
                 ),
               ),

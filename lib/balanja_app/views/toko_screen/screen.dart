@@ -9,11 +9,11 @@ class TokoScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 1,
         shadowColor: Colors.black45,
-        surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
+        surfaceTintColor: dark,
+        backgroundColor: dark,
         title: Text(
           'Pilih Gerai',
-          style: GoogleFonts.montserrat(color: Colors.black, fontSize: 16),
+          style: GoogleFonts.montserrat(color: textdark, fontSize: 16),
         ),
       ),
       body: RefreshIndicator(
