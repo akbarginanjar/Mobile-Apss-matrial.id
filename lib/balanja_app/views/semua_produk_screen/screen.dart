@@ -148,7 +148,7 @@ class _SemuaProdukScreenState extends State<SemuaProdukScreen> {
         onRefresh: onRefresh,
         backgroundColor: dark,
         child: Container(
-          color: dark2,
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView(

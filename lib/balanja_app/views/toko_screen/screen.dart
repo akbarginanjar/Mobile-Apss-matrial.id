@@ -8,6 +8,7 @@ class TokoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
+        iconTheme: IconThemeData(color: primary),
         shadowColor: Colors.black45,
         surfaceTintColor: dark,
         backgroundColor: dark,
@@ -18,7 +19,7 @@ class TokoScreen extends StatelessWidget {
       ),
       body: RefreshIndicator(
         color: primary,
-        backgroundColor: Colors.white,
+        backgroundColor: dark2,
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 1));
           GetToko.to.refreshState();

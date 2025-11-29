@@ -3,7 +3,7 @@ import 'package:mobile_balanja_id/balanja_app/services/transaksi_service.dart';
 import 'package:mobile_balanja_id/balanja_app/utils/loading.dart';
 import 'package:flutter/material.dart';
 
-import '../selesai_card.dart';
+import '../../selesai_card.dart';
 
 class SelesaiTabview extends StatelessWidget {
   const SelesaiTabview({super.key});
