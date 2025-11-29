@@ -11,7 +11,6 @@ class KetProduk extends StatelessWidget {
     final TextEditingController pesan = TextEditingController();
     // final TextEditingController qtt = TextEditingController(text: '1');
     final CheckoutController controller = Get.put(CheckoutController());
-
     return Container(
       color: dark,
       width: MediaQuery.of(context).size.width,
@@ -32,28 +31,32 @@ class KetProduk extends StatelessWidget {
             ],
           ),
           Obx(() {
-            return Column(
-              children: controller.selectedProduk.map((item) {
-                final id = item['produk']['id'];
-                final nama = item['produk']['nama'] ?? 'Produk';
-                final varian = item['produk']['varian'] ?? '-';
-                final harga = item['produk']['harga'] ?? 0;
+            if (controller.cart.isEmpty) {
+              return Center(
+                child: Text("Belum ada produk ditambahkan ${varian!.id}"),
+              );
+            }
 
-                final foto =
-                    (item['produk']['photo'] != null &&
-                        item['produk']['photo'].isNotEmpty &&
-                        item['produk']['photo'][0]['path'] != null)
-                    ? item['produk']['photo'][0]['path']
-                    : 'https://removal.ai/wp-content/uploads/2021/02/no-img.png';
+            return Column(
+              children: controller.cart.entries.map((e) {
+                String idProduk = e.key;
+                int qty = e.value;
+
+                var produk = controller.produkList.firstWhere(
+                  (p) => p['id'].toString() == idProduk,
+                  orElse: () => null,
+                );
+
+                if (produk == null) return const SizedBox();
 
                 return Card(
                   color: dark2,
                   surfaceTintColor: dark2,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 5),
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Column(
@@ -61,54 +64,65 @@ class KetProduk extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // FOTO
                             Flexible(
                               flex: 1,
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: Image.network(foto, fit: BoxFit.cover),
+                                borderRadius: BorderRadius.circular(7),
+                                child: Image.network(
+                                  (produk['photo'] == null ||
+                                          produk['photo'].isEmpty)
+                                      ? "https://removal.ai/wp-content/uploads/2021/02/no-img.png"
+                                      : produk['photo'][0]['path'],
+                                  fit: BoxFit.cover,
+                                  height: 60,
+                                ),
                               ),
                             ),
+
                             const SizedBox(width: 10),
+
+                            // NAMA + HARGA
                             Flexible(
                               flex: 4,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '$nama - $varian',
+                                    produk['nama'],
                                     softWrap: true,
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.montserrat(fontSize: 13),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                    ),
                                   ),
+
+                                  const SizedBox(height: 5),
+
                                   Text(
-                                    'Variasi : $varian',
-                                    style: Theme.of(Get.context!)
-                                        .textTheme
-                                        .bodySmall
-                                        ?.apply(color: Colors.grey[500]),
-                                  ),
-                                  const SizedBox(height: 5.0),
-                                  Text(
-                                    toCurrency(harga),
-                                    style: Theme.of(Get.context!)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.apply(
-                                          color: Theme.of(
-                                            Get.context!,
-                                          ).colorScheme.primary,
-                                        ),
+                                    '${toCurrency(produk['harga'])} ($qty)',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
                           ],
                         ),
+
+                        const SizedBox(height: 10),
+
+                        // QTY BUTTON
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(),
+                            const SizedBox(),
+
                             SizedBox(
                               height: 40,
                               child: Card(
@@ -120,38 +134,32 @@ class KetProduk extends StatelessWidget {
                                     width: 1.5,
                                   ),
                                 ),
-                                child: GetBuilder<CheckoutController>(
-                                  builder: (c) {
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        IconButton(
-                                          icon: const Icon(Icons.remove),
-                                          iconSize: 18,
-                                          onPressed: () {
-                                            c.decrement(id);
-                                          },
-                                        ),
-                                        Obx(
-                                          () => Text(
-                                            '${c.qtyPerProduk[id] ?? 1}',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: primary,
-                                            ),
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(Icons.add),
-                                          iconSize: 18,
-                                          onPressed: () {
-                                            c.increment(id);
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
+                                child: Row(
+                                  children: <Widget>[
+                                    IconButton(
+                                      icon: const Icon(Icons.remove),
+                                      iconSize: 18,
+                                      onPressed: () {
+                                        controller.decrement(idProduk);
+                                      },
+                                    ),
+
+                                    Text(
+                                      '$qty',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: primary,
+                                      ),
+                                    ),
+
+                                    IconButton(
+                                      icon: const Icon(Icons.add),
+                                      iconSize: 18,
+                                      onPressed: () {
+                                        controller.increment(idProduk);
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -165,36 +173,42 @@ class KetProduk extends StatelessWidget {
             );
           }),
           const SizedBox(height: 3.0),
-          TextButton(
-            onPressed: () {
-              Get.to(TambahProduk());
-            },
-            style: TextButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              backgroundColor: Theme.of(
-                context,
-              ).colorScheme.primary.withOpacity(0.2),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Tambah Produk',
-                  softWrap: true,
-                  style: Theme.of(context).textTheme.bodyLarge!.apply(
-                    color: Theme.of(context).colorScheme.primary,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(),
+              TextButton(
+                onPressed: () {
+                  Get.to(TambahProduk());
+                },
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primary.withOpacity(0.2),
                 ),
-                const SizedBox(width: 5.0),
-                Icon(
-                  Icons.add,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 16.0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Tambah Produk',
+                      softWrap: true,
+                      style: Theme.of(context).textTheme.bodyLarge!.apply(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 5.0),
+                    Icon(
+                      Icons.add,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 16.0,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           const SizedBox(height: 3.0),
           Row(

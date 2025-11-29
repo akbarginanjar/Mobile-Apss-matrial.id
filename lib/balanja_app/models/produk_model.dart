@@ -7,18 +7,21 @@ class Produk {
   List<Photo>? photo;
   List<HargaJual>? hargaJual;
   int? harga;
+  int? hargaCoret;
   List<VarianBarang>? varianBarang;
 
-  Produk(
-      {this.id,
-      this.gudangId,
-      this.memberId,
-      this.nama,
-      this.slug,
-      this.photo,
-      this.hargaJual,
-      this.harga,
-      this.varianBarang});
+  Produk({
+    this.id,
+    this.gudangId,
+    this.memberId,
+    this.nama,
+    this.slug,
+    this.photo,
+    this.hargaJual,
+    this.harga,
+    this.hargaCoret,
+    this.varianBarang,
+  });
 
   Produk.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -40,6 +43,7 @@ class Produk {
       });
     }
     harga = json['harga'];
+    hargaCoret = json['harga_coret'];
     if (json['varian_barang'] != null) {
       varianBarang = <VarianBarang>[];
       json['varian_barang'].forEach((v) {
@@ -62,6 +66,7 @@ class Produk {
       data['harga_jual'] = hargaJual!.map((v) => v.toJson()).toList();
     }
     data['harga'] = harga;
+    data['harga_coret'] = hargaCoret;
     if (varianBarang != null) {
       data['varian_barang'] = varianBarang!.map((v) => v.toJson()).toList();
     }
@@ -108,16 +113,17 @@ class HargaJual {
   Tipe? tipe;
   Satuan? satuan;
 
-  HargaJual(
-      {this.id,
-      this.barangId,
-      this.tipeKonsumenId,
-      this.satuanId,
-      this.shareJasa,
-      this.sharePenjual,
-      this.harga,
-      this.tipe,
-      this.satuan});
+  HargaJual({
+    this.id,
+    this.barangId,
+    this.tipeKonsumenId,
+    this.satuanId,
+    this.shareJasa,
+    this.sharePenjual,
+    this.harga,
+    this.tipe,
+    this.satuan,
+  });
 
   HargaJual.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -205,20 +211,21 @@ class VarianBarang {
   String? laci;
   int? harga;
 
-  VarianBarang(
-      {this.id,
-      this.gudangId,
-      this.barangId,
-      this.jumlah,
-      this.memberId,
-      this.konversiKet,
-      this.barang,
-      this.gudang,
-      this.blok,
-      this.palet,
-      this.rak,
-      this.laci,
-      this.harga});
+  VarianBarang({
+    this.id,
+    this.gudangId,
+    this.barangId,
+    this.jumlah,
+    this.memberId,
+    this.konversiKet,
+    this.barang,
+    this.gudang,
+    this.blok,
+    this.palet,
+    this.rak,
+    this.laci,
+    this.harga,
+  });
 
   VarianBarang.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -235,7 +242,7 @@ class VarianBarang {
     palet = json['palet'] is String ? json['palet'] : null;
     rak = json['rak'] is String ? json['rak'] : null;
     laci = json['laci'] is String ? json['laci'] : null;
-    
+
     harga = json['harga'];
   }
 
@@ -303,54 +310,55 @@ class Barang {
   Satuan? satuan;
   Kategori? kategori;
   List<HargaJual>? hargaJual;
-  List<dynamic>? jenisPenyakit; 
-  List<dynamic>? layananEkspedisi; 
+  List<dynamic>? jenisPenyakit;
+  List<dynamic>? layananEkspedisi;
   List<Konversi>? konversi;
   List<Photo>? photo;
 
-  Barang(
-      {this.id,
-      this.idSatuan,
-      this.kode,
-      this.nama,
-      this.varian,
-      this.jenis,
-      this.headId,
-      this.generik,
-      this.narkotik,
-      this.klasifikasiUsia,
-      this.milik,
-      this.kelompokId,
-      this.jenisObat,
-      this.expireDate,
-      this.kondisi,
-      this.deskripsi,
-      this.minPesanan,
-      this.berat,
-      this.panjang,
-      this.lebar,
-      this.tinggi,
-      this.asuransiPengiriman,
-      this.statusOrder,
-      this.waktuPreorder,
-      this.publish,
-      this.kandungan,
-      this.noBatch,
-      this.isConsignment,
-      this.isPreOrder,
-      this.preOrderDay,
-      this.memberId,
-      this.showToOthers,
-      this.slug,
-      this.varianItem,
-      this.share,
-      this.satuan,
-      this.kategori,
-      this.hargaJual,
-      this.jenisPenyakit,
-      this.layananEkspedisi,
-      this.konversi,
-      this.photo});
+  Barang({
+    this.id,
+    this.idSatuan,
+    this.kode,
+    this.nama,
+    this.varian,
+    this.jenis,
+    this.headId,
+    this.generik,
+    this.narkotik,
+    this.klasifikasiUsia,
+    this.milik,
+    this.kelompokId,
+    this.jenisObat,
+    this.expireDate,
+    this.kondisi,
+    this.deskripsi,
+    this.minPesanan,
+    this.berat,
+    this.panjang,
+    this.lebar,
+    this.tinggi,
+    this.asuransiPengiriman,
+    this.statusOrder,
+    this.waktuPreorder,
+    this.publish,
+    this.kandungan,
+    this.noBatch,
+    this.isConsignment,
+    this.isPreOrder,
+    this.preOrderDay,
+    this.memberId,
+    this.showToOthers,
+    this.slug,
+    this.varianItem,
+    this.share,
+    this.satuan,
+    this.kategori,
+    this.hargaJual,
+    this.jenisPenyakit,
+    this.layananEkspedisi,
+    this.konversi,
+    this.photo,
+  });
 
   Barang.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -358,31 +366,32 @@ class Barang {
     kode = json['kode'] is String ? json['kode'] : null;
     nama = json['nama'] is String ? json['nama'] : null;
     varian = json['varian'] is String ? json['varian'] : null;
-    
+
     jenis = json['jenis'];
-    
+
     headId = json['head_id'] is String ? json['head_id'] : null;
     generik = json['generik'] is String ? json['generik'] : null;
-    
+
     narkotik = json['narkotik'];
-    
-    klasifikasiUsia =
-        json['klasifikasi_usia'] is String ? json['klasifikasi_usia'] : null;
-    
+
+    klasifikasiUsia = json['klasifikasi_usia'] is String
+        ? json['klasifikasi_usia']
+        : null;
+
     milik = json['milik'];
     kelompokId = json['kelompok_id'];
     jenisObat = json['jenis_obat'];
-    
+
     expireDate = json['expire_date'] is String ? json['expire_date'] : null;
-    
+
     kondisi = json['kondisi'];
-    
+
     deskripsi = json['deskripsi'] is String ? json['deskripsi'] : null;
-    
+
     minPesanan = json['min_pesanan'];
-    
+
     berat = json['berat'] is String ? json['berat'] : null;
-    
+
     panjang = json['panjang'];
     lebar = json['lebar'];
     tinggi = json['tinggi'];
@@ -390,37 +399,39 @@ class Barang {
     statusOrder = json['status_order'];
     waktuPreorder = json['waktu_preorder'];
     publish = json['publish'];
-    
+
     kandungan = json['kandungan'] is String ? json['kandungan'] : null;
     noBatch = json['no_batch'] is String ? json['no_batch'] : null;
-    
+
     isConsignment = json['is_consignment'];
     isPreOrder = json['is_pre_order'];
     preOrderDay = json['pre_order_day'];
     memberId = json['member_id'];
-    isConsignment = json['is_consignment']; // Duplikat field, tapi biarkan sesuai aslinya
+    isConsignment =
+        json['is_consignment']; // Duplikat field, tapi biarkan sesuai aslinya
     showToOthers = json['show_to_others'];
     slug = json['slug'] is String ? json['slug'] : null;
-    
+
     if (json['varian_item'] != null) {
       varianItem = <VarianItem>[];
       json['varian_item'].forEach((v) {
         varianItem!.add(VarianItem.fromJson(v));
       });
     }
-    
+
     share = json['share'] is String ? json['share'] : null;
-    
+
     satuan = json['satuan'] != null ? Satuan.fromJson(json['satuan']) : null;
-    kategori =
-        json['kategori'] != null ? Kategori.fromJson(json['kategori']) : null;
+    kategori = json['kategori'] != null
+        ? Kategori.fromJson(json['kategori'])
+        : null;
     if (json['harga_jual'] != null) {
       hargaJual = <HargaJual>[];
       json['harga_jual'].forEach((v) {
         hargaJual!.add(HargaJual.fromJson(v));
       });
     }
-    
+
     jenisPenyakit = json['jenis_penyakit'] as List<dynamic>?;
     layananEkspedisi = json['layanan_ekspedisi'] as List<dynamic>?;
 
@@ -505,14 +516,15 @@ class VarianItem {
   String? expireDate;
   int? harga;
 
-  VarianItem(
-      {this.barangId,
-      this.satuanId,
-      this.kode,
-      this.noBatch,
-      this.varian,
-      this.expireDate,
-      this.harga});
+  VarianItem({
+    this.barangId,
+    this.satuanId,
+    this.kode,
+    this.noBatch,
+    this.varian,
+    this.expireDate,
+    this.harga,
+  });
 
   VarianItem.fromJson(Map<String, dynamic> json) {
     barangId = json['barang_id'];
@@ -521,7 +533,7 @@ class VarianItem {
     noBatch = json['no_batch'] is String ? json['no_batch'] : null;
     varian = json['varian'] is String ? json['varian'] : null;
     expireDate = json['expire_date'] is String ? json['expire_date'] : null;
-    
+
     harga = json['harga'];
   }
 
@@ -601,19 +613,20 @@ class Gudang {
   String? kendaraan;
   String? rute;
 
-  Gudang(
-      {this.id,
-      this.jenis,
-      this.namaGudang,
-      this.alamat,
-      this.keterangan,
-      this.ruteId,
-      this.memberId,
-      this.sebagai,
-      this.member,
-      this.karyawan,
-      this.kendaraan,
-      this.rute});
+  Gudang({
+    this.id,
+    this.jenis,
+    this.namaGudang,
+    this.alamat,
+    this.keterangan,
+    this.ruteId,
+    this.memberId,
+    this.sebagai,
+    this.member,
+    this.karyawan,
+    this.kendaraan,
+    this.rute,
+  });
 
   Gudang.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -624,11 +637,11 @@ class Gudang {
 
     ruteId = json['rute_id'];
     memberId = json['member_id'];
-    
+
     sebagai = json['sebagai'] is String ? json['sebagai'] : null;
-    
+
     member = json['member'] != null ? Member.fromJson(json['member']) : null;
-    
+
     karyawan = json['karyawan'] is String ? json['karyawan'] : null;
     kendaraan = json['kendaraan'] is String ? json['kendaraan'] : null;
     rute = json['rute'] is String ? json['rute'] : null;
@@ -677,60 +690,61 @@ class Member {
   String? kecamatan;
   String? kelurahan;
 
-  Member(
-      {this.id,
-      this.namaLengkap,
-      this.jk,
-      this.noHp,
-      this.email,
-      this.provinsiId,
-      this.kabKotaId,
-      this.kecamatanId,
-      this.kelurahanId,
-      this.sebagai,
-      this.status,
-      this.alamat,
-      this.sellerid,
-      this.card,
-      this.ig,
-      this.wa,
-      this.wilayah,
-      this.provinsi,
-      this.kabKota,
-      this.kecamatan,
-      this.kelurahan});
+  Member({
+    this.id,
+    this.namaLengkap,
+    this.jk,
+    this.noHp,
+    this.email,
+    this.provinsiId,
+    this.kabKotaId,
+    this.kecamatanId,
+    this.kelurahanId,
+    this.sebagai,
+    this.status,
+    this.alamat,
+    this.sellerid,
+    this.card,
+    this.ig,
+    this.wa,
+    this.wilayah,
+    this.provinsi,
+    this.kabKota,
+    this.kecamatan,
+    this.kelurahan,
+  });
 
   Member.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     namaLengkap = json['nama_lengkap'] is String ? json['nama_lengkap'] : null;
-    
+
     jk = json['jk'];
-    
+
     noHp = json['no_hp'] is String ? json['no_hp'] : null;
     email = json['email'] is String ? json['email'] : null;
-    
+
     provinsiId = json['provinsi_id'];
     kabKotaId = json['kab_kota_id'];
     kecamatanId = json['kecamatan_id'];
     kelurahanId = json['kelurahan_id'];
-    
+
     sebagai = json['sebagai'] is String ? json['sebagai'] : null;
-    
+
     status = json['status'];
-    
+
     alamat = json['alamat'] is String ? json['alamat'] : null;
     sellerid = json['sellerid'] is String ? json['sellerid'] : null;
     card = json['card'] is String ? json['card'] : null;
     ig = json['ig'] is String ? json['ig'] : null;
     wa = json['wa'] is String ? json['wa'] : null;
-    
+
     if (json['wilayah'] != null) {
       wilayah = <Wilayah>[];
       json['wilayah'].forEach((v) {
         wilayah!.add(Wilayah.fromJson(v));
       });
     }
-    
+
     provinsi = json['provinsi'] is String ? json['provinsi'] : null;
     kabKota = json['kab_kota'] is String ? json['kab_kota'] : null;
     kecamatan = json['kecamatan'] is String ? json['kecamatan'] : null;
@@ -791,19 +805,22 @@ class Cabang {
   String? namaKota;
   List<dynamic>? anggota; // Diubah dari List<Null>? menjadi List<dynamic>?
 
-  Cabang(
-      {this.namaCabang,
-      this.namaTeritori,
-      this.keterangan,
-      this.namaKota,
-      this.anggota});
+  Cabang({
+    this.namaCabang,
+    this.namaTeritori,
+    this.keterangan,
+    this.namaKota,
+    this.anggota,
+  });
 
   Cabang.fromJson(Map<String, dynamic> json) {
     namaCabang = json['nama_cabang'] is String ? json['nama_cabang'] : null;
-    namaTeritori = json['nama_teritori'] is String ? json['nama_teritori'] : null;
+    namaTeritori = json['nama_teritori'] is String
+        ? json['nama_teritori']
+        : null;
     keterangan = json['keterangan'] is String ? json['keterangan'] : null;
     namaKota = json['nama_kota'] is String ? json['nama_kota'] : null;
-    
+
     anggota = json['anggota'] as List<dynamic>?;
   }
 
@@ -825,13 +842,14 @@ class Blok {
   String? updatedAt;
   String? deletedAt;
 
-  Blok(
-      {this.id,
-      this.gudangId,
-      this.blok,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt});
+  Blok({
+    this.id,
+    this.gudangId,
+    this.blok,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+  });
 
   Blok.fromJson(Map<String, dynamic> json) {
     id = json['id'];

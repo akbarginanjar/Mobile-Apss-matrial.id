@@ -11,6 +11,7 @@ class CheckoutScreen extends StatefulWidget {
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final CheckoutController checkoutController = CheckoutController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -110,21 +110,21 @@ class CheckoutController extends GetxController {
     update();
   }
 
-  void increment(int harga) {
-    quantity.value++;
-    totalHarga.value = harga * quantity.value;
-    totalBayar.value = totalHarga.value + subtotalPengiriman + biayaLayanan;
-    totalBayarCheckout.value = totalHarga.value + biayaLayanan;
-  }
+  // void increment(int harga) {
+  //   quantity.value++;
+  //   totalHarga.value = harga * quantity.value;
+  //   totalBayar.value = totalHarga.value + subtotalPengiriman + biayaLayanan;
+  //   totalBayarCheckout.value = totalHarga.value + biayaLayanan;
+  // }
 
-  void decrement(int harga) {
-    if (quantity.value > 1) {
-      quantity.value--;
-      totalHarga.value = harga * quantity.value;
-      totalBayar.value = totalHarga.value + subtotalPengiriman + biayaLayanan;
-      totalBayarCheckout.value = totalHarga.value + biayaLayanan;
-    }
-  }
+  // void decrement(int harga) {
+  //   if (quantity.value > 1) {
+  //     quantity.value--;
+  //     totalHarga.value = harga * quantity.value;
+  //     totalBayar.value = totalHarga.value + subtotalPengiriman + biayaLayanan;
+  //     totalBayarCheckout.value = totalHarga.value + biayaLayanan;
+  //   }
+  // }
 
   @override
   void onInit() {
@@ -132,6 +132,9 @@ class CheckoutController extends GetxController {
 
     loadProduk(); // load pertama
     initScrollListener(); // lazy load
+
+    // otomatis tambahkan produk default dengan qty = 1
+    cart[defaultProductId] = 1;
   }
 
   //TAMBAH PRODUK
@@ -203,43 +206,50 @@ class CheckoutController extends GetxController {
     }
   }
 
-  // List produk terpilih
-  RxList<Map<String, dynamic>> selectedProduk = <Map<String, dynamic>>[].obs;
+  // key: idProduk, value: qty
+  RxMap<String, int> cart = <String, int>{}.obs;
 
-  // Qty untuk tiap produk (gunakan id sebagai key)
-  RxMap<int, int> qtyPerProduk = <int, int>{}.obs;
+  final String defaultProductId = "349";
 
-  void addProduct(Map<String, dynamic> produk) {
-    selectedProduk.add(produk);
-    qtyPerProduk[produk['id']] = 1;
-    update();
+  // Mendapatkan qty berdasarkan id produk
+  int getQty(String idProduk) {
+    return cart[idProduk] ?? 0;
   }
 
-  /// SET QTY
-  void incrementQty(int index) {
-    qtyPerProduk[index] = (qtyPerProduk[index] ?? 0) + 1;
-    update();
+  // Menambah qty
+  void increment(String idProduk) {
+    cart[idProduk] = (cart[idProduk] ?? 0) + 1;
+
+    update(); // untuk GetBuilder
   }
 
-  void decrementQty(int index) {
-    if ((qtyPerProduk[index] ?? 0) > 0) {
-      qtyPerProduk[index] = qtyPerProduk[index]! - 1;
-      update();
-    }
-  }
+  // Mengurangi qty
+  void decrement(String idProduk) {
+    if (!cart.containsKey(idProduk)) return;
 
-  /// SIMPAN PRODUK YANG DIPILIH
-  void simpanProdukTerpilih() {
-    selectedProduk.clear();
+    int currentQty = cart[idProduk] ?? 0;
 
-    for (var i = 0; i < produkList.length; i++) {
-      int qty = qtyPerProduk[i] ?? 0;
-      if (qty > 0) {
-        selectedProduk.add({"produk": produkList[i], "qty": qty});
+    // --- PRODUK DEFAULT: MINIMAL QTY = 1 ---
+    if (idProduk == defaultProductId) {
+      if (currentQty > 1) {
+        cart[idProduk] = currentQty - 1;
       }
+      update();
+      return;
     }
 
-    print("Produk tersimpan: $selectedProduk");
-    Get.back(); // kembali ke halaman sebelumnya
+    // --- PRODUK BIASA ---
+    if (currentQty <= 1) {
+      cart.remove(idProduk); // hapus dari state
+    } else {
+      cart[idProduk] = currentQty - 1;
+    }
+
+    update(); // untuk GetBuilder
+  }
+
+  // Ambil semua produk yang dipilih (id + qty)
+  List<Map<String, dynamic>> getSelectedProducts() {
+    return cart.entries.map((e) => {"id": e.key, "qty": e.value}).toList();
   }
 }

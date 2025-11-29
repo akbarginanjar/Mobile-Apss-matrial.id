@@ -52,6 +52,7 @@ class TambahProduk extends StatelessWidget {
 
                   var item = controller.produkList[index];
                   var foto = item['photo'];
+                  String idProduk = item['id'].toString();
 
                   return Card(
                     color: dark,
@@ -89,7 +90,7 @@ class TambahProduk extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(),
+                              const SizedBox(),
                               SizedBox(
                                 height: 40,
                                 child: Card(
@@ -103,17 +104,16 @@ class TambahProduk extends StatelessWidget {
                                   ),
                                   child: GetBuilder<CheckoutController>(
                                     builder: (c) {
-                                      int qty = c.qtyPerProduk[index] ?? 0;
+                                      int qty = c.getQty(idProduk);
 
                                       return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
                                         children: <Widget>[
                                           IconButton(
                                             icon: const Icon(Icons.remove),
                                             iconSize: 18,
-                                            onPressed: () =>
-                                                c.decrementQty(index),
+                                            onPressed: () {
+                                              c.decrement(idProduk);
+                                            },
                                           ),
                                           Text(
                                             '$qty',
@@ -125,8 +125,9 @@ class TambahProduk extends StatelessWidget {
                                           IconButton(
                                             icon: const Icon(Icons.add),
                                             iconSize: 18,
-                                            onPressed: () =>
-                                                c.incrementQty(index),
+                                            onPressed: () {
+                                              c.increment(idProduk);
+                                            },
                                           ),
                                         ],
                                       );
@@ -158,10 +159,16 @@ class TambahProduk extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                controller.simpanProdukTerpilih();
+                var selected = controller.getSelectedProducts();
+                // Kirim ke screen sebelumnya atau simpan global
+                print(selected);
+
+                // contoh: kirim kembali ke halaman sebelumnya
+                Get.back(result: selected);
               },
+
               child: const Text(
-                "Tambahkan",
+                "Simpan",
                 style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
