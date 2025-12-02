@@ -18,15 +18,17 @@ class TokoInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Flexible(
-              //     flex: 1,
-              //     child: ClipRRect(
-              //         borderRadius: BorderRadius.circular(10.0),
-              //         child: Image.network(
-              //           'https://static.sehatq.com/content/review/product/image/767120211206100834.jpeg',
-              //           fit: BoxFit.cover,
-              //           width: 60,
-              //         ))),
+              Flexible(
+                flex: 1,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Image.asset(
+                    'assets/icon-kecil-matrial.png',
+                    fit: BoxFit.cover,
+                    width: 40,
+                  ),
+                ),
+              ),
               Flexible(
                 flex: 3,
                 child: Container(
@@ -35,62 +37,60 @@ class TokoInfo extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Icon(Icons.store, color: primary2),
-                          const SizedBox(width: 5),
-                          Text(
-                            produk!.varianBarang![0].gudang!.namaGudang
-                                .toString(),
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: Theme.of(
-                              context,
-                            ).textTheme.titleMedium?.apply(color: textdark),
-                          ),
-                        ],
+                      Text(
+                        produk!.varianBarang![0].gudang!.namaGudang.toString(),
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 17,
+                        ),
                       ),
                       Text(
                         produk!.varianBarang![0].gudang!.alamat.toString(),
                         maxLines: 1,
                         softWrap: true,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.apply(color: textdark),
+                        style: Theme.of(context).textTheme.bodyMedium?.apply(),
                       ),
                     ],
                   ),
                 ),
               ),
-              // Flexible(
-              //     flex: 1,
-              //     child: Center(
-              //       child: Column(
-              //         crossAxisAlignment: CrossAxisAlignment.center,
-              //         children: [
-              //           Text('Rating',
-              //               maxLines: 1,
-              //               textAlign: TextAlign.center,
-              //               softWrap: true,
-              //               style: Theme.of(context)
-              //                   .textTheme
-              //                   .bodySmall
-              //                   ?.apply(color: Colors.black)),
-              //           Text('5.1',
-              //               maxLines: 1,
-              //               textAlign: TextAlign.center,
-              //               softWrap: true,
-              //               style: Theme.of(context)
-              //                   .textTheme
-              //                   .titleLarge
-              //                   ?.apply(color: Colors.black)),
-              //         ],
-              //       ),
-              //     ))
+              Flexible(
+                flex: 1,
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Rating',
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                        style: Theme.of(context).textTheme.bodySmall?.apply(),
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.star, color: Colors.orangeAccent),
+                          SizedBox(width: 5),
+                          Text(
+                            '4.8',
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
+                            softWrap: true,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.titleLarge?.apply(),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
-          Divider(color: Colors.grey[200], thickness: 1),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

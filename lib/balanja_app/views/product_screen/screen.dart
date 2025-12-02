@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:mobile_balanja_id/balanja_app/controllers/varian_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/views/product_screen/spesifikasi_product.dart';
+import 'package:mobile_balanja_id/balanja_app/views/product_screen/ulasan_product.dart';
 
 class ProductScreen extends StatefulWidget {
   final Produk produk;
@@ -117,14 +119,126 @@ class _ProductScreenState extends State<ProductScreen> {
                                     : '${widget.produk.nama} - ${filterId.isEmpty ? widget.produk.varianBarang![0].barang!.varian : filterId[0].barang!.varian}',
                                 style: TextStyle(fontSize: 16, color: textdark),
                               ),
-                              const SizedBox(height: 5),
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  // BADGE PRE ORDER
+                                  if (widget.produk.varianBarang![0].jumlah ==
+                                          0 &&
+                                      widget
+                                              .produk
+                                              .varianBarang![0]
+                                              .barang!
+                                              .isPreOrder ==
+                                          false)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: danger,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: const Text(
+                                        "Stok Habis",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ),
+
+                                  const SizedBox(width: 5),
+
+                                  // BADGE READY STOCK
+                                  if (widget
+                                          .produk
+                                          .varianBarang![0]
+                                          .barang!
+                                          .isPreOrder ==
+                                      true)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: CupertinoColors.activeOrange,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: const Text(
+                                        "Pre-Order",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ),
+
+                                  const SizedBox(width: 5),
+
+                                  if (widget.produk.varianBarang![0].jumlah !=
+                                          0 &&
+                                      widget
+                                              .produk
+                                              .varianBarang![0]
+                                              .barang!
+                                              .isPreOrder ==
+                                          true)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: success,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: const Text(
+                                        "Ready Stok",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ),
+
+                                  if (widget.produk.varianBarang![0].jumlah !=
+                                          0 &&
+                                      widget
+                                              .produk
+                                              .varianBarang![0]
+                                              .barang!
+                                              .isPreOrder ==
+                                          false)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: success,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: const Text(
+                                        "Ready Stok",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Flexible(
-                                    flex: 2,
+                                    flex: 3,
                                     child: Text(
                                       '332 Terjual',
                                       style: Theme.of(context)
@@ -135,14 +249,27 @@ class _ProductScreenState extends State<ProductScreen> {
                                   ),
                                   Flexible(
                                     flex: 1,
-                                    child: IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.share),
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                      alignment: Alignment.centerRight,
-                                      iconSize: 20,
+                                    child: Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(Icons.heart_broken),
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                          alignment: Alignment.centerRight,
+                                          iconSize: 20,
+                                        ),
+                                        IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(Icons.share),
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                          alignment: Alignment.centerRight,
+                                          iconSize: 20,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -158,6 +285,8 @@ class _ProductScreenState extends State<ProductScreen> {
                 const SizedBox(height: 9),
                 SpesifikasiProduct(produk: widget.produk),
                 DeskripsiProduct(produk: widget.produk),
+                const SizedBox(height: 9),
+                RatingUlasanWidget(),
                 const SizedBox(height: 100.0),
               ],
             ),

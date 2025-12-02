@@ -65,7 +65,7 @@ class CardSemuaProduk extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: danger,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(15),
                           ),
                           child: const Text(
                             "Stok Habis",
@@ -84,7 +84,7 @@ class CardSemuaProduk extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: CupertinoColors.activeOrange,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(15),
                           ),
                           child: const Text(
                             "Pre-Order",
@@ -103,7 +103,7 @@ class CardSemuaProduk extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: success,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(15),
                           ),
                           child: const Text(
                             "Ready Stok",
@@ -120,7 +120,7 @@ class CardSemuaProduk extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: success,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(15),
                           ),
                           child: const Text(
                             "Ready Stok",
@@ -156,7 +156,6 @@ class CardSemuaProduk extends StatelessWidget {
 
                   const SizedBox(height: 6),
 
-                  // HARGA CORET ATAU "-"
                   if (produk.hargaCoret != 0)
                     Text(
                       toCurrency(produk.hargaCoret!),
