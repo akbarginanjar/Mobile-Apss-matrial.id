@@ -36,18 +36,18 @@ Widget build(BuildContext context) {
                         Text("${GetStorage().read('nama_lengkap')}"),
                       ],
                     ),
-                    const Row(
+                    Row(
                       children: [
                         Icon(Icons.email_rounded),
                         SizedBox(width: 8),
-                        Text("anugrahjelang@gmail.com"),
+                        Text("${GetStorage().read('email')}"),
                       ],
                     ),
-                    const Row(
+                    Row(
                       children: [
-                        Icon(Icons.account_balance_wallet),
+                        Icon(Icons.phone_android),
                         SizedBox(width: 8),
-                        Text("Saldo RP. 20000"),
+                        Text("${GetStorage().read('no_hp')}"),
                       ],
                     ),
                   ],
@@ -57,6 +57,10 @@ Widget build(BuildContext context) {
           ),
         ),
         const SizedBox(height: 30),
+        ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: primary),
+        onPressed: () {
+        }, 
+        child: const Text('Daftar Griya Sehat', style: TextStyle(color: Colors.white),)),
         ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: primary),
           onPressed: () {

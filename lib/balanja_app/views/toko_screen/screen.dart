@@ -8,17 +8,18 @@ class TokoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
+        iconTheme: IconThemeData(color: primary),
         shadowColor: Colors.black45,
-        surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
+        surfaceTintColor: dark,
+        backgroundColor: dark,
         title: Text(
           'Pilih Gerai',
-          style: GoogleFonts.montserrat(color: Colors.black, fontSize: 16),
+          style: GoogleFonts.montserrat(color: textdark, fontSize: 16),
         ),
       ),
       body: RefreshIndicator(
         color: primary,
-        backgroundColor: Colors.white,
+        backgroundColor: dark2,
         onRefresh: () async {
           await Future.delayed(const Duration(seconds: 1));
           GetToko.to.refreshState();

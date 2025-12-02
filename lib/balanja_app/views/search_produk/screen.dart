@@ -39,58 +39,90 @@ class _SearchProdukState extends State<SearchProduk> {
       appBar: AppBar(
         elevation: 1,
         shadowColor: Colors.black45,
-        surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
-        title: Container(
-          height: 40,
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-          // width: size.width * 0.8,
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(29),
-          ),
-          child: Form(
-            key: form,
-            child: TextFormField(
-              controller: search2,
-              decoration: InputDecoration(
-                hintText: 'Cari barang dan jasa',
-                hintStyle: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15,
-                  color: Colors.grey,
-                ),
-                prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
-                suffix: SizedBox(
-                  height: 28,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primary,
-                      elevation: 0,
+        surfaceTintColor: dark,
+        backgroundColor: dark,
+        title: Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Container(
+            height: 40,
+            // width: size.width * 0.8,
+            decoration: BoxDecoration(
+              color: dark2,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Form(
+              key: form,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: search2,
+                      decoration: InputDecoration(
+                        hintText: 'Cari barang dan jasa',
+                        hintStyle: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          color: textdark,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 10
+                        ),
+                        // prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+                        // suffix: SizedBox(
+                        //   height: 28,
+                        //   child: ElevatedButton(
+                        //     style: ElevatedButton.styleFrom(
+                        //       backgroundColor: primary,
+                        //       elevation: 0,
+                        //     ),
+                        //     onPressed: () {
+                        //       changeData(search2.text);
+                        //     },
+                        //     child: const Text(
+                        //       'Cari',
+                        //       style: TextStyle(color: Colors.white),
+                        //     ),
+                        //   ),
+                        // ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: textdark,
+                          ),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15)
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: textdark,
+                          ),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15)
+                          ),
+                        ),
+                      ),
                     ),
-                    onPressed: () {
-                      changeData(search2.text);
-                    },
-                    child: const Text(
-                      'Cari',
-                      style: TextStyle(color: Colors.white),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: primary,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        bottomRight: Radius.circular(15)
+                      )
                     ),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    width: 0,
-                    color: Colors.transparent,
-                  ),
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    width: 0,
-                    color: Colors.transparent,
-                  ),
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
+                    child: IconButton(
+                      icon: Icon(Icons.search, color: dark, size: 24,), 
+                      onPressed: () {
+                        changeData(search2.text);
+                      }
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -98,9 +130,9 @@ class _SearchProdukState extends State<SearchProduk> {
       ),
       body: RefreshIndicator(
         onRefresh: onRefresh,
-        backgroundColor: Colors.white,
+        backgroundColor: dark,
         child: Container(
-          color: const Color.fromARGB(96, 245, 245, 245),
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView(

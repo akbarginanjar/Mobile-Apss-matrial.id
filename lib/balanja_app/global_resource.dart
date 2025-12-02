@@ -69,12 +69,12 @@ export 'package:hexcolor/hexcolor.dart';
 export 'package:mobile_balanja_id/balanja_app/views/splash_screen/screen.dart';
 export 'package:get/get_navigation/src/root/get_material_app.dart';
 
-export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/tab_views/batal_tabview.dart';
-export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/tab_views/belum_bayar_tabview.dart';
-export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/tab_views/diterima_tabview.dart';
-export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/tab_views/dikirim_tabview.dart';
-export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/tab_views/pengembalian_tabview.dart';
-export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/tab_views/selesai_tabview.dart';
+export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/button_views/tab_views/batal_tabview.dart';
+export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/button_views/tab_views/belum_bayar_tabview.dart';
+export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/button_views/tab_views/diterima_tabview.dart';
+export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/button_views/tab_views/dikirim_tabview.dart';
+export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/button_views/tab_views/pengembalian_tabview.dart';
+export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/button_views/tab_views/selesai_tabview.dart';
 
 export 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 export 'package:mobile_balanja_id/balanja_app/services/transaksi_service.dart';
@@ -85,7 +85,7 @@ export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/diproses_card
 export 'package:mobile_balanja_id/balanja_app/controllers/transaksi_controller.dart';
 export 'package:mobile_balanja_id/balanja_app/views/pembayaran/image_bukti_tf.dart';
 export 'package:mobile_balanja_id/balanja_app/views/pembayaran/item_produk.dart';
-export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/screen.dart';
+export 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/button_views/screen.dart';
 export 'package:image_picker/image_picker.dart';
 
 export 'package:mobile_balanja_id/balanja_app/controllers/checkout_controller.dart';

@@ -59,54 +59,86 @@ class _SemuaProdukScreenState extends State<SemuaProdukScreen> {
           surfaceTintColor: dark,
           backgroundColor: dark,
           automaticallyImplyLeading: false,
-          title: Container(
-            height: 40,
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-            // width: size.width * 0.8,
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(29),
-            ),
-            child: TextFormField(
-              controller: search,
-              decoration: InputDecoration(
-                hintText: 'Cari barang dan jasa',
-                hintStyle: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15,
-                  color: dark,
-                ),
-                prefixIcon: Icon(Icons.search, color: dark),
-                suffix: SizedBox(
-                  height: 28,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primary,
-                      elevation: 0,
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Container(
+              height: 40,
+              // width: size.width * 0.8,
+              decoration: BoxDecoration(
+                color: dark2,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: search,
+                      decoration: InputDecoration(
+                        hintText: 'Cari barang dan jasa',
+                        hintStyle: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          color: textdark,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 10
+                        ),
+                        // prefixIcon: Icon(Icons.search, color: dark),
+                        // suffix: SizedBox(
+                        //   height: 28,
+                        //   child: ElevatedButton(
+                        //     style: ElevatedButton.styleFrom(
+                        //       backgroundColor: primary,
+                        //       elevation: 0,
+                        //     ),
+                        //     onPressed: () {
+                        //       Get.to(SearchProduk(search: search.text));
+                        //     },
+                        //     child: const Text(
+                        //       'Cari',
+                        //       style: TextStyle(color: Colors.white),
+                        //     ),
+                        //   ),
+                        // ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: textdark,
+                          ),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15)
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: textdark,
+                          ),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15)
+                          ),
+                        ),
+                      ),
                     ),
-                    onPressed: () {
-                      Get.to(SearchProduk(search: search.text));
-                    },
-                    child: const Text(
-                      'Cari',
-                      style: TextStyle(color: Colors.white),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: primary,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        bottomRight: Radius.circular(15)
+                      )
                     ),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    width: 0,
-                    color: Colors.transparent,
-                  ),
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    width: 0,
-                    color: Colors.transparent,
-                  ),
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
+                    child: IconButton(
+                      icon: Icon(Icons.search, color: dark, size: 24,), 
+                      onPressed: () {
+                        Get.to(SearchProduk(search: search.text));
+                      }
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -116,7 +148,7 @@ class _SemuaProdukScreenState extends State<SemuaProdukScreen> {
         onRefresh: onRefresh,
         backgroundColor: dark,
         child: Container(
-          color: dark2,
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView(

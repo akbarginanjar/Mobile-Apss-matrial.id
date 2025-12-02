@@ -75,7 +75,7 @@ class ProductSection extends StatelessWidget {
               return SizedBox(
                 height: 160,
                 child: Container(
-                  color: dark,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                   child: Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(primary),

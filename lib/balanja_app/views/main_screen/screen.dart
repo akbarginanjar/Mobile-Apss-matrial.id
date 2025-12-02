@@ -1,11 +1,12 @@
 import 'package:mobile_balanja_id/balanja_app/config/theme.dart';
 import 'package:mobile_balanja_id/balanja_app/controllers/main_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/views/home_screen/screen.dart';
-import 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/button_views/screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/cart_screen/cart_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,7 +18,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
-    const PesananScreen(),
+    const PilihTransaksiScreen(),
     const CartScreen(),
     const HomeScreen(),
   ];

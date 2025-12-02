@@ -1,6 +1,8 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/views/notifikasi_screen/screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/profile_screen/screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/search_produk/screen.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -62,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                     height: 40,
                     decoration: BoxDecoration(
                       color: dark2,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Row(
                       children: [
@@ -80,6 +82,20 @@ class HomeScreen extends StatelessWidget {
                                 vertical: 8,
                                 horizontal: 10,
                               ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15)
+                                ),
+                                borderSide: BorderSide(color: textdark)
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15)
+                                ),
+                                borderSide: BorderSide(color: textdark)
+                              )
                             ),
                           ),
                         ),
@@ -87,8 +103,8 @@ class HomeScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: primary,
                             borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(20),
-                              bottomRight: Radius.circular(20),
+                              topRight: Radius.circular(15),
+                              bottomRight: Radius.circular(15),
                             ),
                           ),
                           child: IconButton(
