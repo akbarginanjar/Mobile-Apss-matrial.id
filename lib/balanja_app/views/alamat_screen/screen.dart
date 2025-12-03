@@ -11,8 +11,6 @@ class AlamatScreen extends StatelessWidget {
   TextEditingController labelAlamat = TextEditingController();
   TextEditingController detailAlamat = TextEditingController();
   TextEditingController catatan = TextEditingController();
-  TextEditingController lat = TextEditingController();
-  TextEditingController long = TextEditingController();
   TextEditingController kodepos = TextEditingController();
   final GlobalKey<FormState> form = GlobalKey<FormState>();
   AlamatScreen({super.key});
@@ -252,26 +250,41 @@ class AlamatScreen extends StatelessWidget {
               }),
               const SizedBox(height: 10),
               TextFormField(
-                controller: lat,
-                decoration: InputDecoration(
-                  label: const Padding(
+                controller: alamatController.latC,
+                decoration: const InputDecoration(
+                  label: Padding(
                     padding: EdgeInsets.only(left: 8),
                     child: Text('Latitude', style: TextStyle(fontSize: 14)),
                   ),
-                  fillColor: primary,
                 ),
               ),
+
               const SizedBox(height: 10),
+
               TextFormField(
-                controller: long,
-                decoration: InputDecoration(
-                  label: const Padding(
+                controller: alamatController.longC,
+                decoration: const InputDecoration(
+                  label: Padding(
                     padding: EdgeInsets.only(left: 8),
                     child: Text('Longitude', style: TextStyle(fontSize: 14)),
                   ),
-                  fillColor: primary,
                 ),
               ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: alamatController.getLocation,
+                child: Text(
+                  "Ambil Lokasi Saat Ini",
+                  style: GoogleFonts.montserrat(color: Colors.white),
+                ),
+              ),
+
               const SizedBox(height: 10),
               TextFormField(
                 controller: kodepos,
@@ -336,8 +349,8 @@ class AlamatScreen extends StatelessWidget {
                       jenisAlamat: alamatController.selectedJenisALamat
                           .toString(),
                       catatan: catatan.text,
-                      lat: lat.text,
-                      long: long.text,
+                      lat: alamatController.latC.text,
+                      long: alamatController.longC.text,
                       kodepos: kodepos.text,
                       jenisKelamin: '',
                     );

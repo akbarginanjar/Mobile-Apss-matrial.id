@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 
 class ProductCardVertical extends StatelessWidget {
@@ -22,24 +23,111 @@ class ProductCardVertical extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                topRight: Radius.circular(10.0),
-              ),
-              child: produk.photo!.isEmpty
-                  ? Image.network(
-                      'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
-                      height: 135,
-                      width: 160,
-                      fit: BoxFit.cover,
-                    )
-                  : Image.network(
-                      produk.photo![0].path.toString(),
-                      height: 135,
-                      width: 160,
-                      fit: BoxFit.cover,
-                    ),
+            Stack(
+              children: [
+                // GAMBAR PRODUK
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  child: produk.photo!.isEmpty
+                      ? Image.network(
+                          'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
+                          height: 135,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.network(
+                          produk.photo![0].path.toString(),
+                          height: 135,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+
+                // ===== BADGE DI BAGIAN BAWAH GAMBAR =====
+                Positioned(
+                  bottom: 8,
+                  left: 5,
+                  child: Row(
+                    children: [
+                      // BADGE PRE ORDER
+                      if (produk.varianBarang![0].jumlah == 0 &&
+                          produk.varianBarang![0].barang!.isPreOrder == false)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: danger,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Text(
+                            "Stok Habis",
+                            style: TextStyle(color: Colors.white, fontSize: 11),
+                          ),
+                        ),
+
+                      const SizedBox(width: 5),
+
+                      // BADGE READY STOCK
+                      if (produk.varianBarang![0].barang!.isPreOrder == true)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: CupertinoColors.activeOrange,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Text(
+                            "Pre-Order",
+                            style: TextStyle(color: Colors.white, fontSize: 11),
+                          ),
+                        ),
+
+                      const SizedBox(width: 5),
+
+                      if (produk.varianBarang![0].jumlah != 0 &&
+                          produk.varianBarang![0].barang!.isPreOrder == true)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: success,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Text(
+                            "Ready Stok",
+                            style: TextStyle(color: Colors.white, fontSize: 11),
+                          ),
+                        ),
+
+                      if (produk.varianBarang![0].jumlah != 0 &&
+                          produk.varianBarang![0].barang!.isPreOrder == false)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: success,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Text(
+                            "Ready Stok",
+                            style: TextStyle(color: Colors.white, fontSize: 11),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 4.0, right: 6.0, left: 6.0),

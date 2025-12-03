@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/models/alamat_model.dart';
 
@@ -11,6 +12,12 @@ class AlamatController extends GetxController {
   int? selectKecamatan;
   int? selectKelurahan;
   var selectedJenisALamat = 'Pilih Jenis Alamat'.obs;
+
+  var lat = "".obs;
+  var long = "".obs;
+
+  final latC = TextEditingController();
+  final longC = TextEditingController();
 
   // Daftar item dropdown
   final List<String> genderList = ["Laki-laki", "Perempuan"];
@@ -53,6 +60,53 @@ class AlamatController extends GetxController {
   void onInit() {
     super.onInit();
     fetchProvinces();
+    // Worker untuk update hanya ketika value berubah (AMANN)
+    ever(lat, (_) {
+      latC.text = lat.value;
+    });
+    ever(long, (_) {
+      longC.text = long.value;
+    });
+  }
+
+  Future<void> getLocation() async {
+    try {
+      // 1. Cek apakah lokasi aktif
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        Get.snackbar("Lokasi Mati", "Nyalakan GPS Anda");
+        return;
+      }
+
+      // 2. Cek permission
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          Get.snackbar("Ditolak", "Izin lokasi perlu diaktifkan");
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        Get.snackbar(
+          "Ditolak Permanen",
+          "Aktifkan izin lokasi di Pengaturan HP Anda",
+        );
+        return;
+      }
+
+      // 3. Ambil posisi
+      final pos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      // 4. Set nilai ke state GetX
+      lat.value = pos.latitude.toString();
+      long.value = pos.longitude.toString();
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
   }
 
   Future<List<Province>> fetchProvinces() async {
