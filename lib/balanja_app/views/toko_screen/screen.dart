@@ -38,9 +38,9 @@ class TokoScreen extends StatelessWidget {
                     loadToko();
                     Get.offAll(const MainScreen());
                   },
-                  child: const Card(
-                    color: Colors.white,
-                    surfaceTintColor: Colors.white,
+                  child: Card(
+                    color: dark,
+                    surfaceTintColor: dark,
                     elevation: 10,
                     shadowColor: Colors.black38,
                     child: Column(
@@ -52,7 +52,7 @@ class TokoScreen extends StatelessWidget {
                             children: [
                               Text(
                                 'Tampilkan produk dari semua Gerai',
-                                style: TextStyle(fontSize: 14),
+                                style: TextStyle(fontSize: 14, color: textdark),
                               ),
                             ],
                           ),
@@ -68,10 +68,10 @@ class TokoScreen extends StatelessWidget {
                       FilledTokoStates filled =
                           (snapshot.state as FilledTokoStates);
                       if (filled.data!.isEmpty) {
-                        return const Center(
+                        return Center(
                           child: Text(
                             "Data Tidak Ditemukan!",
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(color: textdark),
                           ),
                         );
                       } else {
