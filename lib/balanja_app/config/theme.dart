@@ -90,8 +90,8 @@ ThemeData defaultTheme(BuildContext context) {
   );
 }
 
-Color primary = HexColor('B9975B');
-Color primary2 = HexColor('B9975B');
+Color primary = HexColor('#B9975B');
+Color primary2 = HexColor('#B9975B');
 Color success = HexColor('#00b300');
 Color danger = HexColor('#cc0000');
 Color warning = HexColor('#FFCA00');

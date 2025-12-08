@@ -6,6 +6,7 @@ import 'package:mobile_balanja_id/balanja_app/views/pembayaran/screen.dart';
 
 class CheckoutService extends GetConnect {
   var tokens = GetStorage().read('tokens');
+
   Future<Response> pilihProduk(params) {
     final header = {
       'secret':
@@ -14,6 +15,34 @@ class CheckoutService extends GetConnect {
       'device': 'mobile',
     };
     return get('${Base.url}/v1/products', headers: header, query: params);
+  }
+
+  Future<Response> getShipmentOption(params) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return get(
+      '${Base.url}/v1/shipment-options',
+      headers: header,
+      query: params,
+    );
+  }
+
+  Future<Response> alamatToko(params) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return get(
+      '${Base.url}/v1/member/get-alamat-toko',
+      headers: header,
+      query: params,
+    );
   }
 
   Future<Checkout> checkout({

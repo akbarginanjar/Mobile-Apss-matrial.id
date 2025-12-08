@@ -160,8 +160,6 @@ class TambahProduk extends StatelessWidget {
               ),
               onPressed: () {
                 var selected = controller.getSelectedProducts();
-                // Kirim ke screen sebelumnya atau simpan global
-                print(selected);
 
                 // contoh: kirim kembali ke halaman sebelumnya
                 Get.back(result: selected);

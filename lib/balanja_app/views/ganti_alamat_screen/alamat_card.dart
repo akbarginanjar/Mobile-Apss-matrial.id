@@ -8,6 +8,9 @@ class AlamatCard extends StatelessWidget {
   final String noTelp;
   final String alamat;
   final String labelAlamat;
+  final String latitude;
+  final String longitude;
+  final String postalCode;
   final int idProvinsi;
   final int idKabKot;
   final int idKecamatan;
@@ -24,6 +27,9 @@ class AlamatCard extends StatelessWidget {
     required this.idKabKot,
     required this.idKecamatan,
     required this.idKelurahan,
+    required this.latitude,
+    required this.longitude,
+    required this.postalCode,
   });
 
   @override
@@ -37,6 +43,9 @@ class AlamatCard extends StatelessWidget {
         noTelp,
         alamat,
         labelAlamat,
+        latitude,
+        longitude,
+        postalCode,
         idProvinsi,
         idKabKot,
         idKecamatan,
@@ -82,6 +91,9 @@ class AlamatCard extends StatelessWidget {
                 noTelp,
                 alamat,
                 labelAlamat,
+                latitude,
+                longitude,
+                postalCode,
                 idProvinsi,
                 idKabKot,
                 idKecamatan,

@@ -27,6 +27,7 @@ class GantiAlamatController extends GetxController {
           'device': 'mobile',
         },
       );
+      print(conn.body);
       if (conn.statusCode == 200) {
         final List result = conn.body['data'];
         return result.map((e) => Alamat.fromJson(e)).toList();

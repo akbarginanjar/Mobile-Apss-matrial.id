@@ -49,7 +49,6 @@ export 'package:mobile_balanja_id/balanja_app/views/toko_screen/screen.dart';
 export 'package:mobile_balanja_id/balanja_app/views/widgets/product_card_vertical.dart';
 
 export 'package:mobile_balanja_id/balanja_app/views/checkout_screen/keterangan_produk.dart';
-export 'package:mobile_balanja_id/balanja_app/views/checkout_screen/kurir_pengiriman.dart';
 export 'package:mobile_balanja_id/balanja_app/views/checkout_screen/metode_pembayaran.dart';
 export 'package:mobile_balanja_id/balanja_app/views/checkout_screen/rincian_pembayaran.dart';
 

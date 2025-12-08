@@ -10,6 +10,9 @@ class Alamat {
   String? nomorKontak;
   String? namaKontak;
   String? jenisAlamat;
+  String? latitude;
+  String? longitude;
+  String? postalCode;
   String? catatan;
   String? createdAt;
   String? updatedAt;
@@ -19,26 +22,30 @@ class Alamat {
   Provinsi? kecamatan;
   Provinsi? desa;
 
-  Alamat(
-      {this.id,
-      this.memberId,
-      this.labelAlamat,
-      this.provinsiId,
-      this.kabKotaId,
-      this.kecamatanId,
-      this.desaId,
-      this.alamat,
-      this.nomorKontak,
-      this.namaKontak,
-      this.jenisAlamat,
-      this.catatan,
-      this.createdAt,
-      this.updatedAt,
-      this.memberName,
-      this.provinsi,
-      this.kabKota,
-      this.kecamatan,
-      this.desa});
+  Alamat({
+    this.id,
+    this.memberId,
+    this.labelAlamat,
+    this.provinsiId,
+    this.kabKotaId,
+    this.kecamatanId,
+    this.desaId,
+    this.alamat,
+    this.nomorKontak,
+    this.namaKontak,
+    this.jenisAlamat,
+    this.latitude,
+    this.longitude,
+    this.postalCode,
+    this.catatan,
+    this.createdAt,
+    this.updatedAt,
+    this.memberName,
+    this.provinsi,
+    this.kabKota,
+    this.kecamatan,
+    this.desa,
+  });
 
   Alamat.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -52,16 +59,22 @@ class Alamat {
     nomorKontak = json['nomor_kontak'];
     namaKontak = json['nama_kontak'];
     jenisAlamat = json['jenis_alamat'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    postalCode = json['postal_code'];
     catatan = json['catatan'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     memberName = json['member_name'];
-    provinsi =
-        json['provinsi'] != null ? Provinsi.fromJson(json['provinsi']) : null;
-    kabKota =
-        json['kab_kota'] != null ? Provinsi.fromJson(json['kab_kota']) : null;
-    kecamatan =
-        json['kecamatan'] != null ? Provinsi.fromJson(json['kecamatan']) : null;
+    provinsi = json['provinsi'] != null
+        ? Provinsi.fromJson(json['provinsi'])
+        : null;
+    kabKota = json['kab_kota'] != null
+        ? Provinsi.fromJson(json['kab_kota'])
+        : null;
+    kecamatan = json['kecamatan'] != null
+        ? Provinsi.fromJson(json['kecamatan'])
+        : null;
     desa = json['desa'] != null ? Provinsi.fromJson(json['desa']) : null;
   }
 
@@ -124,10 +137,7 @@ class Province {
   Province({required this.id, required this.name});
 
   factory Province.fromJson(Map<String, dynamic> json) {
-    return Province(
-      id: json['id'],
-      name: json['name'],
-    );
+    return Province(id: json['id'], name: json['name']);
   }
 }
 
@@ -138,10 +148,7 @@ class KabKot {
   KabKot({required this.id, required this.name});
 
   factory KabKot.fromJson(Map<String, dynamic> json) {
-    return KabKot(
-      id: json['id'],
-      name: json['name'],
-    );
+    return KabKot(id: json['id'], name: json['name']);
   }
 }
 
@@ -152,10 +159,7 @@ class Kacamatan {
   Kacamatan({required this.id, required this.name});
 
   factory Kacamatan.fromJson(Map<String, dynamic> json) {
-    return Kacamatan(
-      id: json['id'],
-      name: json['name'],
-    );
+    return Kacamatan(id: json['id'], name: json['name']);
   }
 }
 
@@ -166,9 +170,6 @@ class KelurahanModel {
   KelurahanModel({required this.id, required this.name});
 
   factory KelurahanModel.fromJson(Map<String, dynamic> json) {
-    return KelurahanModel(
-      id: json['id'],
-      name: json['name'],
-    );
+    return KelurahanModel(id: json['id'], name: json['name']);
   }
 }

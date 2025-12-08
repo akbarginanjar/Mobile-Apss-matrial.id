@@ -253,7 +253,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                       children: [
                                         IconButton(
                                           onPressed: () {},
-                                          icon: const Icon(Icons.heart_broken),
+                                          icon: const Icon(Icons.favorite),
                                           color: Theme.of(
                                             context,
                                           ).colorScheme.primary,

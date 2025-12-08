@@ -24,6 +24,13 @@ class CheckoutController extends GetxController {
   String? nomorKontak;
   String? alamat;
   String? labelAlamat;
+  String? latAlamat;
+  String? longAlamat;
+  String? postalCode;
+
+  String? selectShipment;
+  String? namaShipment;
+  String? deskripsiShipment;
 
   int? selectKurir;
   String? namePengirimanKurir;
@@ -56,6 +63,14 @@ class CheckoutController extends GetxController {
     },
   ];
 
+  void changeSelectShipment(String value, String nama, String deskripsi) {
+    selectShipment = value;
+    namaShipment = nama;
+    deskripsiShipment = deskripsi;
+    update();
+    Get.back();
+  }
+
   void changeSelectKurir(
     int value,
     String namePengiriman,
@@ -79,6 +94,9 @@ class CheckoutController extends GetxController {
     String nomor,
     String detailAlamat,
     String label,
+    String lat,
+    String long,
+    String kodepos,
     int provinsi,
     int kabkot,
     int kecamatan,
@@ -89,6 +107,9 @@ class CheckoutController extends GetxController {
     nomorKontak = nomor;
     alamat = detailAlamat;
     labelAlamat = label;
+    latAlamat = lat;
+    longAlamat = long;
+    postalCode = kodepos;
     idProvinsi = provinsi;
     idKabKot = kabkot;
     idKecamatan = kecamatan;
@@ -126,15 +147,43 @@ class CheckoutController extends GetxController {
   //   }
   // }
 
+  Map<String, dynamic>? alamatToko;
+  RxBool isLoadingAlamatToko = false.obs;
+
+  Future<void> loadAlamatToko() async {
+    isLoadingAlamatToko.value = true;
+
+    final params = {"member_id": GetStorage().read('member_id').toString()};
+
+    try {
+      final res = await CheckoutService().alamatToko(params);
+      print(res.body);
+      if (res.statusCode == 200) {
+        alamatToko = res.body;
+        update(); // jika pakai GetBuilder
+      }
+    } finally {
+      isLoadingAlamatToko.value = false;
+    }
+  }
+
+  Map<String, dynamic>? produkUtama; // menyimpan data produk utama
+  String idProdukUtama = ""; // akan di-set dari view
+
+  void setProdukUtama(Map<String, dynamic> produk) {
+    idProdukUtama = produk['id'].toString();
+    produkUtama = produk;
+    cart[idProdukUtama] = 1;
+
+    update(); // untuk GetBuilder
+  }
+
   @override
   void onInit() {
     super.onInit();
-
+    loadAlamatToko();
     loadProduk(); // load pertama
     initScrollListener(); // lazy load
-
-    // otomatis tambahkan produk default dengan qty = 1
-    cart[defaultProductId] = 1;
   }
 
   //TAMBAH PRODUK
@@ -209,8 +258,6 @@ class CheckoutController extends GetxController {
   // key: idProduk, value: qty
   RxMap<String, int> cart = <String, int>{}.obs;
 
-  final String defaultProductId = "349";
-
   // Mendapatkan qty berdasarkan id produk
   int getQty(String idProduk) {
     return cart[idProduk] ?? 0;
@@ -219,8 +266,7 @@ class CheckoutController extends GetxController {
   // Menambah qty
   void increment(String idProduk) {
     cart[idProduk] = (cart[idProduk] ?? 0) + 1;
-
-    update(); // untuk GetBuilder
+    update();
   }
 
   // Mengurangi qty
@@ -229,8 +275,8 @@ class CheckoutController extends GetxController {
 
     int currentQty = cart[idProduk] ?? 0;
 
-    // --- PRODUK DEFAULT: MINIMAL QTY = 1 ---
-    if (idProduk == defaultProductId) {
+    // PRODUK UTAMA → minimal qty = 1
+    if (idProduk == idProdukUtama) {
       if (currentQty > 1) {
         cart[idProduk] = currentQty - 1;
       }
@@ -238,18 +284,67 @@ class CheckoutController extends GetxController {
       return;
     }
 
-    // --- PRODUK BIASA ---
+    // PRODUK BIASA
     if (currentQty <= 1) {
-      cart.remove(idProduk); // hapus dari state
+      cart.remove(idProduk);
     } else {
       cart[idProduk] = currentQty - 1;
     }
 
-    update(); // untuk GetBuilder
+    update();
+  }
+
+  Map<String, dynamic>? findProdukById(String id) {
+    // cek produk utama dulu
+    if (produkUtama != null && produkUtama!['id'].toString() == id) {
+      return produkUtama;
+    }
+
+    // cari di list produk lainnya
+    return produkList.firstWhere(
+      (p) => p['id'].toString() == id,
+      orElse: () => null,
+    );
   }
 
   // Ambil semua produk yang dipilih (id + qty)
+  List<Map<String, dynamic>> getSelectedItemsKurir() {
+    return cart.entries.map((e) {
+      final id = e.key;
+      final qty = e.value;
+
+      final produk = findProdukById(id);
+
+      if (produk == null) {
+        return {"name": "Unknown", "value": 0, "quantity": qty, "weight": 0};
+      }
+
+      return {
+        "name": produk['nama'] ?? '',
+        "value": produk['barang_id'] ?? 0,
+        "quantity": qty,
+        "weight": produk['berat'] ?? 0,
+      };
+    }).toList();
+  }
+
   List<Map<String, dynamic>> getSelectedProducts() {
-    return cart.entries.map((e) => {"id": e.key, "qty": e.value}).toList();
+    return cart.entries.map((e) {
+      final id = e.key;
+      final qty = e.value;
+
+      final produk = findProdukById(id);
+
+      if (produk == null) {
+        return {"name": "Unknown", "value": 0, "quantity": qty, "weight": 0};
+      }
+
+      return {
+        "penyimpanan_id": produk['id'] ?? 0,
+        "barang_id": produk['barang_id'] ?? 0,
+        "qty": qty,
+        "harga": produk['harga'] ?? 0,
+      };
+    }).toList();
   }
 }

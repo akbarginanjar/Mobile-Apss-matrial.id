@@ -1,8 +1,9 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/views/ganti_kurir_screen/screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/shipment_screen/screen.dart';
 
-class KurirPengiriman extends StatelessWidget {
-  const KurirPengiriman({super.key});
+class GantiPengiriman extends StatelessWidget {
+  const GantiPengiriman({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,37 +38,27 @@ class KurirPengiriman extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        metodeController.namePengirimanKurir != null
-                            ? metodeController.namePengirimanKurir!
-                            : 'Pengiriman',
+                        'Pengiriman',
                         style: Theme.of(
                           context,
                         ).textTheme.bodySmall?.apply(color: Colors.grey[600]),
                       ),
-                      Text(
-                        metodeController.nameKurir != null
-                            ? metodeController.nameKurir!
-                            : 'Pilih Opsi Pengiriman',
-                      ),
+                      Text(''),
                     ],
                   ),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        metodeController.priceKurir != null
-                            ? toCurrency(metodeController.priceKurir!)
-                            : '-',
-                        style: Theme.of(context).textTheme.bodyMedium?.apply(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                        metodeController.namaShipment != null
+                            ? metodeController.namaShipment!
+                            : 'Pilih Opsi Pengiriman',
                       ),
                       Text(
-                        '0',
-                        style: Theme.of(context).textTheme.bodySmall?.apply(
-                          color: Colors.grey[400],
-                          decoration: TextDecoration.lineThrough,
-                        ),
+                        metodeController.deskripsiShipment != null
+                            ? metodeController.deskripsiShipment!
+                            : '-',
+                        style: TextStyle(fontSize: 12),
                       ),
                     ],
                   ),
@@ -93,7 +84,7 @@ class KurirPengiriman extends StatelessWidget {
                   Flexible(
                     flex: 1,
                     child: TextButton(
-                      onPressed: () => Get.to(() => const GantiKurirScreen()),
+                      onPressed: () => Get.to(() => ShipmentScreen()),
                       style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),

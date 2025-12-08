@@ -101,6 +101,15 @@ class _GantiAlamatScreenState extends State<GantiAlamatScreen> {
                                             snapshot.data![index].nomorKontak,
                                         labelAlamat:
                                             snapshot.data![index].labelAlamat,
+                                        latitude:
+                                            snapshot.data![index].latitude ??
+                                            '',
+                                        longitude:
+                                            snapshot.data![index].longitude ??
+                                            '',
+                                        postalCode:
+                                            snapshot.data![index].postalCode ??
+                                            '',
                                         idProvinsi:
                                             snapshot.data![index].provinsi.id,
                                         idKabKot:

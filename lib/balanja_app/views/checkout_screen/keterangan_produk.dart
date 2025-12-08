@@ -9,8 +9,23 @@ class KetProduk extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<FormState> form = GlobalKey<FormState>();
     final TextEditingController pesan = TextEditingController();
-    // final TextEditingController qtt = TextEditingController(text: '1');
-    final CheckoutController controller = Get.put(CheckoutController());
+    // Ambil controller tanpa late
+    final CheckoutController controller = Get.find();
+
+    // Pastikan setProdukUtama hanya dipanggil sekali
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.setProdukUtama({
+        "id": varian!.id,
+        "nama": varian!.barang!.nama,
+        "barang_id": varian!.barangId,
+        "berat": varian!.barang!.berat,
+        "harga": varian!.harga,
+        "photo": [
+          {"path": varian!.barang!.photo![0].path},
+        ],
+      });
+    });
+
     return Container(
       color: dark,
       width: MediaQuery.of(context).size.width,
@@ -32,9 +47,7 @@ class KetProduk extends StatelessWidget {
           ),
           Obx(() {
             if (controller.cart.isEmpty) {
-              return Center(
-                child: Text("Belum ada produk ditambahkan ${varian!.id}"),
-              );
+              return Center(child: Text("Belum ada produk ditambahkan"));
             }
 
             return Column(
@@ -42,12 +55,21 @@ class KetProduk extends StatelessWidget {
                 String idProduk = e.key;
                 int qty = e.value;
 
-                var produk = controller.produkList.firstWhere(
-                  (p) => p['id'].toString() == idProduk,
-                  orElse: () => null,
-                );
+                var produk;
 
-                if (produk == null) return const SizedBox();
+                // jika produk utama dan produkUtama tidak null → pakai data langsung!
+                if (idProduk == controller.idProdukUtama &&
+                    controller.produkUtama != null) {
+                  produk = controller.produkUtama;
+                } else {
+                  // cari di produkList seperti biasa
+                  produk = controller.produkList.firstWhere(
+                    (p) => p['id'].toString() == idProduk,
+                    orElse: () => null,
+                  );
+                }
+
+                if (produk == null) return SizedBox();
 
                 return Card(
                   color: dark2,
