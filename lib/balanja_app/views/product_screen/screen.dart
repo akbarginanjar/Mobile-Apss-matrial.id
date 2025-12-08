@@ -50,26 +50,37 @@ class _ProductScreenState extends State<ProductScreen> {
                 GetBuilder<VarianController>(
                   init: VarianController(),
                   builder: (c) {
+                    final selectedVariantPhoto = c.select != null
+                        ? widget.produk.varianBarang![c.select!].barang?.photo
+                        : null;
+
                     return Column(
                       children: [
                         const SizedBox(height: 50),
                         if (c.select != null)
-                          Image.network(
-                            '${widget.produk.varianBarang![c.select!].barang!.photo![0].path}',
-                            height: 350,
-                            width: MediaQuery.of(context).size.width,
-                            fit: BoxFit.cover,
-                          )
-                        else
-                          widget.produk.photo!.isEmpty
+                          (selectedVariantPhoto?.isNotEmpty == true)
                               ? Image.network(
-                                  'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
+                                  '${selectedVariantPhoto![0].path}',
                                   height: 350,
                                   width: MediaQuery.of(context).size.width,
                                   fit: BoxFit.cover,
                                 )
                               : Image.network(
+                                  'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
+                                  height: 350,
+                                  width: MediaQuery.of(context).size.width,
+                                  fit: BoxFit.cover,
+                                )
+                        else
+                          widget.produk.photo?.isNotEmpty == true
+                              ? Image.network(
                                   '${widget.produk.photo![0].path}',
+                                  height: 350,
+                                  width: MediaQuery.of(context).size.width,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
                                   height: 350,
                                   width: MediaQuery.of(context).size.width,
                                   fit: BoxFit.cover,
@@ -122,7 +133,6 @@ class _ProductScreenState extends State<ProductScreen> {
                               const SizedBox(height: 10),
                               Row(
                                 children: [
-                                  // BADGE PRE ORDER
                                   if (widget.produk.varianBarang![0].jumlah ==
                                           0 &&
                                       widget
@@ -148,10 +158,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                         ),
                                       ),
                                     ),
-
                                   const SizedBox(width: 5),
-
-                                  // BADGE READY STOCK
                                   if (widget
                                           .produk
                                           .varianBarang![0]
@@ -399,6 +406,10 @@ class _ProductScreenState extends State<ProductScreen> {
                 GetBuilder<VarianController>(
                   init: VarianController(),
                   builder: (c) {
+                    final selectedVariantPhoto = c.select != null
+                        ? widget.produk.varianBarang![c.select!].barang?.photo
+                        : null;
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -407,21 +418,35 @@ class _ProductScreenState extends State<ProductScreen> {
                             c.select != null
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      '${widget.produk.varianBarang![c.select!].barang!.photo![0].path}',
-                                      height: 100,
-                                      width: 100,
-                                      fit: BoxFit.cover,
-                                    ),
+                                    child: (selectedVariantPhoto?.isNotEmpty == true)
+                                        ? Image.network(
+                                            '${selectedVariantPhoto![0].path}',
+                                            height: 100,
+                                            width: 100,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.network(
+                                            'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
+                                            height: 100,
+                                            width: 100,
+                                            fit: BoxFit.cover,
+                                          ),
                                   )
                                 : ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      '${widget.produk.photo![0].path}',
-                                      height: 100,
-                                      width: 100,
-                                      fit: BoxFit.cover,
-                                    ),
+                                    child: widget.produk.photo?.isNotEmpty == true
+                                        ? Image.network(
+                                            '${widget.produk.photo![0].path}',
+                                            height: 100,
+                                            width: 100,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.network(
+                                            'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
+                                            height: 100,
+                                            width: 100,
+                                            fit: BoxFit.cover,
+                                          ),
                                   ),
                             const SizedBox(width: 30),
                             Column(
@@ -484,11 +509,26 @@ class _ProductScreenState extends State<ProductScreen> {
                                       if (idx !=
                                           (widget.produk.varianBarang!.length +
                                               1)) {
-                                        return widget
-                                                    .produk
-                                                    .varianBarang![index]
-                                                    .jumlah ==
-                                                0
+                                        final currentVariantPhoto = widget.produk.varianBarang![index].barang?.photo;
+                                        final isOutOfStock = widget.produk.varianBarang![index].jumlah == 0;
+
+                                        final safeImageWidget = ClipRRect(
+                                          borderRadius: BorderRadius.circular(5),
+                                          child: (currentVariantPhoto?.isNotEmpty == true)
+                                            ? Image.network(
+                                                currentVariantPhoto![0].path.toString(),
+                                                height: 30,
+                                                width: 30,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.network(
+                                                'https://removal.ai/wp-content/uploads/2021/02/no-img.png', 
+                                                height: 30,
+                                                width: 30,
+                                                fit: BoxFit.cover,
+                                              ),
+                                        );
+                                        return isOutOfStock
                                             ? InkWell(
                                                 onTap: () {
                                                   c.changeSelect(index);
@@ -524,24 +564,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                5,
-                                                              ),
-                                                          child: Image.network(
-                                                            widget
-                                                                .produk
-                                                                .varianBarang![index]
-                                                                .barang!
-                                                                .photo![0]
-                                                                .path
-                                                                .toString(),
-                                                            height: 30,
-                                                            width: 30,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
+                                                        safeImageWidget,
                                                         const SizedBox(
                                                           width: 10,
                                                         ),
@@ -604,24 +627,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                5,
-                                                              ),
-                                                          child: Image.network(
-                                                            widget
-                                                                .produk
-                                                                .varianBarang![index]
-                                                                .barang!
-                                                                .photo![0]
-                                                                .path
-                                                                .toString(),
-                                                            height: 30,
-                                                            width: 30,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
+                                                        safeImageWidget,
                                                         const SizedBox(
                                                           width: 10,
                                                         ),

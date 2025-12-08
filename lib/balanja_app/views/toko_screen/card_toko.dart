@@ -30,8 +30,8 @@ class CardToko extends StatelessWidget {
         Get.offAll(const MainScreen());
       },
       child: Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
+        color: dark,
+        surfaceTintColor: dark,
         elevation: 10,
         shadowColor: Colors.black38,
         child: Column(
@@ -41,15 +41,15 @@ class CardToko extends StatelessWidget {
               leading: SizedBox(height: 30, child: Image.network(imageToko)),
               title: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.watch_later_outlined,
-                    color: Colors.grey,
+                    color: primary,
                     size: 12,
                   ),
                   const SizedBox(width: 5),
                   Text(
                     jadwalToko.toString(),
-                    style: const TextStyle(color: Colors.grey, fontSize: 11),
+                    style: TextStyle(color: textdark, fontSize: 11),
                   ),
                 ],
               ),
@@ -72,8 +72,8 @@ class CardToko extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text(
                 namaToko,
-                style: const TextStyle(
-                  color: Colors.black,
+                style: TextStyle(
+                  color: textdark,
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
                 ),
@@ -83,7 +83,7 @@ class CardToko extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text(
                 alamat,
-                style: const TextStyle(color: Colors.black, fontSize: 12),
+                style: TextStyle(color: textdark, fontSize: 12),
               ),
             ),
             const SizedBox(height: 15),
