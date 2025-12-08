@@ -1,78 +1,74 @@
-import 'package:mobile_balanja_id/balanja_app/config/theme.dart';
-import 'package:mobile_balanja_id/balanja_app/controllers/ganti_kurir_controller.dart';
-import 'package:mobile_balanja_id/balanja_app/utils/value_formatter.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:mobile_balanja_id/balanja_app/config/theme.dart';
+import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
+import 'package:mobile_balanja_id/balanja_app/models/kurir_model.dart';
 
 class KurirCard extends StatelessWidget {
-  final String name;
-  final int price;
-  final int minDay;
-  final int maxDay;
-  final int value;
-  const KurirCard({
-    super.key,
-    required this.name,
-    required this.value,
-    required this.price,
-    required this.minDay,
-    required this.maxDay,
-  });
+  final Kurir item;
+
+  const KurirCard(this.item, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final GantiKurirController c = Get.find();
-
-    return InkWell(
-      onTap: () => c.changeSelect(value),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6.0),
-        decoration: BoxDecoration(
-          color: c.select == value
-              ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-              : Colors.white,
-          border: Border(
-            bottom: BorderSide(color: Colors.grey[300]!, width: 1.0),
-          ),
-        ),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(0),
-          trailing: c.select == value
-              ? Icon(Icons.check, color: primary)
-              : Icon(Icons.check, color: Colors.grey[200]),
-          title: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
+    final checkoutController = Get.put(CheckoutController());
+    return Card(
+      color: dark,
+      margin: const EdgeInsets.only(bottom: 10),
+      child: InkWell(
+        onTap: () {
+          checkoutController.changeSelectKurir(
+            item.courierCode,
+            item.courierName,
+            item.courierServiceCode,
+            item.serviceName,
+            item.description,
+            item.duration,
+            item.price,
+          );
+          Get.back();
+        },
+        borderRadius: BorderRadius.circular(15),
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Row(
             children: [
-              Text(
-                '$name | ',
-                maxLines: 2,
-                softWrap: true,
-                textAlign: TextAlign.start,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.apply(color: Colors.black87),
-              ),
-              Text(
-                toCurrency(price),
-                maxLines: 2,
-                softWrap: true,
-                textAlign: TextAlign.end,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyMedium?.apply(
-                  color: Theme.of(context).colorScheme.secondary,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.serviceName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      "${item.courierName} • ${item.description} • ${item.duration}",
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      toCurrency(item.price),
+                      style: TextStyle(
+                        color: primary,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
                 ),
               ),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Colors.white54,
+                size: 20,
+              ),
             ],
-          ),
-          subtitle: Text(
-            'Akan diterima pada tanggal ${DateTime.now().add(Duration(days: minDay)).day} - ${DateFormat.yMMMMd().format(DateTime.now().add(Duration(days: maxDay)))}',
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.apply(color: Colors.black87),
           ),
         ),
       ),

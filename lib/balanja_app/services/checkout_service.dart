@@ -31,6 +31,16 @@ class CheckoutService extends GetConnect {
     );
   }
 
+  Future<Response> getKurir(body) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return post('${Base.url}/v1/rates/category', headers: header, body);
+  }
+
   Future<Response> alamatToko(params) {
     final header = {
       'secret':

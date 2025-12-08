@@ -1,5 +1,6 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/services/checkout_service.dart';
+import 'package:mobile_balanja_id/balanja_app/views/checkout_screen/ganti_kurir.dart';
 import 'package:mobile_balanja_id/balanja_app/views/checkout_screen/ganti_pengiriman.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -14,6 +15,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final CheckoutController checkoutController = Get.put(CheckoutController());
   @override
   Widget build(BuildContext context) {
+    // checkoutController.loadAlamatToko(1);
+    checkoutController.loadAlamatToko(widget.varian!.memberId.toString());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: dark,
@@ -34,12 +37,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
       body: Obx(() {
         if (checkoutController.isLoadingAlamatToko.value) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
 
         final a = checkoutController.alamatToko;
-
-        if (a == null) return Text("Alamat belum tersedia");
 
         return Stack(
           children: [
@@ -47,10 +48,40 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (a == null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 20,
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide(color: Colors.red[800]!),
+                          ),
+                          margin: EdgeInsets.all(0),
+                          color: dark2,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Center(
+                              child: Text(
+                                "Toko tidak memiliki alamat",
+                                style: TextStyle(
+                                  color: Colors.red[800],
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   const AlamatPengiriman(),
                   KetProduk(varian: widget.varian),
                   const GantiPengiriman(),
-                  TextButton(onPressed: () {}, child: Text('data')),
+                  const GantiKurir(),
                   const MetodePembayaran(),
                   RincianPembayaran(varian: widget.varian),
                 ],

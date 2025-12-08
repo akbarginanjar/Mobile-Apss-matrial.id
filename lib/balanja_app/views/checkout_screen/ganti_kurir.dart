@@ -2,8 +2,8 @@ import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/views/ganti_kurir_screen/screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/shipment_screen/screen.dart';
 
-class GantiPengiriman extends StatelessWidget {
-  const GantiPengiriman({super.key});
+class GantiKurir extends StatelessWidget {
+  const GantiKurir({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class GantiPengiriman extends StatelessWidget {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: 6.0),
-                  Text("Opsi Pengiriman"),
+                  Text("Opsi Kurir"),
                 ],
               ),
               Divider(color: Colors.grey[800], thickness: 2.0),
@@ -34,37 +34,43 @@ class GantiPengiriman extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Pengiriman',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodySmall?.apply(color: Colors.grey[600]),
-                        ),
-                        Text(''),
-                      ],
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Kurir',
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodySmall?.apply(color: Colors.grey[600]),
+                      ),
+                      Text(
+                        metodeController.courierDescription != null
+                            ? metodeController.courierDescription!
+                            : '-',
+                      ),
+                    ],
                   ),
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          metodeController.namaShipment != null
-                              ? metodeController.namaShipment!
-                              : 'Pilih Opsi Pengiriman',
-                        ),
-                        Text(
-                          metodeController.deskripsiShipment != null
-                              ? metodeController.deskripsiShipment!
-                              : '-',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ],
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        metodeController.courierName != null
+                            ? metodeController.courierName!
+                            : 'Pilih Opsi Kurir',
+                      ),
+                      Text(
+                        metodeController.courierDuration != null
+                            ? metodeController.courierDuration!
+                            : '-',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                      Text(
+                        metodeController.courierPrice != null
+                            ? toCurrency(metodeController.courierPrice!)
+                            : '-',
+                        style: TextStyle(color: primary),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -85,7 +91,7 @@ class GantiPengiriman extends StatelessWidget {
                   Flexible(
                     flex: 1,
                     child: TextButton(
-                      onPressed: () => Get.to(() => ShipmentScreen()),
+                      onPressed: () => Get.to(() => GantiKurirScreen()),
                       style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),

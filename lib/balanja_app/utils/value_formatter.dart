@@ -12,6 +12,23 @@ String toCurrency(int price, {String? locale, String? symbol}) {
   return currencyFormatter.format(price);
 }
 
+int toInt(dynamic value) {
+  if (value == null) return 0;
+
+  // Jika sudah int
+  if (value is int) return value;
+
+  // Jika double → int
+  if (value is double) return value.toInt();
+
+  // Jika String → int
+  if (value is String) {
+    return int.tryParse(value) ?? double.tryParse(value)?.toInt() ?? 0;
+  }
+
+  return 0;
+}
+
 void copyToClipboard(BuildContext context, String text) {
   Clipboard.setData(ClipboardData(text: text));
   ScaffoldMessenger.of(context).showSnackBar(

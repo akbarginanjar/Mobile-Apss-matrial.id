@@ -33,11 +33,13 @@ class CheckoutController extends GetxController {
   String? deskripsiShipment;
 
   int? selectKurir;
-  String? namePengirimanKurir;
-  String? nameKurir;
-  int? priceKurir;
-  int? minDayKurir;
-  int? maxDayKurir;
+  String? courierCode;
+  String? courierName;
+  String? courierServiceCode;
+  String? courierserviceName;
+  String? courierDescription;
+  String? courierDuration;
+  int? courierPrice;
 
   final List<Map> listKurir = [
     {
@@ -69,22 +71,33 @@ class CheckoutController extends GetxController {
     deskripsiShipment = deskripsi;
     update();
     Get.back();
+    courierCode = null;
+    courierName = null;
+    courierServiceCode = null;
+    courierserviceName = null;
+    courierDescription = null;
+    courierDuration = null;
+    courierPrice = null;
   }
 
   void changeSelectKurir(
-    int value,
-    String namePengiriman,
-    String name,
+    // int value,
+    String code,
+    String nama,
+    String serviceCode,
+    String serviceName,
+    String description,
+    String duration,
     int price,
-    int minDay,
-    int maxDay,
   ) {
-    selectKurir = value;
-    namePengirimanKurir = namePengiriman;
-    nameKurir = name;
-    priceKurir = price;
-    minDayKurir = minDay;
-    maxDayKurir = maxDay;
+    // selectKurir = value;
+    courierCode = code;
+    courierName = nama;
+    courierServiceCode = serviceCode;
+    courierserviceName = serviceName;
+    courierDescription = description;
+    courierDuration = duration;
+    courierPrice = price;
     update();
   }
 
@@ -150,10 +163,10 @@ class CheckoutController extends GetxController {
   Map<String, dynamic>? alamatToko;
   RxBool isLoadingAlamatToko = false.obs;
 
-  Future<void> loadAlamatToko() async {
+  Future<void> loadAlamatToko(memberIdToko) async {
     isLoadingAlamatToko.value = true;
 
-    final params = {"member_id": GetStorage().read('member_id').toString()};
+    final params = {"member_id": memberIdToko};
 
     try {
       final res = await CheckoutService().alamatToko(params);
@@ -181,7 +194,6 @@ class CheckoutController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadAlamatToko();
     loadProduk(); // load pertama
     initScrollListener(); // lazy load
   }
@@ -323,7 +335,7 @@ class CheckoutController extends GetxController {
         "name": produk['nama'] ?? '',
         "value": produk['barang_id'] ?? 0,
         "quantity": qty,
-        "weight": produk['berat'] ?? 0,
+        "weight": toInt(produk['berat']),
       };
     }).toList();
   }

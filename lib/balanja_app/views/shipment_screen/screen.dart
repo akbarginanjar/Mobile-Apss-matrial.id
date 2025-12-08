@@ -1,6 +1,6 @@
 import 'package:mobile_balanja_id/balanja_app/config/theme.dart';
 import 'package:mobile_balanja_id/balanja_app/controllers/checkout_controller.dart';
-import 'package:mobile_balanja_id/balanja_app/controllers/ganti_kurir_controller.dart';
+import 'package:mobile_balanja_id/balanja_app/controllers/kurir_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/controllers/shipment_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/utils/loading.dart';
 import 'package:mobile_balanja_id/balanja_app/utils/value_formatter.dart';
