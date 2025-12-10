@@ -7,7 +7,7 @@ class AlamatPengiriman extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: dark2,
+      color: dark,
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12.0),

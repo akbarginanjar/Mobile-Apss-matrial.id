@@ -19,8 +19,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     checkoutController.loadAlamatToko(widget.varian!.memberId.toString());
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: dark,
-        surfaceTintColor: dark,
+        backgroundColor: dark2,
+        surfaceTintColor: dark2,
         shadowColor: Colors.black38,
         elevation: 3,
         centerTitle: true,
@@ -152,7 +152,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ),
                             onPressed: () {
-                              if (c.selectBank == null) {
+                              if (c.paymentCode == null) {
                                 EasyLoading.showToast(
                                   'Pilih Alamat Pengiriman',
                                 );
@@ -187,7 +187,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   idKecamatan: c.idKecamatan!,
                                   idKelurahan: c.idKelurahan!,
                                   alamat: c.alamat!,
-                                  code: c.selectBank!,
+                                  code: 2,
                                 );
                               }
                             },

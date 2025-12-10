@@ -35,6 +35,7 @@ class GantiPengiriman extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Flexible(
+                    flex: 1,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -49,6 +50,7 @@ class GantiPengiriman extends StatelessWidget {
                     ),
                   ),
                   Flexible(
+                    flex: 3,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [

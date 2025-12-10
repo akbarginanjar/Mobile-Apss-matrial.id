@@ -10,10 +10,19 @@ class CheckoutController extends GetxController {
   RxInt totalBayar = 0.obs;
   RxInt totalBayarCheckout = 0.obs;
 
-  int? selectBank;
-  String? judul;
-  String? metode;
-  String? noRekening;
+  var selectedItemCode = "".obs;
+  String? paymentGroup;
+  String? paymentCode;
+  String? paymentName;
+  String? paymentNumber;
+  String? paymentDescription;
+  String? paymentImageUrl;
+  String? paymentImage;
+  String? paymentType;
+  String? paymentFeeType;
+  int? paymentFeeValue;
+
+  var selectedVoucher = "".obs;
 
   int? selectAlamat;
   int? idProvinsi;
@@ -40,30 +49,6 @@ class CheckoutController extends GetxController {
   String? courierDescription;
   String? courierDuration;
   int? courierPrice;
-
-  final List<Map> listKurir = [
-    {
-      'name_pengiriman': 'JNE',
-      'name': 'Reguler',
-      'price': 12000,
-      'minDay': 3,
-      'maxDay': 6,
-    },
-    {
-      'name_pengiriman': 'JNT',
-      'name': 'Ngegas',
-      'price': 16000,
-      'minDay': 2,
-      'maxDay': 4,
-    },
-    {
-      'name_pengiriman': 'JNE',
-      'name': 'Ngegas Gila',
-      'price': 25000,
-      'minDay': 1,
-      'maxDay': 2,
-    },
-  ];
 
   void changeSelectShipment(String value, String nama, String deskripsi) {
     selectShipment = value;
@@ -101,6 +86,43 @@ class CheckoutController extends GetxController {
     update();
   }
 
+  void selectPayment(
+    String group,
+    String code,
+    String name,
+    String number,
+    String description,
+    String imageUrl,
+    String image,
+    String type,
+    String feeType,
+    int feeValue,
+  ) {
+    selectedItemCode.value = code;
+    paymentGroup = group;
+    paymentCode = code;
+    paymentName = name;
+    paymentNumber = number;
+    paymentDescription = description;
+    paymentImageUrl = imageUrl;
+    paymentImage = image;
+    paymentType = type;
+    paymentFeeType = feeType;
+    paymentFeeValue = feeValue;
+
+    update();
+
+    Get.back();
+  }
+
+  void changeVoucher(String id) {
+    selectedItemCode.value = id;
+
+    update();
+
+    Get.back();
+  }
+
   void changeSelectAlamat(
     int value,
     String nama,
@@ -129,19 +151,6 @@ class CheckoutController extends GetxController {
     idKelurahan = kelurahan;
     update();
     Get.back();
-  }
-
-  void changeSelectBank(
-    int value,
-    String metodePembayaran,
-    String tujuan,
-    String number,
-  ) {
-    selectBank = value;
-    judul = metodePembayaran;
-    metode = tujuan;
-    noRekening = number;
-    update();
   }
 
   // void increment(int harga) {
@@ -269,6 +278,7 @@ class CheckoutController extends GetxController {
 
   // key: idProduk, value: qty
   RxMap<String, int> cart = <String, int>{}.obs;
+  var showAllProducts = false.obs;
 
   // Mendapatkan qty berdasarkan id produk
   int getQty(String idProduk) {

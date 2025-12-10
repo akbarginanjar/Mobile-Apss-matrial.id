@@ -61,8 +61,6 @@ export 'package:mobile_balanja_id/balanja_app/utils/base.dart';
 export 'package:mobile_balanja_id/balanja_app/utils/alert.dart';
 export 'package:flutter_easyloading/flutter_easyloading.dart';
 
-export 'package:mobile_balanja_id/balanja_app/services/bank_service.dart';
-
 export 'package:hexcolor/hexcolor.dart';
 
 export 'package:mobile_balanja_id/balanja_app/views/splash_screen/screen.dart';
@@ -89,4 +87,4 @@ export 'package:image_picker/image_picker.dart';
 
 export 'package:mobile_balanja_id/balanja_app/controllers/checkout_controller.dart';
 export 'package:mobile_balanja_id/balanja_app/controllers/metode_pembayaran_controller.dart';
-export 'package:mobile_balanja_id/balanja_app/models/bank_model.dart';
+export 'package:mobile_balanja_id/balanja_app/models/payment_model.dart';

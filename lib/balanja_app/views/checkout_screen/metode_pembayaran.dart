@@ -36,27 +36,62 @@ class MetodePembayaran extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        metodeController.judul != null
-                            ? metodeController.judul.toString()
-                            : 'Metode Pembayaran',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodySmall?.apply(color: Colors.grey[600]),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Pembayaran',
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.apply(color: Colors.grey[600]),
+                            ),
+                            if (metodeController.paymentGroup != null)
+                              if (metodeController.paymentGroup != '')
+                                Text('${metodeController.paymentGroup}'),
+                            Text(''),
+                            if (metodeController.paymentDescription != '')
+                              Text(''),
+                          ],
+                        ),
                       ),
-                      Text(
-                        metodeController.metode != null
-                            ? metodeController.metode.toString()
-                            : 'Pilih',
+                      Flexible(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            if (metodeController.paymentImage != null ||
+                                metodeController.paymentImageUrl != null)
+                              Image.network(
+                                metodeController.paymentImageUrl == ''
+                                    ? metodeController.paymentImage.toString()
+                                    : metodeController.paymentImageUrl
+                                          .toString(),
+                                width: 100,
+                                fit: BoxFit.contain,
+                              )
+                            else
+                              Text('Pilih'),
+                            SizedBox(height: 5),
+                            if (metodeController.paymentNumber != null)
+                              if (metodeController.paymentNumber == '')
+                                Text('${metodeController.paymentName}')
+                              else
+                                Text(
+                                  '${metodeController.paymentName} - ${metodeController.paymentNumber}',
+                                ),
+                            // SizedBox(height: 5),
+                            if (metodeController.paymentDescription != null)
+                              if (metodeController.paymentDescription != '')
+                                Text(
+                                  '${metodeController.paymentDescription}',
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                  Text(
-                    metodeController.noRekening != null
-                        ? 'No Rekening : ${metodeController.noRekening.toString()}'
-                        : '-',
-                    style: TextStyle(fontSize: 15),
-                  ),
+                  // Text('${metodeController.selectedPayment.value}'),
                 ],
               );
             },
@@ -74,7 +109,12 @@ class MetodePembayaran extends StatelessWidget {
                     flex: 1,
                     child: TextButton(
                       onPressed: () {
-                        Get.to(const MetodePembayaranScreen());
+                        Get.to(
+                          PaymentMethodScreen(
+                            idToko: metodeController.alamatToko!['member_id']
+                                .toString(),
+                          ),
+                        );
                       },
                       style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(

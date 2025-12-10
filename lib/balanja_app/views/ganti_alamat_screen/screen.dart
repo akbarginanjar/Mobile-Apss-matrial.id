@@ -29,9 +29,7 @@ class _GantiAlamatScreenState extends State<GantiAlamatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        shadowColor: Colors.black38,
-        elevation: 3,
-        // centerTitle: true,
+        backgroundColor: Colors.transparent,
         title: Text('Alamat Tujuan', style: GoogleFonts.montserrat()),
         iconTheme: IconThemeData(
           color: primary, // Ubah warna ikon kembali di sini

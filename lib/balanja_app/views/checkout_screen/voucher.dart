@@ -1,4 +1,5 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
+import 'package:mobile_balanja_id/balanja_app/views/voucher_screen/screen.dart';
 
 class Voucher extends StatelessWidget {
   const Voucher({super.key});
@@ -7,23 +8,7 @@ class Voucher extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.defaultDialog(
-          title: 'Voucher',
-          content: const Center(
-            child: Text(
-              'Voucher Belum Tersedia',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Get.back();
-              },
-              child: const Text('Oke'),
-            ),
-          ],
-        );
+        Get.to(VoucherScreen());
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -64,12 +64,13 @@ class GantiKurir extends StatelessWidget {
                             : '-',
                         style: TextStyle(fontSize: 10),
                       ),
-                      Text(
-                        metodeController.courierPrice != null
-                            ? toCurrency(metodeController.courierPrice!)
-                            : '-',
-                        style: TextStyle(color: primary),
-                      ),
+                      if (metodeController.courierPrice != null)
+                        Text(
+                          metodeController.courierPrice != null
+                              ? toCurrency(metodeController.courierPrice!)
+                              : '-',
+                          style: TextStyle(color: primary),
+                        ),
                     ],
                   ),
                 ],

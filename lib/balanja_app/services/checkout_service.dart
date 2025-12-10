@@ -41,6 +41,30 @@ class CheckoutService extends GetConnect {
     return post('${Base.url}/v1/rates/category', headers: header, body);
   }
 
+  Future<Response> getPaymentMethod(params) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return get('${Base.url}/v1/p-method', headers: header, query: params);
+  }
+
+  Future<Response> getVoucher(params) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return get(
+      '${Base.url}/v1/get-available-discounts',
+      headers: header,
+      query: params,
+    );
+  }
+
   Future<Response> alamatToko(params) {
     final header = {
       'secret':

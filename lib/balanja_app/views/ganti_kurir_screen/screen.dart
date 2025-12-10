@@ -38,10 +38,9 @@ class GantiKurirScreen extends StatelessWidget {
     controller.loadKurir(body);
 
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: const Text("Pilih Kurir"),
-        backgroundColor: Colors.black,
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -52,13 +51,18 @@ class GantiKurirScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           children: [
             Text(
-              "${checkoutController.namaShipment}",
+              checkoutController.namaShipment == null
+                  ? 'Harap pilih pengiriman terlebih dahulu!'
+                  : checkoutController.namaShipment.toString(),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(height: 10),
+            if (checkoutController.namaShipment == null)
+              Text('Pastikan alamat anda (tujuan) sudah dipilih dan lengkap.'),
             const SizedBox(height: 16),
 
             ...controller.listKurir.map((item) => KurirCard(item)),

@@ -1,53 +1,27 @@
-import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
+import 'package:get/get.dart';
+import 'package:mobile_balanja_id/balanja_app/models/payment_model.dart';
+import 'package:mobile_balanja_id/balanja_app/services/checkout_service.dart';
 
-abstract class MetodePembayaranStates {}
+class PaymentMethodController extends GetxController {
+  var groups = <PaymentMethodGroup>[].obs;
+  var isLoading = false.obs;
 
-class InitMetodePembayaranStates extends MetodePembayaranStates {}
+  Future<void> loadPaymentMethod(idToko) async {
+    try {
+      isLoading.value = true;
 
-class FilledMetodePembayaranStates extends MetodePembayaranStates {
-  final List<Bank>? data;
-  final bool isfull;
+      final res = await CheckoutService().getPaymentMethod({
+        "member_id": idToko,
+      });
 
-  FilledMetodePembayaranStates({this.data, this.isfull = false});
-}
-
-class MetodePembayaranEvent {}
-
-class MetodePembayaranController extends GetxController {
-  int? select;
-  String? judul;
-  String? metode;
-
-  void changeSelect(int value, String metodePembayaran, String tujuan) {
-    select = value;
-    judul = metodePembayaran;
-    metode = tujuan;
-    update();
-  }
-
-  @override
-  void onInit() async {
-    // ignore: todo
-    // TODO: implement onInit
-    inisialState();
-    super.onInit();
-  }
-
-  static MetodePembayaranController get to => Get.find();
-  MetodePembayaranStates state = InitMetodePembayaranStates();
-  void inisialState() async {
-    if (state is InitMetodePembayaranStates) {
-      state = FilledMetodePembayaranStates(
-        data: await BankController().getBank(),
-      );
-      update();
-    }
-  }
-
-  void refreshState() {
-    if (state is FilledTokoStates) {
-      state = InitMetodePembayaranStates();
-      update();
+      if (res.statusCode == 200) {
+        final List data = res.body['data'];
+        groups.value = data.map((e) => PaymentMethodGroup.fromJson(e)).toList();
+      }
+    } catch (e) {
+      print("ERR: $e");
+    } finally {
+      isLoading.value = false;
     }
   }
 }
