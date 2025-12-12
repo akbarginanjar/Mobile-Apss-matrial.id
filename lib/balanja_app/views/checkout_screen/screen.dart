@@ -17,6 +17,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     // checkoutController.loadAlamatToko(1);
     checkoutController.loadAlamatToko(widget.varian!.memberId.toString());
+    checkoutController.loadTransaksiFee(widget.varian!.memberId.toString());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: dark2,
@@ -83,6 +84,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   const GantiPengiriman(),
                   const GantiKurir(),
                   const MetodePembayaran(),
+                  Obx(
+                    () => Card(
+                      color: dark,
+                      margin: EdgeInsets.symmetric(horizontal: 15),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 5,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Donasi: ${toCurrency(checkoutController.transaksiDonasi.value)}",
+                              style: TextStyle(fontSize: 16),
+                            ),
+
+                            Switch(
+                              value: checkoutController.isDonasiActive.value,
+                              onChanged: checkoutController.toggleDonasi,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   RincianPembayaran(varian: widget.varian),
                 ],
               ),

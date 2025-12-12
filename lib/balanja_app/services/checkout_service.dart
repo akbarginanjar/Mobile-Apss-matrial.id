@@ -65,6 +65,20 @@ class CheckoutService extends GetConnect {
     );
   }
 
+  Future<Response> getTransaksi(params) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return get(
+      '${Base.url}/v1/get-transaction-fee',
+      headers: header,
+      query: params,
+    );
+  }
+
   Future<Response> alamatToko(params) {
     final header = {
       'secret':

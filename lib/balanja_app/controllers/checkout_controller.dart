@@ -50,6 +50,47 @@ class CheckoutController extends GetxController {
   String? courierDuration;
   int? courierPrice;
 
+  RxInt transaksiBiayaLayanan = 0.obs;
+  RxInt transaksiBiayaAplikasi = 0.obs;
+  RxInt transaksiDonasi = 0.obs;
+  RxBool isDonasiActive = true.obs;
+
+  Future<void> loadTransaksiFee(String memberId) async {
+    try {
+      final response = await CheckoutService().getTransaksi({
+        'member_id': memberId,
+      });
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        List data = response.body;
+
+        transaksiBiayaLayanan.value = data.firstWhere(
+          (e) => e['code'] == 'biaya-layanan',
+          orElse: () => {'nominal': 0},
+        )['nominal'];
+
+        transaksiBiayaAplikasi.value = data.firstWhere(
+          (e) => e['code'] == 'biaya-aplikasi',
+          orElse: () => {'nominal': 0},
+        )['nominal'];
+
+        transaksiDonasi.value = data.firstWhere(
+          (e) => e['code'] == 'donasi',
+          orElse: () => {'nominal': 0},
+        )['nominal'];
+
+        transaksiDonasi.value = transaksiDonasi.value;
+      }
+    } catch (e) {
+      print("Error load transaksi fee: $e");
+    }
+  }
+
+  void toggleDonasi(bool value) {
+    isDonasiActive.value = value;
+  }
+
   void changeSelectShipment(String value, String nama, String deskripsi) {
     selectShipment = value;
     namaShipment = nama;

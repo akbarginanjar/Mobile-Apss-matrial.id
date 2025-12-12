@@ -6,6 +6,7 @@ class RincianPembayaran extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(CheckoutController());
     return Container(
       color: dark,
       width: MediaQuery.of(context).size.width,
@@ -51,10 +52,37 @@ class RincianPembayaran extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [Text('Subtotal pengiriman'), Text('Rp. 6.000')],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Text('Biaya layanan'), Text('Rp. 1.000')],
+          Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('Biaya layanan'),
+                Text(toCurrency(controller.transaksiBiayaLayanan.value)),
+              ],
+            ),
+          ),
+          Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('Biaya Aplikasi'),
+                Text(toCurrency(controller.transaksiBiayaAplikasi.value)),
+              ],
+            ),
+          ),
+          Obx(
+            () => controller.isDonasiActive.value
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('Donasi'),
+                      Text(toCurrency(controller.transaksiDonasi.value)),
+                    ],
+                  )
+                : SizedBox.shrink(), // hidden
           ),
           Divider(color: Colors.grey[800], thickness: 1.0),
           GetBuilder<CheckoutController>(
