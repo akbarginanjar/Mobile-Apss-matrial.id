@@ -9,6 +9,7 @@ class CheckoutController extends GetxController {
   RxInt totalHarga = 0.obs;
   RxInt totalBayar = 0.obs;
   RxInt totalBayarCheckout = 0.obs;
+  RxInt totalSemuaProduk = 0.obs;
 
   var selectedItemCode = "".obs;
   String? paymentGroup;
@@ -23,8 +24,14 @@ class CheckoutController extends GetxController {
   int? paymentFeeValue;
 
   var selectedVoucher = "".obs;
+  String? voucherName;
+  String? voucherOwnedBy;
+  String? voucherMember;
+  RxString voucherType = ''.obs;
+  RxInt voucherValue = 0.obs;
 
   int? selectAlamat;
+  int? idAlamat;
   int? idProvinsi;
   int? idKabKot;
   int? idKecamatan;
@@ -48,12 +55,14 @@ class CheckoutController extends GetxController {
   String? courierserviceName;
   String? courierDescription;
   String? courierDuration;
-  int? courierPrice;
+  RxInt courierPrice = 0.obs;
 
   RxInt transaksiBiayaLayanan = 0.obs;
   RxInt transaksiBiayaAplikasi = 0.obs;
   RxInt transaksiDonasi = 0.obs;
-  RxBool isDonasiActive = true.obs;
+  RxBool isDonasiActive = false.obs;
+
+  RxString selectedVoucherId = "".obs;
 
   Future<void> loadTransaksiFee(String memberId) async {
     try {
@@ -89,6 +98,8 @@ class CheckoutController extends GetxController {
 
   void toggleDonasi(bool value) {
     isDonasiActive.value = value;
+
+    hitungTotalBayarCheckout();
   }
 
   void changeSelectShipment(String value, String nama, String deskripsi) {
@@ -103,7 +114,7 @@ class CheckoutController extends GetxController {
     courierserviceName = null;
     courierDescription = null;
     courierDuration = null;
-    courierPrice = null;
+    courierPrice.value = 0;
   }
 
   void changeSelectKurir(
@@ -123,7 +134,7 @@ class CheckoutController extends GetxController {
     courierserviceName = serviceName;
     courierDescription = description;
     courierDuration = duration;
-    courierPrice = price;
+    courierPrice.value = price;
     update();
   }
 
@@ -156,16 +167,41 @@ class CheckoutController extends GetxController {
     Get.back();
   }
 
-  void changeVoucher(String id) {
-    selectedItemCode.value = id;
+  void changeVoucher(
+    String voucherId,
+    String name,
+    String ownedBy,
+    String member,
+    String type,
+    int value,
+  ) {
+    selectedVoucherId.value = voucherId;
+    voucherName = name;
+    voucherOwnedBy = ownedBy;
+    voucherMember = member;
+    voucherType.value = type;
+    voucherValue.value = value;
 
+    EasyLoading.showSuccess('Voucher berhasil digunakan');
     update();
+    Get.back();
+  }
 
+  void deleteVoucher() {
+    selectedVoucherId.value = '';
+    voucherName = null;
+    voucherOwnedBy = null;
+    voucherMember = null;
+    voucherType.value = '';
+    voucherValue.value = 0;
+    EasyLoading.showToast('Voucher tidak digunakan');
+    update();
     Get.back();
   }
 
   void changeSelectAlamat(
     int value,
+    int id,
     String nama,
     String nomor,
     String detailAlamat,
@@ -179,6 +215,7 @@ class CheckoutController extends GetxController {
     int kelurahan,
   ) {
     selectAlamat = value;
+    idAlamat = id;
     namaKontak = nama;
     nomorKontak = nomor;
     alamat = detailAlamat;
@@ -241,10 +278,55 @@ class CheckoutController extends GetxController {
     update(); // untuk GetBuilder
   }
 
+  void hitungTotalBayarCheckout() {
+    // Hitung subtotal sebelum voucher
+    final subtotal =
+        totalSemuaProduk.value +
+        transaksiBiayaLayanan.value +
+        transaksiBiayaAplikasi.value +
+        (isDonasiActive.value ? transaksiDonasi.value : 0) +
+        courierPrice.value;
+
+    int potongan = 0;
+
+    // Hitung potongan berdasarkan tipe voucher
+    if (voucherType.value == 'nominal') {
+      potongan = voucherValue.value;
+    } else if (voucherType.value == 'percent') {
+      potongan = ((subtotal * voucherValue.value) / 100).round();
+    }
+
+    // Total akhir
+    totalBayarCheckout.value = subtotal - potongan;
+
+    // Pastikan total tidak minus
+    if (totalBayarCheckout.value < 0) {
+      totalBayarCheckout.value = 0;
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
     loadProduk(); // load pertama
+    ever(cart, (_) {
+      getSelectedProducts(); // hitung ulang setiap cart berubah
+    });
+    everAll(
+      [
+        totalSemuaProduk,
+        transaksiBiayaLayanan,
+        transaksiBiayaAplikasi,
+        transaksiDonasi,
+        courierPrice, // sekarang ikut realtime
+        voucherValue,
+        voucherType,
+      ],
+      (_) {
+        hitungTotalBayarCheckout();
+      },
+    );
+
     initScrollListener(); // lazy load
   }
 
@@ -329,6 +411,10 @@ class CheckoutController extends GetxController {
   // Menambah qty
   void increment(String idProduk) {
     cart[idProduk] = (cart[idProduk] ?? 0) + 1;
+
+    // Recalculate total setiap ada perubahan qty
+    getSelectedProducts();
+
     update();
   }
 
@@ -343,6 +429,10 @@ class CheckoutController extends GetxController {
       if (currentQty > 1) {
         cart[idProduk] = currentQty - 1;
       }
+
+      // Recalculate total
+      getSelectedProducts();
+
       update();
       return;
     }
@@ -353,6 +443,9 @@ class CheckoutController extends GetxController {
     } else {
       cart[idProduk] = currentQty - 1;
     }
+
+    // Recalculate total
+    getSelectedProducts();
 
     update();
   }
@@ -392,7 +485,9 @@ class CheckoutController extends GetxController {
   }
 
   List<Map<String, dynamic>> getSelectedProducts() {
-    return cart.entries.map((e) {
+    int total = 0; // penampung total sementara
+
+    final selectedList = cart.entries.map((e) {
       final id = e.key;
       final qty = e.value;
 
@@ -402,12 +497,85 @@ class CheckoutController extends GetxController {
         return {"name": "Unknown", "value": 0, "quantity": qty, "weight": 0};
       }
 
+      final harga = produk['harga'] ?? 0;
+      int subtotal = harga * qty;
+
+      // hitung total semua produk
+      total += subtotal;
+
       return {
         "penyimpanan_id": produk['id'] ?? 0,
         "barang_id": produk['barang_id'] ?? 0,
         "qty": qty,
-        "harga": produk['harga'] ?? 0,
+        "harga": harga,
+        // "subtotal": subtotal,
       };
     }).toList();
+
+    // simpan ke state
+    totalSemuaProduk.value = total;
+
+    return selectedList;
+  }
+
+  //CHECKOUT
+  RxBool isLoadingCheckout = false.obs;
+
+  Future<void> doCheckout(payload) async {
+    try {
+      isLoadingCheckout.value = true;
+      EasyLoading.show(status: "Memproses checkout...");
+
+      print("CHECKOUT PAYLOAD:");
+      print(payload);
+
+      final res = await CheckoutService().prosesCheckout(payload);
+      print(res.statusCode);
+      print(res.body);
+
+      if (res.statusCode == 200) {
+        EasyLoading.showSuccess("Checkout berhasil!");
+
+        // contoh ambil data dari response
+        final data = res.body;
+
+        // navigasi ke halaman sukses
+        Get.offAll(CheckoutSuccessSCreen());
+      } else {
+        EasyLoading.showError("Checkout gagal, kode: ${res.statusCode}");
+      }
+    } catch (e) {
+      EasyLoading.showError("Terjadi error saat checkout");
+      print("Checkout error: $e");
+    } finally {
+      isLoadingCheckout.value = false;
+      EasyLoading.dismiss();
+    }
+  }
+}
+
+class CheckoutSuccessSCreen extends StatelessWidget {
+  const CheckoutSuccessSCreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+            child: Icon(Icons.check_circle, color: Colors.green[700], size: 80),
+          ),
+          Text('Pesanan berhasil dibuat'),
+          ElevatedButton(
+            onPressed: () {
+              Get.offAll(MainScreen());
+            },
+            child: Text('Kembali ke home'),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -64,10 +64,10 @@ class GantiKurir extends StatelessWidget {
                             : '-',
                         style: TextStyle(fontSize: 10),
                       ),
-                      if (metodeController.courierPrice != null)
+                      if (metodeController.courierPrice.value != 0)
                         Text(
-                          metodeController.courierPrice != null
-                              ? toCurrency(metodeController.courierPrice!)
+                          metodeController.courierPrice.value != 0
+                              ? toCurrency(metodeController.courierPrice.value)
                               : '-',
                           style: TextStyle(color: primary),
                         ),
@@ -92,7 +92,15 @@ class GantiKurir extends StatelessWidget {
                   Flexible(
                     flex: 1,
                     child: TextButton(
-                      onPressed: () => Get.to(() => GantiKurirScreen()),
+                      onPressed: () {
+                        if (metodeController.alamat == null) {
+                          EasyLoading.showToast(
+                            'Pilih alamat anda terlebih dahulu.',
+                          );
+                        } else {
+                          Get.to(GantiKurirScreen());
+                        }
+                      },
                       style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),

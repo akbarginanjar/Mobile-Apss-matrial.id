@@ -11,6 +11,7 @@ class AlamatCard extends StatelessWidget {
   final String latitude;
   final String longitude;
   final String postalCode;
+  final int idAlamat;
   final int idProvinsi;
   final int idKabKot;
   final int idKecamatan;
@@ -23,6 +24,7 @@ class AlamatCard extends StatelessWidget {
     required this.alamat,
     required this.labelAlamat,
     required this.value,
+    required this.idAlamat,
     required this.idProvinsi,
     required this.idKabKot,
     required this.idKecamatan,
@@ -39,6 +41,7 @@ class AlamatCard extends StatelessWidget {
     return InkWell(
       onTap: () => c.changeSelectAlamat(
         value,
+        idAlamat,
         name,
         noTelp,
         alamat,
@@ -87,6 +90,7 @@ class AlamatCard extends StatelessWidget {
               value: c.selectAlamat == value,
               onChanged: (v) => c.changeSelectAlamat(
                 value,
+                idAlamat,
                 name,
                 noTelp,
                 alamat,

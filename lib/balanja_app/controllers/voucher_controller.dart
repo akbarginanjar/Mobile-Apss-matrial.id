@@ -1,37 +1,24 @@
 import 'package:get/get.dart';
-import 'package:mobile_balanja_id/balanja_app/models/voucher_mode.dart';
+import 'package:mobile_balanja_id/balanja_app/models/voucher_model.dart';
 import 'package:mobile_balanja_id/balanja_app/services/checkout_service.dart';
 
 class VoucherController extends GetxController {
-  var isLoading = false.obs;
-  var vouchers = <VoucherModel>[].obs;
+  RxBool loading = false.obs;
+  RxList<Voucher> vouchers = <Voucher>[].obs;
 
-  // HIT API
-  Future<void> loadVouchers() async {
-    isLoading.value = true;
-
-    final params = {};
-
+  Future<void> loadVoucher(Map<String, dynamic> params) async {
     try {
-      final response = await CheckoutService().getVoucher(params);
-      print(response.statusCode);
-      print(response.body);
+      loading.value = true;
 
-      if (response.statusCode == 200) {
-        final body = response.body;
+      final res = await CheckoutService().getVoucher(params);
 
-        if (body is List) {
-          vouchers.value = body
-              .map((e) => VoucherModel.fromJson(Map<String, dynamic>.from(e)))
-              .toList();
-        } else {
-          vouchers.clear();
-        }
+      if (res.statusCode == 200) {
+        final List data = res.body;
+
+        vouchers.value = data.map((e) => Voucher.fromJson(e)).toList();
       }
-    } catch (e) {
-      print("Error load vouchers: $e");
+    } finally {
+      loading.value = false;
     }
-
-    isLoading.value = false;
   }
 }

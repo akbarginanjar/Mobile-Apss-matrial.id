@@ -117,6 +117,7 @@ class _GantiAlamatScreenState extends State<GantiAlamatScreen> {
                                         idKelurahan:
                                             snapshot.data![index].desa.id,
                                         value: index,
+                                        idAlamat: snapshot.data![index].id,
                                       )
                                     : const BatasAkhir(customName: 'alamat');
                               },

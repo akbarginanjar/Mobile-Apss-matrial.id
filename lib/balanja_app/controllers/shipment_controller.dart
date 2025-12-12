@@ -1,5 +1,4 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
-import 'package:mobile_balanja_id/balanja_app/models/pengiriman_model.dart';
 import 'package:mobile_balanja_id/balanja_app/models/shipment_model.dart';
 import 'package:mobile_balanja_id/balanja_app/services/checkout_service.dart';
 

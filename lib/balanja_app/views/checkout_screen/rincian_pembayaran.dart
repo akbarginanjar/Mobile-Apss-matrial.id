@@ -27,30 +27,29 @@ class RincianPembayaran extends StatelessWidget {
             ],
           ),
           Divider(color: Colors.grey[800], thickness: 2.0),
-          GetBuilder<CheckoutController>(
-            init: CheckoutController(),
-            builder: (c) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('Subtotal untuk produk'),
-                  Obx(
-                    () => Text(
-                      // ignore: unrelated_type_equality_checks
-                      c.totalHarga == 0
-                          ? toCurrency(varian!.harga!)
-                          : toCurrency(c.totalHarga.toInt()),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Text('Subtotal pengiriman'), Text('Rp. 6.000')],
+            children: [
+              Text('Total Harga'),
+              Obx(() => Text(toCurrency(controller.totalSemuaProduk.value))),
+            ],
+          ),
+          GetBuilder<CheckoutController>(
+            init: CheckoutController(),
+            builder: (metodeController) {
+              return metodeController.courierPrice.value != 0
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('Subtotal pengiriman'),
+                        Text(toCurrency(metodeController.courierPrice.value)),
+                      ],
+                    )
+                  : SizedBox.shrink();
+            },
           ),
           Obx(
             () => Row(
@@ -84,6 +83,24 @@ class RincianPembayaran extends StatelessWidget {
                   )
                 : SizedBox.shrink(), // hidden
           ),
+          Obx(
+            () => controller.voucherValue.value != 0
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('Diskon'),
+                      if (controller.voucherType.value == 'nominal')
+                        Text(
+                          '-${toCurrency(controller.voucherValue.value)}',
+                          style: TextStyle(color: Colors.red[800]),
+                        )
+                      else
+                        Text('-${controller.voucherValue.value}'),
+                    ],
+                  )
+                : SizedBox.shrink(),
+          ),
           Divider(color: Colors.grey[800], thickness: 1.0),
           GetBuilder<CheckoutController>(
             init: CheckoutController(),
@@ -95,10 +112,7 @@ class RincianPembayaran extends StatelessWidget {
                   Text('Total'),
                   Obx(
                     () => Text(
-                      // ignore: unrelated_type_equality_checks
-                      c.totalBayar == 0
-                          ? toCurrency(varian!.harga! + 6000 + 1000)
-                          : toCurrency(c.totalBayar.toInt()),
+                      toCurrency(controller.totalBayarCheckout.value),
                       style: Theme.of(context).textTheme.titleMedium?.apply(
                         color: Theme.of(context).colorScheme.primary,
                       ),

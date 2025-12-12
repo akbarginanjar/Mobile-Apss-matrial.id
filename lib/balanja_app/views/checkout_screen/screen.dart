@@ -98,7 +98,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           children: [
                             Text(
                               "Donasi: ${toCurrency(checkoutController.transaksiDonasi.value)}",
-                              style: TextStyle(fontSize: 16),
                             ),
 
                             Switch(
@@ -146,12 +145,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               Text('Total'),
                               Obx(
                                 () => Text(
-                                  // ignore: unrelated_type_equality_checks
-                                  c.totalBayar == 0
-                                      ? toCurrency(
-                                          widget.varian!.harga! + 6000 + 1000,
-                                        )
-                                      : toCurrency(c.totalBayar.toInt()),
+                                  toCurrency(
+                                    checkoutController.totalBayarCheckout.value,
+                                  ),
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
@@ -169,63 +165,124 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       builder: (c) {
                         return Flexible(
                           flex: 2,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(
-                                context,
-                              ).colorScheme.primary,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                            ),
-                            onPressed: () {
-                              if (c.paymentCode == null) {
-                                EasyLoading.showToast(
-                                  'Pilih Alamat Pengiriman',
-                                );
-                              } else if (c.selectKurir == null) {
-                                EasyLoading.showToast('Pilih Opsi Pengiriman');
-                              } else if (c.selectAlamat == null) {
-                                EasyLoading.showToast(
-                                  'Pilih Metode Pembayaran',
-                                );
-                              } else {
-                                int totalBayarApi;
-                                if (c.totalBayarCheckout.toInt() == 0) {
-                                  totalBayarApi = widget.varian!.harga! + 1000;
-                                } else {
-                                  totalBayarApi = c.totalBayarCheckout.toInt();
-                                }
+                          child: Obx(() {
+                            return SizedBox(
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed:
+                                    checkoutController.isLoadingCheckout.value
+                                    ? null
+                                    : () {
+                                        if (c.selectAlamat == null) {
+                                          EasyLoading.showToast(
+                                            'Pilih Alamat Pengiriman',
+                                          );
+                                        } else if (c.selectShipment == null) {
+                                          EasyLoading.showToast(
+                                            'Pilih Opsi Pengiriman',
+                                          );
+                                        } else if (c.paymentCode == null) {
+                                          EasyLoading.showToast(
+                                            'Pilih Metode Pembayaran',
+                                          );
+                                        } else {
+                                          final payload = {
+                                            "toko_member_id": checkoutController
+                                                .alamatToko!['member_id'],
+                                            "toko_member_alamat_id":
+                                                checkoutController
+                                                    .alamatToko!['id'],
+                                            "konsumen_member_id": GetStorage()
+                                                .read('member_id'),
+                                            "konsumen_member_alamat_id":
+                                                checkoutController.idAlamat,
+                                            "uang_masuk": checkoutController
+                                                .totalSemuaProduk
+                                                .value,
+                                            "ongkir": checkoutController
+                                                .courierPrice
+                                                .value,
+                                            "biaya_layanan": checkoutController
+                                                .transaksiBiayaLayanan
+                                                .value,
+                                            "biaya_aplikasi": checkoutController
+                                                .transaksiBiayaAplikasi
+                                                .value,
+                                            "items": checkoutController
+                                                .getSelectedProducts(),
+                                            "metode_bayar": 'payment_gateway',
+                                            "payment_code":
+                                                checkoutController.paymentCode,
+                                            "payment_type":
+                                                checkoutController.paymentType,
+                                            "transaction_type": "barang",
+                                            "shipment_option": 'dikirim',
 
-                                CheckoutService().checkout(
-                                  memberId: GetStorage().read('member_id'),
-                                  nama: GetStorage()
-                                      .read('nama_lengkap')
-                                      .toString(),
-                                  email: GetStorage().read('email').toString(),
-                                  noHp: GetStorage().read('no_hp').toString(),
-                                  totalBayar: totalBayarApi,
-                                  ongkir: 6000,
-                                  penyimpananId: widget.varian!.id!,
-                                  qty: c.quantity.toInt(),
-                                  hargaSatuan: widget.varian!.harga!,
-                                  idProvinsi: c.idProvinsi!,
-                                  idKabKot: c.idKabKot!,
-                                  idKecamatan: c.idKecamatan!,
-                                  idKelurahan: c.idKelurahan!,
-                                  alamat: c.alamat!,
-                                  code: 2,
-                                );
-                              }
-                            },
-                            child: Text(
-                              'Checkout',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyLarge!.apply(color: Colors.white),
-                            ),
-                          ),
+                                            "shipment": {
+                                              "mode": "postal_code",
+                                              "postal_code":
+                                                  checkoutController.postalCode,
+                                              "courier_company":
+                                                  checkoutController
+                                                      .courierCode,
+                                              "courier_type": checkoutController
+                                                  .courierServiceCode,
+                                              "note": '',
+                                            },
+
+                                            // Jika voucher dipilih
+                                            if (checkoutController
+                                                .selectedVoucherId
+                                                .value
+                                                .isNotEmpty)
+                                              "event_diskon_ids":
+                                                  checkoutController
+                                                      .selectedVoucherId
+                                                      .value,
+
+                                            if (checkoutController
+                                                    .isDonasiActive
+                                                    .value ==
+                                                true)
+                                              "donasi": checkoutController
+                                                  .transaksiDonasi
+                                                  .value,
+                                          };
+                                          print(payload);
+                                          checkoutController.doCheckout(
+                                            payload,
+                                          );
+                                        }
+                                      },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      checkoutController.isLoadingCheckout.value
+                                      ? Colors.grey[700]
+                                      : primary,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                ),
+                                child:
+                                    checkoutController.isLoadingCheckout.value
+                                    ? SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Text(
+                                        'Checkout',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .apply(color: Colors.white),
+                                      ),
+                              ),
+                            );
+                          }),
                         );
                       },
                     ),
