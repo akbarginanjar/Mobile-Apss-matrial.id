@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 
 class ProdukController extends GetConnect {
-  Future<List<Produk>> getProduk() async {
+  Future<List<Produk>> getProduk({int start = 0, int length = 6}) async {
     try {
       final String tokens = GetStorage().read('tokens');
       if (GetStorage().read('id_toko') == null) {
         final conn = await get(
-          '${Base.url}/v1/toko-penyimpanan-public?search=&harga=retail&start=0&length=10&order=desc&show_as_product=1',
+          '${Base.url}/v1/toko-penyimpanan-public?search=&harga=retail&start=$start&length=$length&order=desc&show_as_product=1',
           headers: {
             'secret':
                 'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',

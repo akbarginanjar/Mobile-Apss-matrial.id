@@ -1,7 +1,8 @@
-import 'package:mobile_balanja_id/balanja_app/global_resource.dart'; // Sesuaikan path import global_resource
+import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/screen.dart';
 
-class PilihPesananScreen extends StatelessWidget {
-  const PilihPesananScreen({super.key});
+class PilihTransaksiScreen extends StatelessWidget {
+  const PilihTransaksiScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class PilihPesananScreen extends StatelessWidget {
               icon: Icons.shopping_bag_outlined,
               text: 'Transaksi Produk',
               onTap: () {
-                Get.to(() => const PesananScreen());
+                Get.to(() => TransaksiProdukScreen());
               },
             ),
             const SizedBox(height: 10),

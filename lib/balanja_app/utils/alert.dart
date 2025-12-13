@@ -39,13 +39,14 @@ noInternet() {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   children: [
-                    Icon(Icons.wifi),
-                    SizedBox(width: 10),
+                    Icon(Icons.wifi, color: textdark,),
+                    const SizedBox(width: 10),
                     Text(
                       'Tidak ada internet',
                       style: TextStyle(
+                        color: textdark,
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                       ),
@@ -53,11 +54,11 @@ noInternet() {
                   ],
                 ),
                 const SizedBox(height: 15),
-                const Text(
+                Text(
                   'Silahkan periksa kembali koneksi internet anda.',
-                  style: TextStyle(fontSize: 14),
+                  style: TextStyle(color: textdark, fontSize: 14),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: primary),
                   onPressed: () {
