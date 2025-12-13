@@ -1,4 +1,6 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_jasa/screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_pelatihan/screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/screen.dart';
 
 class PilihTransaksiScreen extends StatelessWidget {
@@ -34,7 +36,7 @@ class PilihTransaksiScreen extends StatelessWidget {
               icon: Icons.handshake_outlined,
               text: 'Transaksi Jasa',
               onTap: () {
-                Get.to(() => const PesananScreen());
+                Get.to(() => TransaksiJasaScreen());
               },
             ),
             const SizedBox(height: 10),
@@ -42,7 +44,7 @@ class PilihTransaksiScreen extends StatelessWidget {
               icon: Icons.school_outlined,
               text: 'Transaksi Pelatihan',
               onTap: () {
-                Get.to(() => const PesananScreen());
+                Get.to(() => TransaksiPelatihanScreen());
               },
             ),
             const SizedBox(height: 20),
