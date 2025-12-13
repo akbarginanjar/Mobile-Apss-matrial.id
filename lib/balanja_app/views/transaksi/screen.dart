@@ -1,7 +1,10 @@
-import 'package:mobile_balanja_id/balanja_app/global_resource.dart'; // Sesuaikan path import global_resource
+import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_jasa/screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_pelatihan/screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/screen.dart';
 
-class PilihPesananScreen extends StatelessWidget {
-  const PilihPesananScreen({super.key});
+class PilihTransaksiScreen extends StatelessWidget {
+  const PilihTransaksiScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class PilihPesananScreen extends StatelessWidget {
               icon: Icons.shopping_bag_outlined,
               text: 'Transaksi Produk',
               onTap: () {
-                Get.to(() => const PesananScreen());
+                Get.to(() => TransaksiProdukScreen());
               },
             ),
             const SizedBox(height: 10),
@@ -33,7 +36,7 @@ class PilihPesananScreen extends StatelessWidget {
               icon: Icons.handshake_outlined,
               text: 'Transaksi Jasa',
               onTap: () {
-                Get.to(() => const PesananScreen());
+                Get.to(() => TransaksiJasaScreen());
               },
             ),
             const SizedBox(height: 10),
@@ -41,7 +44,7 @@ class PilihPesananScreen extends StatelessWidget {
               icon: Icons.school_outlined,
               text: 'Transaksi Pelatihan',
               onTap: () {
-                Get.to(() => const PesananScreen());
+                Get.to(() => TransaksiPelatihanScreen());
               },
             ),
             const SizedBox(height: 20),

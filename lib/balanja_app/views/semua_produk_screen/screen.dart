@@ -11,19 +11,64 @@ class SemuaProdukScreen extends StatefulWidget {
 }
 
 class _SemuaProdukScreenState extends State<SemuaProdukScreen> {
-  Future<void> fetchData() async {
-    setState(() {
-      ProdukController().getProduk();
-    });
+
+  final GetProduk produkStateController = Get.put(GetProduk());
+  final ScrollController _scrollController = ScrollController();
+  TextEditingController search = TextEditingController();
+  final GlobalKey<FormState> form = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels >= 
+        _scrollController.position.maxScrollExtent * 0.95) {
+      
+      produkStateController.loadMoreProduk();
+    }
   }
 
   Future<void> onRefresh() async {
-    await fetchData();
+    produkStateController.refreshState();
+    await Future.doWhile(() {
+      final state = produkStateController.state;
+      return state is IniProdukStates || (state is FilledProdukStates && state.isLoadingMore);
+    });
   }
 
-  TextEditingController search = TextEditingController();
-  ProdukController produkController = ProdukController();
-  final GlobalKey<FormState> form = GlobalKey<FormState>();
+  Widget _buildFooterIndicator(FilledProdukStates state) {
+    if (state.isLoadingMore) {
+      return Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation(primary),
+          ),
+        ),
+      );
+    } else if (state.isfull && state.data != null && state.data!.isNotEmpty) {
+      return Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: Text(
+            'Semua produk telah dimuat.',
+            style: TextStyle(color: textdark),
+          ),
+        ),
+      );
+    }
+    return const SizedBox.shrink();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,44 +196,55 @@ class _SemuaProdukScreenState extends State<SemuaProdukScreen> {
           color: Theme.of(context).scaffoldBackgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ListView(
-              children: [
-                const FilterSemuaProduk(),
-                const SizedBox(height: 10),
-                FutureBuilder<List<dynamic>>(
-                  future: ProdukController().getProduk(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return SizedBox(
-                        height: 160,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation(primary),
+            child: GetBuilder<GetProduk>(
+              init: produkStateController,
+              builder: (controller) {
+                final state = controller.state;
+
+                if (state is IniProdukStates) {
+                  return SizedBox(
+                    height: Get.height * 0.6,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(primary),
+                      ),
+                    ),
+                  );
+                }
+
+                if (state is FilledProdukStates) {
+                  return ListView(
+                    controller: _scrollController, 
+                    children: [
+                      const FilterSemuaProduk(),
+                      const SizedBox(height: 10),
+                      
+                      if (state.data == null || state.data!.isEmpty) 
+                        const Center(child: Text("Tidak ada produk ditemukan."))
+                      else 
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(), 
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 1.0,
+                            mainAxisSpacing: 1.0,
+                            childAspectRatio: 0.70,
                           ),
+                          itemCount: state.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return CardSemuaProduk(produk: state.data![index]);
+                          },
                         ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else {
-                      return GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 1.0,
-                              mainAxisSpacing: 1.0,
-                              childAspectRatio: 0.70,
-                            ),
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return CardSemuaProduk(produk: snapshot.data![index]);
-                        },
-                      );
-                    }
-                  },
-                ),
-              ],
+
+                      _buildFooterIndicator(state),
+                      
+                      const SizedBox(height: 20),
+                    ],
+                  );
+                }
+                return const Center(child: Text("Terjadi kesalahan tak terduga."));
+              },
             ),
           ),
         ),
