@@ -1,6 +1,7 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/models/transaksi_model.dart';
 import 'package:mobile_balanja_id/balanja_app/views/pembayaran/screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/pembayaran/screen_old.dart';
 
 class BelumBayarCard extends StatelessWidget {
   final Transaksi? transaksi;

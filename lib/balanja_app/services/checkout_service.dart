@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/models/checkout_model.dart';
-import 'package:mobile_balanja_id/balanja_app/views/pembayaran/screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/pembayaran/screen_old.dart';
 
 class CheckoutService extends GetConnect {
   var tokens = GetStorage().read('tokens');

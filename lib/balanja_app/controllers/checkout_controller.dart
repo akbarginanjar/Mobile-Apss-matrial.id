@@ -1,5 +1,6 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/services/checkout_service.dart';
+import 'package:mobile_balanja_id/balanja_app/views/pembayaran/screen.dart';
 
 class CheckoutController extends GetxController {
   RxInt quantity = 1.obs;
@@ -524,7 +525,13 @@ class CheckoutController extends GetxController {
         final data = res.body;
 
         // navigasi ke halaman sukses
-        Get.offAll(CheckoutSuccessSCreen(idTransakti: data['id']));
+        Get.offAll(
+          PembayaranScreen(
+            idTransakti: data['id'],
+            noInvoice: data['no_invoice'],
+            status: data['status'],
+          ),
+        );
       } else {
         EasyLoading.showError("Checkout gagal, kode: ${res.statusCode}");
       }
@@ -535,39 +542,5 @@ class CheckoutController extends GetxController {
       isLoadingCheckout.value = false;
       EasyLoading.dismiss();
     }
-  }
-}
-
-class CheckoutSuccessSCreen extends StatelessWidget {
-  final int? idTransakti;
-  final String? noInvoice;
-  final String? status;
-  const CheckoutSuccessSCreen({
-    required this.idTransakti,
-    super.key,
-    this.noInvoice,
-    this.status,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(
-            child: Icon(Icons.check_circle, color: Colors.green[700], size: 80),
-          ),
-          Text('Pesanan berhasil dibuat'),
-          ElevatedButton(
-            onPressed: () {
-              Get.offAll(MainScreen());
-            },
-            child: Text('Kembali ke home'),
-          ),
-        ],
-      ),
-    );
   }
 }

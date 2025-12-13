@@ -305,9 +305,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                   .value,
                                           };
                                           print(payload);
-                                          // checkoutController.doCheckout(
-                                          //   payload,
-                                          // );
+                                          checkoutController.doCheckout(
+                                            payload,
+                                          );
                                         }
                                       },
                                 style: ElevatedButton.styleFrom(
