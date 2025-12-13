@@ -16,7 +16,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     // checkoutController.loadAlamatToko(1);
-    checkoutController.loadAlamatToko(widget.varian!.memberId.toString());
+    checkoutController.loadAlamatToko(
+      widget.varian!.barang!.memberId.toString(),
+    );
     checkoutController.loadTransaksiFee(widget.varian!.memberId.toString());
     return Scaffold(
       appBar: AppBar(
@@ -210,35 +212,89 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                 .value,
                                             "items": checkoutController
                                                 .getSelectedProducts(),
-                                            "metode_bayar": 'payment_gateway',
-                                            "payment_code":
-                                                checkoutController.paymentCode,
-                                            "payment_type":
-                                                checkoutController.paymentType,
+                                            if (checkoutController
+                                                    .paymentGroup ==
+                                                'Manual Transfer')
+                                              "metode_bayar": 'manual_transfer'
+                                            else
+                                              "metode_bayar": 'payment_gateway',
+                                            if (checkoutController
+                                                    .paymentGroup ==
+                                                'Manual Transfer')
+                                              "kode_bayar": checkoutController
+                                                  .paymentCode,
+                                            if (checkoutController
+                                                        .paymentGroup ==
+                                                    'Virtual Account' ||
+                                                checkoutController
+                                                        .paymentGroup ==
+                                                    'QRIS')
+                                              "payment_code": checkoutController
+                                                  .paymentCode,
+                                            if (checkoutController
+                                                        .paymentGroup ==
+                                                    'Virtual Account' ||
+                                                checkoutController
+                                                        .paymentGroup ==
+                                                    'QRIS')
+                                              "payment_type": checkoutController
+                                                  .paymentType,
                                             "transaction_type": "barang",
                                             "shipment_option": 'dikirim',
-
-                                            "shipment": {
-                                              "mode": "postal_code",
-                                              "postal_code":
-                                                  checkoutController.postalCode,
-                                              "courier_company":
-                                                  checkoutController
-                                                      .courierCode,
-                                              "courier_type": checkoutController
-                                                  .courierServiceCode,
-                                              "note": '',
-                                            },
+                                            if (checkoutController
+                                                    .courierServiceCode ==
+                                                'instant')
+                                              "shipment": {
+                                                "mode": "latlong",
+                                                "latitude":
+                                                    checkoutController
+                                                        .latAlamat ??
+                                                    '',
+                                                "longitude":
+                                                    checkoutController
+                                                        .longAlamat ??
+                                                    '',
+                                                "courier_company":
+                                                    checkoutController
+                                                        .courierCode,
+                                                "courier_type":
+                                                    checkoutController
+                                                        .courierServiceCode,
+                                                "order_note": "-",
+                                              }
+                                            else
+                                              "shipment": {
+                                                "mode": "postal_code",
+                                                "postal_code":
+                                                    checkoutController
+                                                        .postalCode,
+                                                "latitude":
+                                                    checkoutController
+                                                        .latAlamat ??
+                                                    '',
+                                                "longitude":
+                                                    checkoutController
+                                                        .longAlamat ??
+                                                    '',
+                                                "courier_company":
+                                                    checkoutController
+                                                        .courierCode,
+                                                "courier_type":
+                                                    checkoutController
+                                                        .courierServiceCode,
+                                                "note": "-",
+                                              },
 
                                             // Jika voucher dipilih
                                             if (checkoutController
                                                 .selectedVoucherId
                                                 .value
                                                 .isNotEmpty)
-                                              "event_diskon_ids":
-                                                  checkoutController
-                                                      .selectedVoucherId
-                                                      .value,
+                                              "event_diskon_ids": [
+                                                checkoutController
+                                                    .selectedVoucherId
+                                                    .value,
+                                              ],
 
                                             if (checkoutController
                                                     .isDonasiActive
@@ -249,9 +305,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                   .value,
                                           };
                                           print(payload);
-                                          checkoutController.doCheckout(
-                                            payload,
-                                          );
+                                          // checkoutController.doCheckout(
+                                          //   payload,
+                                          // );
                                         }
                                       },
                                 style: ElevatedButton.styleFrom(
@@ -296,3 +352,36 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 }
+
+// {
+//     "toko_member_id": 81,
+//     "toko_member_alamat_id": 41,
+//     "konsumen_member_id": 180,
+//     "konsumen_member_alamat_id": 48,
+//     "uang_masuk": 86500,
+//     "ongkir": 37000,
+//     "biaya_layanan": 500,
+//     "biaya_aplikasi": 1000,
+//     "items": [
+//         {
+//             "penyimpanan_id": 376,
+//             "barang_id": 1977,
+//             "qty": 1,
+//             "harga": 86500
+//         }
+//     ],
+//     "shipment_option": "dikirim",
+//     "metode_bayar": "payment_gateway",
+//     "payment_code": "bca",
+//     "payment_type": "bank_transfer",
+//     "shipment": {
+//         "mode": "latlong",
+//         "latitude": "-6.963023",
+//         "longitude": "107.610483",
+//         "courier_company": "gojek",
+//         "courier_type": "instant",
+//         "order_note": "-"
+//     },
+//     "transaction_type": "barang",
+//     "donasi": 800
+// }

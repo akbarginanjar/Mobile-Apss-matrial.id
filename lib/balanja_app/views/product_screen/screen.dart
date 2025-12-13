@@ -418,7 +418,9 @@ class _ProductScreenState extends State<ProductScreen> {
                             c.select != null
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: (selectedVariantPhoto?.isNotEmpty == true)
+                                    child:
+                                        (selectedVariantPhoto?.isNotEmpty ==
+                                            true)
                                         ? Image.network(
                                             '${selectedVariantPhoto![0].path}',
                                             height: 100,
@@ -434,7 +436,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                   )
                                 : ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: widget.produk.photo?.isNotEmpty == true
+                                    child:
+                                        widget.produk.photo?.isNotEmpty == true
                                         ? Image.network(
                                             '${widget.produk.photo![0].path}',
                                             height: 100,
@@ -509,24 +512,39 @@ class _ProductScreenState extends State<ProductScreen> {
                                       if (idx !=
                                           (widget.produk.varianBarang!.length +
                                               1)) {
-                                        final currentVariantPhoto = widget.produk.varianBarang![index].barang?.photo;
-                                        final isOutOfStock = widget.produk.varianBarang![index].jumlah == 0;
+                                        final currentVariantPhoto = widget
+                                            .produk
+                                            .varianBarang![index]
+                                            .barang
+                                            ?.photo;
+                                        final isOutOfStock =
+                                            widget
+                                                .produk
+                                                .varianBarang![index]
+                                                .jumlah ==
+                                            0;
 
                                         final safeImageWidget = ClipRRect(
-                                          borderRadius: BorderRadius.circular(5),
-                                          child: (currentVariantPhoto?.isNotEmpty == true)
-                                            ? Image.network(
-                                                currentVariantPhoto![0].path.toString(),
-                                                height: 30,
-                                                width: 30,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Image.network(
-                                                'https://removal.ai/wp-content/uploads/2021/02/no-img.png', 
-                                                height: 30,
-                                                width: 30,
-                                                fit: BoxFit.cover,
-                                              ),
+                                          borderRadius: BorderRadius.circular(
+                                            5,
+                                          ),
+                                          child:
+                                              (currentVariantPhoto
+                                                      ?.isNotEmpty ==
+                                                  true)
+                                              ? Image.network(
+                                                  currentVariantPhoto![0].path
+                                                      .toString(),
+                                                  height: 30,
+                                                  width: 30,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Image.network(
+                                                  'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
+                                                  height: 30,
+                                                  width: 30,
+                                                  fit: BoxFit.cover,
+                                                ),
                                         );
                                         return isOutOfStock
                                             ? InkWell(
@@ -701,6 +719,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                       widget.produk.varianBarang![c.select!],
                                 ),
                               );
+                              // print(widget.produk.varianBarang![c.select!].id);
                             }
                           }
                         },

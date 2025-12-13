@@ -28,7 +28,10 @@ class ProductSection extends StatelessWidget {
                 flex: 2,
                 child: Text(
                   title,
-                  style: TextStyle(fontWeight: FontWeight.w600, color: textdark),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: textdark,
+                  ),
                 ),
               ),
               Flexible(
@@ -97,7 +100,7 @@ class ProductSection extends StatelessWidget {
                     return Container(
                       margin: EdgeInsets.only(left: index == 0 ? 12.0 : 0),
                       color: Theme.of(context).scaffoldBackgroundColor,
-                      width: 160,
+                      width: 190,
                       child: ProductCardVertical(produk: snapshot.data![index]),
                     );
                   },

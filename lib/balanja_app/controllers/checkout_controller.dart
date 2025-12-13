@@ -231,22 +231,6 @@ class CheckoutController extends GetxController {
     Get.back();
   }
 
-  // void increment(int harga) {
-  //   quantity.value++;
-  //   totalHarga.value = harga * quantity.value;
-  //   totalBayar.value = totalHarga.value + subtotalPengiriman + biayaLayanan;
-  //   totalBayarCheckout.value = totalHarga.value + biayaLayanan;
-  // }
-
-  // void decrement(int harga) {
-  //   if (quantity.value > 1) {
-  //     quantity.value--;
-  //     totalHarga.value = harga * quantity.value;
-  //     totalBayar.value = totalHarga.value + subtotalPengiriman + biayaLayanan;
-  //     totalBayarCheckout.value = totalHarga.value + biayaLayanan;
-  //   }
-  // }
-
   Map<String, dynamic>? alamatToko;
   RxBool isLoadingAlamatToko = false.obs;
 
@@ -540,7 +524,7 @@ class CheckoutController extends GetxController {
         final data = res.body;
 
         // navigasi ke halaman sukses
-        Get.offAll(CheckoutSuccessSCreen());
+        Get.offAll(CheckoutSuccessSCreen(idTransakti: data['id']));
       } else {
         EasyLoading.showError("Checkout gagal, kode: ${res.statusCode}");
       }
@@ -555,7 +539,15 @@ class CheckoutController extends GetxController {
 }
 
 class CheckoutSuccessSCreen extends StatelessWidget {
-  const CheckoutSuccessSCreen({super.key});
+  final int? idTransakti;
+  final String? noInvoice;
+  final String? status;
+  const CheckoutSuccessSCreen({
+    required this.idTransakti,
+    super.key,
+    this.noInvoice,
+    this.status,
+  });
 
   @override
   Widget build(BuildContext context) {
