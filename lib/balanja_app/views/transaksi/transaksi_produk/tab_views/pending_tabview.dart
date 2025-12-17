@@ -1,7 +1,7 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/models/transaksi_model.dart';
 import 'package:mobile_balanja_id/balanja_app/controllers/transaksi_produk_controller.dart';
-// import 'package:mobile_balanja_id/balanja_app/views/transaksi/pending_card.dart';
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/card/pending_card.dart';
 
 class PendingTabView extends StatelessWidget {
   PendingTabView({super.key});
@@ -44,7 +44,7 @@ class PendingTabView extends StatelessWidget {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     final Transaksi transaksi = controller.pendingList[index];
-                    // return PendingCard(transaksi: transaksi);
+                    return PendingCard(transaksi: transaksi);
                   },
                 ),
               ],
