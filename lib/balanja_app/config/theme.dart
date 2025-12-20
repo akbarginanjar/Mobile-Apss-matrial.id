@@ -99,3 +99,5 @@ Color info = HexColor('#1992ff');
 Color dark = HexColor('#212121');
 Color dark2 = HexColor('#262626');
 Color textdark = HexColor('#949492');
+
+Color textTheme = Colors.white;

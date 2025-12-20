@@ -59,12 +59,12 @@ class _PesananScreenState extends State<PesananScreen> {
         ),
         body: const TabBarView(
           children: [
-            BelumBayarTabview(),
-            DiprosesTabview(),
-            DikirimTabview(),
-            DiterimaTabview(),
-            SelesaiTabview(),
-            BatalTabview(),
+            // BelumBayarTabview(),
+            // DiprosesTabview(),
+            // DikirimTabview(),
+            // DiterimaTabview(),
+            // SelesaiTabview(),
+            // BatalTabview(),
             // PengembalianTabview(),
             // PengembalianTabview(),
           ],
