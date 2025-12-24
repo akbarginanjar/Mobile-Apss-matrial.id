@@ -11,6 +11,12 @@ class DibatalkanTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(TransaksiProdukController());
 
+    if (controller.transaksiDibatalkan.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.loadDibatalkan();
+      });
+    }
+
     return Scaffold(
       body: Obx(() {
         if (controller.isLoading.value) {
