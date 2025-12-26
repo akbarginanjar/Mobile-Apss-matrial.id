@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_balanja_id/balanja_app/controllers/transaksi_produk_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/models/transaksi_model.dart';
-import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/produk_card/diterima_card.dart'; 
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_jasa/jasa_card/pending_card.dart';
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/produk_card/diterima_card.dart';
 
 class DiterimaTabView extends StatelessWidget {
   const DiterimaTabView({super.key});
@@ -34,7 +35,7 @@ class DiterimaTabView extends StatelessWidget {
             itemCount: controller.transaksiDiterima.length,
             itemBuilder: (context, index) {
               final Transaksi transaksi = controller.transaksiDiterima[index];
-              return DiterimaCard(transaksi: transaksi);
+              return PendingCard(transaksi: transaksi);
             },
           ),
         );

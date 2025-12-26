@@ -80,7 +80,7 @@ class TransaksiController extends GetxController {
               DefaultButtonSecond(
                 text: "Tutup",
                 press: () {
-                  Get.back();
+                  Navigator.of(Get.overlayContext!).pop();
                 },
               ),
               DefaultButton(
@@ -96,9 +96,12 @@ class TransaksiController extends GetxController {
 
         if (response.body['status_bayar'] == 'lunas') {
           Get.defaultDialog(
-            titlePadding: EdgeInsets.only(top: 20),
+            titlePadding: const EdgeInsets.only(top: 20),
             title: "Pembayaran Berhasil",
-            titleStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            titleStyle: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
             content: const Padding(
               padding: EdgeInsets.all(5),
               child: Column(
@@ -116,7 +119,7 @@ class TransaksiController extends GetxController {
                 ],
               ),
             ),
-            contentPadding: EdgeInsets.only(
+            contentPadding: const EdgeInsets.only(
               bottom: 20,
               top: 10,
               left: 20,
@@ -126,13 +129,13 @@ class TransaksiController extends GetxController {
               DefaultButtonSecond(
                 text: "Tutup",
                 press: () {
-                  Get.back();
+                  Navigator.of(Get.overlayContext!).pop(); // ✅ TANPA Get.back()
                 },
               ),
               DefaultButton(
                 text: "OK",
                 press: () {
-                  Get.offAll(MainScreen());
+                  Get.offAll(() => MainScreen());
                 },
                 color: primary,
               ),

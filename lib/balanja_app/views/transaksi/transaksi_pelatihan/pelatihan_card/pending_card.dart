@@ -1,5 +1,6 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/models/transaksi_model.dart';
+import 'package:mobile_balanja_id/balanja_app/views/pembayaran/screen.dart';
 
 class PendingCard extends StatelessWidget {
   final Transaksi transaksi;
@@ -9,79 +10,87 @@ class PendingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       color: dark,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Pending (Belum Lunas)",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: primary,
-                fontSize: 14,
+      child: InkWell(
+        onTap: () {
+          Get.to(
+            PembayaranScreen(
+              idTransakti: transaksi.id,
+              noInvoice: transaksi.noInvoice,
+            ),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${transaksi.status}",
+                style: TextStyle(color: primary, fontSize: 14),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              transaksi.noInvoice ?? "-",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: textdark,
-                fontSize: 16,
+              const SizedBox(height: 1),
+              Text(
+                transaksi.noInvoice ?? "-",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: textdark,
+                  fontSize: 16,
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Tanggal Transaksi",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: textdark,
+              const SizedBox(height: 5),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Tanggal Transaksi",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: textdark,
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        transaksi.waktuTransaksi ?? "-",
-                        style: TextStyle(color: textdark),
-                      ),
-                    ],
+                        const SizedBox(height: 2),
+                        Text(
+                          transaksi.waktuTransaksi ?? "-",
+                          style: TextStyle(color: textdark),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        "Nominal",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: textdark,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Nominal",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: textdark,
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        toCurrency(toInt(transaksi.totalBayar)),
-                        style: TextStyle(
-                          color: primary,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(height: 2),
+                        Text(
+                          toCurrency(toInt(transaksi.totalBayar)),
+                          style: TextStyle(
+                            color: primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,43 +1,42 @@
-import 'package:mobile_balanja_id/balanja_app/global_resource.dart'; 
-import 'package:mobile_balanja_id/balanja_app/controllers/transaksi_produk_controller.dart'; 
+import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
+import 'package:mobile_balanja_id/balanja_app/controllers/transaksi_produk_controller.dart';
 
-import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/tab_views/pending_tabview.dart'; 
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/tab_views/pending_tabview.dart';
 import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/tab_views/diproses_tabview.dart';
 import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/tab_views/dikirim_tabview.dart';
 import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/tab_views/diterima_tabview.dart';
 import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/tab_views/selesai_tabview.dart';
-import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/tab_views/dibatalkan_tabview.dart'; 
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/tab_views/dibatalkan_tabview.dart';
 
 class TransaksiProdukScreen extends StatelessWidget {
   TransaksiProdukScreen({super.key});
-  
-  final TransaksiProdukController controller = Get.put(TransaksiProdukController()); 
+
+  final TransaksiProdukController controller = Get.put(
+    TransaksiProdukController(),
+  );
 
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
       length: 6,
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Pesanan Kamu',
-            style: TextStyle(color: textdark),
-          ),
+          title: Text('Transaksi Produk', style: TextStyle(color: textdark)),
           centerTitle: true,
           iconTheme: IconThemeData(color: primary),
           backgroundColor: dark,
           surfaceTintColor: dark,
-          shape: Border(bottom: BorderSide(color: textdark)), 
+          shape: Border(bottom: BorderSide(color: dark)),
           bottom: TabBar(
             isScrollable: true,
             indicatorColor: primary,
             labelColor: primary,
             unselectedLabelColor: textdark,
-            labelStyle: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: primary, fontWeight: FontWeight.bold),
+            labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: primary,
+              fontWeight: FontWeight.bold,
+            ),
             automaticIndicatorColorAdjustment: true,
             tabs: const [
               Tab(text: 'Pending'),
@@ -51,12 +50,12 @@ class TransaksiProdukScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            PendingTabView(), 
+            PendingTabView(),
             DiprosesTabView(),
             DikirimTabView(),
             DiterimaTabView(),
             SelesaiTabView(),
-            DibatalkanTabView(), 
+            DibatalkanTabView(),
           ],
         ),
       ),

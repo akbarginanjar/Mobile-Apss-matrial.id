@@ -341,9 +341,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               ),
                             ),
                           ),
-                          onPressed: () {
-                            beliSekarang();
-                          },
+                          onPressed: () {},
                           child: Text(
                             'Keranjang',
                             style: Theme.of(context).textTheme.bodyMedium!
@@ -370,7 +368,9 @@ class _ProductScreenState extends State<ProductScreen> {
                             beliSekarang();
                           },
                           child: Text(
-                            'Beli Sekarang',
+                            widget.produk.varianBarang![0].jumlah == 0
+                                ? 'Pre Order'
+                                : 'Beli Sekarang',
                             style: GoogleFonts.montserrat(
                               fontSize: 14,
                               color: Colors.white,
@@ -711,7 +711,13 @@ class _ProductScreenState extends State<ProductScreen> {
                                     .varianBarang![c.select!]
                                     .jumlah == //validator stok
                                 0) {
-                              EasyLoading.showToast('Stok tidak tersedia');
+                              EasyLoading.showToast('Pre Order');
+                              Get.to(
+                                CheckoutScreen(
+                                  varian:
+                                      widget.produk.varianBarang![c.select!],
+                                ),
+                              );
                             } else {
                               Get.to(
                                 CheckoutScreen(
@@ -724,7 +730,13 @@ class _ProductScreenState extends State<ProductScreen> {
                           }
                         },
                         child: Text(
-                          'Beli Sekarang',
+                          widget
+                                      .produk
+                                      .varianBarang![0]
+                                      .jumlah == //validator stok
+                                  0
+                              ? 'Pre Order'
+                              : 'Beli Sekarang',
                           style: GoogleFonts.montserrat(
                             color: Colors.white,
                             fontSize: 14,
