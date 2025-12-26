@@ -11,6 +11,12 @@ class DikirimTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(TransaksiProdukController());
 
+    if (controller.transaksiDikirim.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.loadDikirim();
+      });
+    }
+
     return Scaffold(
       body: Obx(() {
         if (controller.isLoading.value) {

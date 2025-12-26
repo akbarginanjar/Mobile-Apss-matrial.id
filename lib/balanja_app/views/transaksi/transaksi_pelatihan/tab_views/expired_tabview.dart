@@ -1,59 +1,41 @@
-import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
-import 'package:mobile_balanja_id/balanja_app/models/transaksi_model.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile_balanja_id/balanja_app/controllers/transaksi_pelatihan_controller.dart';
-// import 'package:mobile_balanja_id/balanja_app/views/transaksi/expired_pelatihan_card.dart';
+import 'package:mobile_balanja_id/balanja_app/models/transaksi_model.dart';
+import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_pelatihan/pelatihan_card/expired_card.dart'; 
 
 class ExpiredTabView extends StatelessWidget {
-  ExpiredTabView({super.key});
-
-  final TransaksiPelatihanController controller = Get.find<TransaksiPelatihanController>();
+  const ExpiredTabView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: dark2,
-      child: Obx(() {
-        if (controller.isLoadingExpired.value && controller.expiredList.isEmpty) {
-          return const SizedBox(
-            height: 160,
-            child: Center(child: CircularProgressIndicator()),
-          );
+    final controller = Get.put(TransaksiPelatihanController());
+
+    if (controller.transaksiExpired.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.loadExpired();
+      });
+    }
+
+    return Scaffold(
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
         }
 
-        if (controller.expiredList.isEmpty) {
-          return RefreshIndicator(
-            onRefresh: () => controller.fetchTransaksi('expired'),
-            child: ListView(
-              children: [
-                const SizedBox(height: 200),
-                Center(
-                  child: Text(
-                    'Tidak ada transaksi Pelatihan Expired.',
-                    style: TextStyle(color: textdark),
-                  ),
-                ),
-              ],
-            ),
-          );
+        if (controller.transaksiExpired.isEmpty) {
+          return const Center(child: Text("Tidak ada transaksi Expired"));
         }
 
         return RefreshIndicator(
-          onRefresh: () => controller.fetchTransaksi('expired'),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListView.builder(
-                  itemCount: controller.expiredList.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final Transaksi transaksi = controller.expiredList[index];
-                    // return ExpiredPelatihanCard(transaksi: transaksi);
-                  },
-                ),
-              ],
-            ),
+          onRefresh: () => controller.loadExpired(),
+          child: ListView.builder(
+            padding: const EdgeInsets.all(12),
+            itemCount: controller.transaksiExpired.length,
+            itemBuilder: (context, index) {
+              final Transaksi transaksi = controller.transaksiExpired[index];
+              return ExpiredCard(transaksi: transaksi); 
+            },
           ),
         );
       }),

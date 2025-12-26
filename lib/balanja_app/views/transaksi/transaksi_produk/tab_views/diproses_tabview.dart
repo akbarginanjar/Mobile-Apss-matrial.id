@@ -11,6 +11,12 @@ class DiprosesTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(TransaksiProdukController());
 
+    if (controller.transaksiDiproses.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.loadDiproses();
+      });
+    }
+
     return Scaffold(
       body: Obx(() {
         if (controller.isLoading.value) {

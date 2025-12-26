@@ -1,73 +1,52 @@
-import 'dart:io';
-import 'package:mobile_balanja_id/balanja_app/models/transaksi_model.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
-
-class AuthenticationException implements Exception {
-  final String message;
-  const AuthenticationException(this.message);
-
-  @override
-  String toString() => 'AuthenticationException: $message';
-}
+import 'package:mobile_balanja_id/balanja_app/models/transaksi_model.dart';
 
 class TransaksiJasaService extends GetConnect {
-  final _storage = GetStorage();
-
   Future<List<Transaksi>> getTransaksiJasaByStatus(String status) async {
-    final String? tokens = _storage.read('tokens');
-
+    final String? tokens = GetStorage().read('tokens');
     if (tokens == null) {
-      throw const AuthenticationException('Sesi login tidak ditemukan.');
+      EasyLoading.dismiss();
+      Get.snackbar('Error', 'Sesi login tidak ditemukan.');
+      throw Exception('Sesi login tidak ditemukan.');
     }
-
+    final url =
+        '${Base.url}/v1/transaksi-online?konsumen_member_id=${GetStorage().read('member_id')}&show_bukti_tf=1&status=$status&view_as_invoice=1&start=0&length=20&transaction_type=jasa';
+    final headers = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'web',
+    };
+    EasyLoading.show(status: 'Memuat transaksi $status...');
+    Response conn;
     try {
-      final Response conn = await get(
-        '${Base.url}/v1/transaksi-online?konsumen_member_id=${GetStorage().read('member_id')}&show_bukti_tf=1&status=$status&view_as_invoice=1&start=0&length=20&transaction_type=jasa',
-        headers: {
-          'secret':
-              'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
-          'Authorization': 'bearer $tokens',
-          'device': 'mobile',
-        },
-      );
-
-      if (conn.statusCode == 200) {
-        final body = conn.body;
-
-        List result = [];
-
-        if (body is List) {
-          result = body;
-        } else if (body is Map && body['data'] is List) {
-          result = body['data'];
-        } else if (body is Map && body['data'] is Map) {
-          result = (body['data'] as Map).values.toList();
-        } else {
-          result = [];
-        }
-
-        return result
-            .whereType<Map<String, dynamic>>()
-            .map((json) => Transaksi.fromJson(json))
-            .toList();
-      } else if (conn.statusCode == 401) {
-        throw const AuthenticationException('Masa Aktif Akun Habis');
-      } else if (conn.statusCode == null) {
-        noInternet();
-        throw Exception('Koneksi terputus.');
-      } else {
-        final errorMessage = conn.body['message'] ??
-            'Gagal memuat data transaksi jasa. Status: ${conn.statusCode}';
-        throw Exception(errorMessage);
-      }
-    } on TimeoutException {
-      throw Exception('Jaringan lemah. Timeout.');
-    } on SocketException {
-      throw Exception('Data dalam keadaan mati. Periksa koneksi.');
-    } on HttpException catch (e) {
-      throw Exception('Masalah HTTP: ${e.message}');
+      conn = await get(url, headers: headers);
     } catch (e) {
-      throw Exception('Error Sistem: ${e.toString()}');
+      EasyLoading.dismiss();
+      Get.snackbar('Error Transaksi Jasa $status', e.toString());
+      rethrow;
+    }
+    EasyLoading.dismiss();
+    if (conn.statusCode == 200 && (conn.body is Map || conn.body is List)) {
+      final body = conn.body;
+      List result = [];
+      if (body is List) {
+        result = body;
+      } else if (body is Map && body['data'] is List) {
+        result = body['data'];
+      }
+      final typed = result.whereType<Map<String, dynamic>>().toList();
+      final transaksi = typed.map((json) => Transaksi.fromJson(json)).toList();
+      return transaksi;
+    } else {
+      String errorMessage;
+      if (conn.body is Map && (conn.body as Map)['message'] != null) {
+        errorMessage = (conn.body as Map)['message'].toString();
+      } else {
+        errorMessage = conn.body.toString();
+      }
+      Get.snackbar('Error Transaksi Jasa $status', errorMessage);
+      throw Exception(errorMessage);
     }
   }
 }
