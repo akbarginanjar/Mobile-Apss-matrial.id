@@ -1,24 +1,15 @@
+import 'package:mobile_balanja_id/balanja_app/controllers/auth_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
-import 'package:mobile_balanja_id/balanja_app/views/login_nohp_screen/screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/register_screen/screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/widgets/button.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginNoHpScreen extends StatelessWidget {
+  const LoginNoHpScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  bool _obscureText = true;
-  GetStorage box = GetStorage();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
-  AuthService authService = AuthService();
-  final GlobalKey<FormState> form = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(AuthController());
+    final GlobalKey<FormState> form = GlobalKey<FormState>();
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -63,86 +54,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: TextFormField(
-                    controller: email,
+                    controller: controller.phoneController,
                     validator: (val) {
                       if (val!.isEmpty) {
-                        showErrorDialog(
-                          'Email atau Password tidak boleh kosong!',
-                        );
+                        showErrorDialog('No HP tidak boleh kosong!');
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      hintText: 'Email',
-                      hintStyle: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                        color: Colors.grey,
-                      ),
-                      prefixIcon: Icon(Icons.person, color: Colors.grey[500]),
-                      fillColor: primary,
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 1.5,
-                          color: Colors.transparent,
-                        ),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 0,
-                          color: Colors.transparent,
-                        ),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 7),
-                  height: 50,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 0,
-                  ),
-                  // width: size.width * 0.8,
-                  decoration: BoxDecoration(
-                    color: dark2,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: TextFormField(
-                    controller: password,
-                    obscureText: _obscureText,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        showErrorDialog(
-                          'Email atau Password tidak boleh kosong!',
-                        );
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Password',
+                      hintText: '08123xxx',
                       hintStyle: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 15,
                         color: Colors.grey,
                       ),
                       prefixIcon: Icon(
-                        Icons.lock_outline,
+                        Icons.phone_android,
                         color: Colors.grey[500],
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureText
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
                       ),
                       fillColor: primary,
                       focusedBorder: OutlineInputBorder(
@@ -162,31 +90,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 DefaultButton(
                   text: 'Login',
                   press: () {
-                    if (form.currentState!.validate()) {
-                      authService
-                          .login(email: email.text, password: password.text)
-                          .then((value) {
-                            if (box.read('tokens') != null) {
-                              form.currentState!.reset();
-                              Get.offAll(
-                                const MainScreen(),
-                                transition: Transition.rightToLeft,
-                              );
-                            }
-                          });
-                    }
+                    controller.requestOtp();
                   },
                   color: primary,
                 ),
                 const SizedBox(height: 10),
                 DefaultButtonOutline(
-                  text: 'Login dengan No HP',
+                  text: 'Login dengan Email',
                   press: () {
-                    Get.off(LoginNoHpScreen());
+                    Get.off(LoginScreen());
                   },
                 ),
                 const SizedBox(height: 20),

@@ -21,7 +21,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Get.to(
                 PembayaranScreen(
                   idTransakti: 590,
-                  noInvoice: 'INVMTIDT-0306-191225-609',
+                  noInvoice: 'INVMTIDT-0313-201225-422',
                 ),
               );
             },

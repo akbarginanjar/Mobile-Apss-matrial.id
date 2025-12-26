@@ -338,62 +338,53 @@ class PembayaranScreen extends StatelessWidget {
                         }),
 
                         if (data['bukti_tf'] != null)
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: InkWell(
-                              onTap: () {
-                                Get.dialog(
-                                  Dialog(
-                                    insetPadding: EdgeInsets.zero,
-                                    backgroundColor: Colors.black,
-                                    child: Stack(
-                                      children: [
-                                        // Gambar fullscreen
-                                        Center(
-                                          child: InteractiveViewer(
-                                            child: Image.network(
-                                              '${Base.url}${data['bukti_tf']['file']}',
-                                              width: double.infinity,
-                                              fit: BoxFit.contain,
-                                            ),
+                          TextButton(
+                            onPressed: () {
+                              Get.dialog(
+                                Dialog(
+                                  insetPadding: EdgeInsets.zero,
+                                  backgroundColor: Colors.black,
+                                  child: Stack(
+                                    children: [
+                                      // Gambar fullscreen
+                                      Center(
+                                        child: InteractiveViewer(
+                                          child: Image.network(
+                                            '${Base.url}${data['bukti_tf']['file']}',
+                                            width: double.infinity,
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
+                                      ),
 
-                                        // Tombol Close
-                                        Positioned(
-                                          top: 40,
-                                          right: 20,
-                                          child: InkWell(
-                                            onTap: () => Get.back(),
-                                            child: Container(
-                                              padding: const EdgeInsets.all(8),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black.withOpacity(
-                                                  0.6,
-                                                ),
-                                                shape: BoxShape.circle,
+                                      // Tombol Close
+                                      Positioned(
+                                        top: 40,
+                                        right: 20,
+                                        child: InkWell(
+                                          onTap: () => Get.back(),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black.withOpacity(
+                                                0.6,
                                               ),
-                                              child: const Icon(
-                                                Icons.close,
-                                                color: Colors.white,
-                                                size: 24,
-                                              ),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: const Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                              size: 24,
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                );
-                              },
-
-                              child: Image.network(
-                                '${Base.url}${data['bukti_tf']['file']}',
-                                width: double.infinity,
-                                height: 150,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                                ),
+                              );
+                            },
+                            child: Text('Lihat Bukti Bayar'),
                           ),
                         if (data['bukti_tf'] != null) SizedBox(height: 10),
 
@@ -443,6 +434,7 @@ class PembayaranScreen extends StatelessWidget {
                                     if (response.statusCode == 200) {
                                       EasyLoading.showSuccess('Berhasil');
                                       controller.getInvoice(noInvoice);
+                                      controller.clearImage();
                                     } else {
                                       EasyLoading.showError('Gagal');
                                     }

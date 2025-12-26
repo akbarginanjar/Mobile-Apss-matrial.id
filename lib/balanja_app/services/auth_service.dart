@@ -3,7 +3,28 @@ import 'dart:io';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/models/user_model.dart';
 
-class AuthController extends GetConnect {
+class AuthService extends GetConnect {
+  var tokens = GetStorage().read('tokens');
+  Future<Response> loginNoHp(body) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return post('${Base.url}/v1/otp/request', headers: header, body);
+  }
+
+  Future<Response> otpVerifikasi(body) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return post('${Base.url}/v1/otp/verify', headers: header, body);
+  }
+
   Future<User> login({required String email, required String password}) async {
     try {
       if (password.isNotEmpty && email.isNotEmpty) {

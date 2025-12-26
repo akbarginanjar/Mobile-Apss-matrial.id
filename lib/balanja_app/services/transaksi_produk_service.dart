@@ -11,17 +11,19 @@ class TransaksiProdukService extends GetConnect {
       throw Exception('Sesi login tidak ditemukan.');
     }
     final url =
-        '${Base.url}/v1/transaksi-online?konsumen_member_id=178&show_bukti_tf=1&status=pending&view_as_invoice=1&start=0&length=20&transaction_type=barang';
+        '${Base.url}/v1/transaksi-online?konsumen_member_id=${GetStorage().read('member_id')}&show_bukti_tf=1&status=pending&view_as_invoice=1&start=0&length=20&transaction_type=barang';
     final headers = {
       'secret':
           'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
       'Author': 'bearer $tokens',
-      'device': 'web',
+      'device': 'mobile',
     };
-    EasyLoading.show(status: 'Memuat transaksi pending...');
+    EasyLoading.show(status: 'Memuat transaksi...');
     Response conn;
     try {
       conn = await get(url, headers: headers);
+      print(conn.statusCode);
+      print(conn.body);
     } catch (e) {
       EasyLoading.dismiss();
       Get.snackbar('Error Transaksi Produk Pending', e.toString());
@@ -60,7 +62,7 @@ class TransaksiProdukService extends GetConnect {
       throw Exception('Sesi login tidak ditemukan.');
     }
     final url =
-        '${Base.url}/v1/transaksi-online?konsumen_member_id=178&show_bukti_tf=1&status=diproses&view_as_invoice=1&start=0&length=20&transaction_type=barang';
+        '${Base.url}/v1/transaksi-online?konsumen_member_id=${GetStorage().read('member_id')}&show_bukti_tf=1&status=diproses&view_as_invoice=1&start=0&length=20&transaction_type=barang';
     final headers = {
       'secret':
           'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
@@ -109,7 +111,7 @@ class TransaksiProdukService extends GetConnect {
       throw Exception('Sesi login tidak ditemukan.');
     }
     final url =
-        '${Base.url}/v1/transaksi-online?konsumen_member_id=178&show_bukti_tf=1&status=dikirim&view_as_invoice=1&start=0&length=20&transaction_type=barang';
+        '${Base.url}/v1/transaksi-online?konsumen_member_id=${GetStorage().read('member_id')}&show_bukti_tf=1&status=dikirim&view_as_invoice=1&start=0&length=20&transaction_type=barang';
     final headers = {
       'secret':
           'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
@@ -158,7 +160,7 @@ class TransaksiProdukService extends GetConnect {
       throw Exception('Sesi login tidak ditemukan.');
     }
     final url =
-        '${Base.url}/v1/transaksi-online?konsumen_member_id=178&show_bukti_tf=1&status=diterima&view_as_invoice=1&start=0&length=20&transaction_type=barang';
+        '${Base.url}/v1/transaksi-online?konsumen_member_id=${GetStorage().read('member_id')}&show_bukti_tf=1&status=diterima&view_as_invoice=1&start=0&length=20&transaction_type=barang';
     final headers = {
       'secret':
           'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
@@ -207,7 +209,7 @@ class TransaksiProdukService extends GetConnect {
       throw Exception('Sesi login tidak ditemukan.');
     }
     final url =
-        '${Base.url}/v1/transaksi-online?konsumen_member_id=178&show_bukti_tf=1&status=selesai&view_as_invoice=1&start=0&length=20&transaction_type=barang';
+        '${Base.url}/v1/transaksi-online?konsumen_member_id=${GetStorage().read('member_id')}&show_bukti_tf=1&status=selesai&view_as_invoice=1&start=0&length=20&transaction_type=barang';
     final headers = {
       'secret':
           'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
@@ -256,7 +258,7 @@ class TransaksiProdukService extends GetConnect {
       throw Exception('Sesi login tidak ditemukan.');
     }
     final url =
-        '${Base.url}/v1/transaksi-online?konsumen_member_id=178&show_bukti_tf=1&status=dibatalkan&view_as_invoice=1&start=0&length=20&transaction_type=barang';
+        '${Base.url}/v1/transaksi-online?konsumen_member_id=${GetStorage().read('member_id')}&show_bukti_tf=1&status=dibatalkan&view_as_invoice=1&start=0&length=20&transaction_type=barang';
     final headers = {
       'secret':
           'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',

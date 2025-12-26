@@ -11,7 +11,7 @@ class Transaksi {
   String? metodeBayar;
   int? uangMasuk;
   int? ongkir;
-  int? diskon;
+  // int? diskon;
   int? totalBayar;
   String? expireTime;
   String? statusBayar;
@@ -25,32 +25,33 @@ class Transaksi {
   Member? member;
   BuktiTf? buktiTf;
 
-  Transaksi(
-      {this.id,
-      this.noInvoice,
-      this.waktuTransaksi,
-      this.memberId,
-      this.alamatId,
-      this.jasaKirimId,
-      this.nama,
-      this.email,
-      this.noHp,
-      this.metodeBayar,
-      this.uangMasuk,
-      this.ongkir,
-      this.diskon,
-      this.totalBayar,
-      this.expireTime,
-      this.statusBayar,
-      this.status,
-      this.createdAt,
-      this.updatedAt,
-      this.noResi,
-      this.akunId,
-      this.kasId,
-      this.konsumenMemberId,
-      this.member,
-      this.buktiTf});
+  Transaksi({
+    this.id,
+    this.noInvoice,
+    this.waktuTransaksi,
+    this.memberId,
+    this.alamatId,
+    this.jasaKirimId,
+    this.nama,
+    this.email,
+    this.noHp,
+    this.metodeBayar,
+    this.uangMasuk,
+    this.ongkir,
+    // this.diskon,
+    this.totalBayar,
+    this.expireTime,
+    this.statusBayar,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.noResi,
+    this.akunId,
+    this.kasId,
+    this.konsumenMemberId,
+    this.member,
+    this.buktiTf,
+  });
 
   Transaksi.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,7 +66,7 @@ class Transaksi {
     metodeBayar = json['metode_bayar'];
     uangMasuk = json['uang_masuk'];
     ongkir = json['ongkir'];
-    diskon = json['diskon'];
+    // diskon = json['diskon'];
     totalBayar = json['total_bayar'];
     expireTime = json['expire_time'];
     statusBayar = json['status_bayar'];
@@ -77,8 +78,9 @@ class Transaksi {
     kasId = json['kas_id'];
     konsumenMemberId = json['konsumen_member_id'];
     member = json['member'] != null ? Member.fromJson(json['member']) : null;
-    buktiTf =
-        json['bukti_tf'] != null ? BuktiTf.fromJson(json['bukti_tf']) : null;
+    buktiTf = json['bukti_tf'] != null
+        ? BuktiTf.fromJson(json['bukti_tf'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -95,7 +97,7 @@ class Transaksi {
     data['metode_bayar'] = metodeBayar;
     data['uang_masuk'] = uangMasuk;
     data['ongkir'] = ongkir;
-    data['diskon'] = diskon;
+    // data['diskon'] = diskon;
     data['total_bayar'] = totalBayar;
     data['expire_time'] = expireTime;
     data['status_bayar'] = statusBayar;
@@ -140,13 +142,14 @@ class BuktiTf {
   String? createdAt;
   String? updatedAt;
 
-  BuktiTf(
-      {this.id,
-      this.transaksiId,
-      this.rekeningId,
-      this.file,
-      this.createdAt,
-      this.updatedAt});
+  BuktiTf({
+    this.id,
+    this.transaksiId,
+    this.rekeningId,
+    this.file,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   BuktiTf.fromJson(Map<String, dynamic> json) {
     id = json['id'];

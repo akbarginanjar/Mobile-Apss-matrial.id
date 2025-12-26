@@ -16,7 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController konfirmasiPassword = TextEditingController();
-  AuthController authController = AuthController();
+  AuthService authService = AuthService();
   final GlobalKey<FormState> form = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -183,7 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             onPressed: () {
               if (form.currentState!.validate()) {
-                authController
+                authService
                     .register(
                       namaLengkap: namaLengkap.text,
                       nomorHp: nomorHp.text,
