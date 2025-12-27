@@ -94,7 +94,9 @@ class TransaksiController extends GetxController {
           );
         }
 
-        if (response.body['status_bayar'] == 'lunas') {
+        if (response.body['status_bayar'] == 'lunas' &&
+            response.body['status'] == 'pending' &&
+            response.body['status'] == 'diproses') {
           Get.defaultDialog(
             titlePadding: const EdgeInsets.only(top: 20),
             title: "Pembayaran Berhasil",

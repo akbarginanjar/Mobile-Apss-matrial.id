@@ -14,6 +14,7 @@ class PendingCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       color: dark,
       child: InkWell(
+        borderRadius: BorderRadius.circular(15),
         onTap: () {
           Get.to(
             PembayaranScreen(
