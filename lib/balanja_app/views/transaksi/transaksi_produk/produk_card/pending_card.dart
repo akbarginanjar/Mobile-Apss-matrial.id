@@ -29,7 +29,7 @@ class PendingCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Pending (Belum Lunas)",
+                "${transaksi.status}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: primary,

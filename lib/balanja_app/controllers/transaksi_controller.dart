@@ -232,4 +232,91 @@ class TransaksiController extends GetxController {
     final response = await request.send();
     return http.Response.fromStream(response);
   }
+
+  Future<void> batalkanPesanan(String noInvoice) async {
+    try {
+      EasyLoading.show(status: 'Membatalkan pesanan...');
+
+      final formData = FormData({'no_invoice': noInvoice});
+
+      final response = await TransaksiService().batalkanPesanan(formData);
+
+      EasyLoading.dismiss();
+
+      if (response.statusCode == 200) {
+        EasyLoading.showSuccess('Pesanan berhasil dibatalkan');
+
+        getInvoice(noInvoice);
+      } else {
+        EasyLoading.showError(
+          response.body['message'] ?? 'Gagal membatalkan pesanan',
+        );
+        getInvoice(noInvoice);
+      }
+    } catch (e) {
+      EasyLoading.dismiss();
+      EasyLoading.showError('Terjadi kesalahan');
+    }
+  }
+
+  final kategoriList = <String>[].obs;
+  final selectedKategori = ''.obs;
+  final alasanController = TextEditingController();
+
+  final isLoadingKomplain = false.obs;
+
+  Future<void> loadKategoriKomplain() async {
+    try {
+      isLoadingKomplain.value = true;
+
+      final Response response = await TransaksiService().getKategoriKomplain();
+
+      if (response.statusCode == 200 && response.body != null) {
+        final List data = response.body['data'];
+        kategoriList.assignAll(data.map((e) => e.toString()).toList());
+
+        if (kategoriList.isNotEmpty) {
+          selectedKategori.value = kategoriList.first;
+        }
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal memuat kategori komplain');
+    } finally {
+      isLoadingKomplain.value = false;
+    }
+  }
+
+  Future<void> kirimKomplain(idTransaksi, noInvoice) async {
+    if (selectedKategori.isEmpty || alasanController.text.isEmpty) {
+      EasyLoading.showToast('Kategori dan alasan wajib diisi');
+      return;
+    }
+    try {
+      EasyLoading.show(status: 'Proses Komplain...');
+
+      final formData = FormData({
+        'transaksi_id': idTransaksi,
+        'kategori_refund': selectedKategori,
+        'alasan': alasanController.text,
+      });
+
+      final response = await TransaksiService().kirimKomplain(formData);
+      print(response.statusCode);
+      print(response.body);
+      EasyLoading.dismiss();
+
+      if (response.statusCode == 200) {
+        EasyLoading.showSuccess('Komplain Berhasil Terkirim');
+        getInvoice(noInvoice);
+      } else {
+        EasyLoading.showError(
+          response.body['message'] ?? 'Gagal membatalkan pesanan',
+        );
+        getInvoice(noInvoice);
+      }
+    } catch (e) {
+      EasyLoading.dismiss();
+      EasyLoading.showError('Terjadi kesalahan');
+    }
+  }
 }

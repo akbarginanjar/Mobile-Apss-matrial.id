@@ -7,6 +7,7 @@ import 'package:mobile_balanja_id/balanja_app/controllers/transaksi_controller.d
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/utils/value_formatter.dart';
 import 'package:mobile_balanja_id/balanja_app/views/main_screen/screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/pembayaran/komplain_screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/pembayaran/screen_old.dart';
 import 'package:mobile_balanja_id/balanja_app/views/pembayaran/tracking_web_screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/widgets/button.dart';
@@ -74,26 +75,29 @@ class PembayaranScreen extends StatelessWidget {
           child: Column(
             children: [
               if (data['status_bayar'] == 'belum_lunas')
-                Container(
-                  color: dark,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      Text(
-                        'Batas waktu bayar',
-                        style: TextStyle(color: textTheme),
-                      ),
-                      const SizedBox(height: 5),
-                      CountDownWidget(expireTime: data['expire_time'] ?? ''),
+                if (data['status'] != 'dibatalkan')
+                  Container(
+                    color: dark,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Text(
+                          'Batas waktu bayar',
+                          style: TextStyle(color: textTheme),
+                        ),
+                        const SizedBox(height: 5),
+                        CountDownWidget(expireTime: data['expire_time'] ?? ''),
 
-                      const SizedBox(height: 20),
-                    ],
+                        const SizedBox(height: 20),
+                      ],
+                    ),
                   ),
-                ),
               const SizedBox(height: 10),
               if (data['status_bayar'] == 'belum_lunas')
                 if (data['payment_info'] != null &&
-                    data['payment_info']['payment_type'] == 'qris')
+                    data['metode_bayar'] == 'payment_gateway' &&
+                    data['payment_info']['payment_type'] == 'qris' &&
+                    data['status'] != 'dibatalkan')
                   Container(
                     color: dark,
                     child: Padding(
@@ -131,7 +135,9 @@ class PembayaranScreen extends StatelessWidget {
                     ),
                   )
                 else if (data['payment_info'] != null &&
-                    data['payment_info']['payment_type'] == 'bank_transfer')
+                    data['metode_bayar'] == 'payment_gateway' &&
+                    data['payment_info']['payment_type'] == 'bank_transfer' &&
+                    data['status'] != 'dibatalkan')
                   Container(
                     color: dark,
                     child: Padding(
@@ -185,7 +191,10 @@ class PembayaranScreen extends StatelessWidget {
                       ),
                     ),
                   )
-                else
+                else if (data['payment_info'] != null &&
+                        data['metode_bayar'] == 'manual_transfer' ||
+                    data['payment_info'] == null &&
+                        data['status'] != 'dibatalkan')
                   Container(
                     color: dark,
                     child: Padding(
@@ -440,31 +449,34 @@ class PembayaranScreen extends StatelessWidget {
                     ),
                   ),
               if (data['status_bayar'] == 'belum_lunas')
-                Container(
-                  color: Colors.grey[800],
-                  height: 1,
-                  width: double.infinity,
-                ),
+                if (data['status'] != 'dibatalkan')
+                  Container(
+                    color: Colors.grey[800],
+                    height: 1,
+                    width: double.infinity,
+                  ),
               if (data['status_bayar'] == 'belum_lunas')
-                SizedBox(
-                  height: 40,
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      controller.getInvoice(noInvoice);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: dark,
-                      shape: RoundedRectangleBorder(),
-                    ),
+                if (data['status'] != 'dibatalkan')
+                  SizedBox(
+                    height: 40,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        controller.getInvoice(noInvoice);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: dark,
+                        shape: RoundedRectangleBorder(),
+                      ),
 
-                    child: Text(
-                      'Cek Status Pembayaran',
-                      style: GoogleFonts.montserrat(),
+                      child: Text(
+                        'Cek Status Pembayaran',
+                        style: GoogleFonts.montserrat(),
+                      ),
                     ),
                   ),
-                ),
-              if (data['status_bayar'] == 'belum_lunas') SizedBox(height: 10),
+              if (data['status_bayar'] == 'belum_lunas')
+                if (data['status'] != 'dibatalkan') SizedBox(height: 10),
               if (data['status'] == 'diproses' &&
                   data['status_bayar'] == 'lunas')
                 Container(
@@ -1051,21 +1063,92 @@ class PembayaranScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: SizedBox(
-                  height: 45,
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: primary),
-                    onPressed: () {
-                      Get.offAll(MainScreen());
-                    },
-                    child: Text(
-                      'Lihat Pesanan Saya',
-                      style: GoogleFonts.montserrat(color: Colors.white),
-                    ),
+              if (data['status'] != 'dibatalkan' &&
+                  data['status'] != 'dikirim' &&
+                  data['status'] != 'selesai')
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 15,
                   ),
+                  child: DefaultButton(
+                    text: 'Batalkan Pesanan',
+                    press: () {
+                      Get.dialog(
+                        AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          title: Text(
+                            'Batalkan Pesanan',
+                            style: GoogleFonts.montserrat(),
+                          ),
+                          content: const Text(
+                            'Apakah kamu yakin ingin membatalkan pesanan ini?',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Get.back(), // TIDAK
+                              child: Text(
+                                'Tidak',
+                                style: GoogleFonts.montserrat(color: textTheme),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                Get.back(); // ✅ tutup modal dulu
+                                await controller.batalkanPesanan(
+                                  data['no_invoice'].toString(),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: danger,
+                              ),
+                              child: Text(
+                                'Ya, Batalkan',
+                                style: GoogleFonts.montserrat(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        barrierDismissible: false,
+                      );
+                    },
+                    color: danger,
+                  ),
+                ),
+              if (data['status'] == 'selesai')
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 15,
+                  ),
+                  child: DefaultButton(
+                    text: 'Komplain',
+                    press: () {
+                      Get.to(
+                        KomplainScreen(
+                          idTransaksi: data['id'],
+                          noInvoice: data['no_invoice'],
+                        ),
+                      );
+                    },
+                    color: danger,
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 5,
+                  horizontal: 15,
+                ),
+                child: DefaultButton(
+                  text: 'Lihat Pesanan Saya',
+                  press: () {
+                    Get.offAll(MainScreen());
+                  },
+                  color: primary,
                 ),
               ),
               const SizedBox(height: 20),

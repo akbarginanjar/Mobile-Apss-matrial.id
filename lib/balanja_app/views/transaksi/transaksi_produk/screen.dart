@@ -18,7 +18,7 @@ class TransaksiProdukScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: 5,
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
@@ -42,7 +42,6 @@ class TransaksiProdukScreen extends StatelessWidget {
               Tab(text: 'Pending'),
               Tab(text: 'Diproses'),
               Tab(text: 'Dikirim'),
-              Tab(text: 'Diterima'),
               Tab(text: 'Selesai'),
               Tab(text: 'Dibatalkan'),
             ],
@@ -53,7 +52,6 @@ class TransaksiProdukScreen extends StatelessWidget {
             PendingTabView(),
             DiprosesTabView(),
             DikirimTabView(),
-            DiterimaTabView(),
             SelesaiTabView(),
             DibatalkanTabView(),
           ],

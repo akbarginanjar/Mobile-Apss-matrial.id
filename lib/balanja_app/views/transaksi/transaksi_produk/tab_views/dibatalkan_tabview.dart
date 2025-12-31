@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:mobile_balanja_id/balanja_app/controllers/transaksi_produk_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/models/transaksi_model.dart';
 import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_pelatihan/pelatihan_card/pending_card.dart';
-import 'package:mobile_balanja_id/balanja_app/views/transaksi/transaksi_produk/produk_card/dibatalkan_card.dart';
 
 class DibatalkanTabView extends StatelessWidget {
   const DibatalkanTabView({super.key});
