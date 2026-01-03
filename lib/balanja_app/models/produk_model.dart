@@ -1,3 +1,133 @@
+class ProdukModel {
+  int id;
+  int jumlah;
+  int barangId;
+  int gudangId;
+  int memberId;
+
+  String nama;
+  String kode;
+  String slug;
+  String productType;
+
+  bool isPreOrder;
+  int preOrderDay;
+
+  int harga;
+  int hargaCoret;
+  int diskon;
+  int totalVarianBarang;
+
+  KategoriModel kategori;
+  List<FotoProdukModel> photo;
+
+  ProdukModel({
+    this.id = 0,
+    this.jumlah = 0,
+    this.barangId = 0,
+    this.gudangId = 0,
+    this.memberId = 0,
+    this.nama = '',
+    this.kode = '',
+    this.slug = '',
+    this.productType = '',
+    this.isPreOrder = false,
+    this.preOrderDay = 0,
+    this.harga = 0,
+    this.hargaCoret = 0,
+    this.diskon = 0,
+    this.totalVarianBarang = 0,
+    KategoriModel? kategori,
+    List<FotoProdukModel>? photo,
+  }) : kategori = kategori ?? KategoriModel(),
+       photo = photo ?? [];
+
+  factory ProdukModel.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return ProdukModel();
+
+    return ProdukModel(
+      id: json['id'] ? json['id'] : 0,
+      jumlah: json['jumlah'] is int ? json['jumlah'] : 0,
+      barangId: json['barang_id'] is int ? json['barang_id'] : 0,
+      gudangId: json['gudang_id'] is int ? json['gudang_id'] : 0,
+      memberId: json['member_id'] is int ? json['member_id'] : 0,
+
+      nama: json['nama']?.toString() ?? '',
+      kode: json['kode']?.toString() ?? '',
+      slug: json['slug']?.toString() ?? '',
+      productType: json['product_type']?.toString() ?? '',
+
+      isPreOrder: json['is_pre_order'] == true,
+      preOrderDay: json['pre_order_day'] is int ? json['pre_order_day'] : 0,
+
+      harga: json['harga'] is int ? json['harga'] : 0,
+      hargaCoret: json['harga_coret'] is int ? json['harga_coret'] : 0,
+      diskon: json['diskon'] is int ? json['diskon'] : 0,
+      totalVarianBarang: json['total_varian_barang'] is int
+          ? json['total_varian_barang']
+          : 0,
+
+      kategori: json['kategori'] is Map<String, dynamic>
+          ? KategoriModel.fromJson(json['kategori'])
+          : KategoriModel(),
+
+      photo: json['photo'] is List
+          ? (json['photo'] as List)
+                .map(
+                  (e) => FotoProdukModel.fromJson(
+                    e is Map<String, dynamic> ? e : null,
+                  ),
+                )
+                .toList()
+          : [],
+    );
+  }
+}
+
+class KategoriModel {
+  int id;
+  String kategori;
+
+  KategoriModel({this.id = 0, this.kategori = ''});
+
+  factory KategoriModel.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return KategoriModel();
+
+    return KategoriModel(id: json['id'] ?? 0, kategori: json['kategori'] ?? '');
+  }
+}
+
+class FotoProdukModel {
+  int id;
+  int barangId;
+  String photo;
+  String path;
+  int tipe;
+  String tipeLabel;
+
+  FotoProdukModel({
+    this.id = 0,
+    this.barangId = 0,
+    this.photo = '',
+    this.path = '',
+    this.tipe = 0,
+    this.tipeLabel = '',
+  });
+
+  factory FotoProdukModel.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return FotoProdukModel();
+
+    return FotoProdukModel(
+      id: json['id'] ?? 0,
+      barangId: json['barang_id'] ?? 0,
+      photo: json['photo'] ?? '',
+      path: json['path'] ?? '',
+      tipe: json['tipe'] ?? 0,
+      tipeLabel: json['tipe_label'] ?? '',
+    );
+  }
+}
+
 class Produk {
   int? id;
   int? gudangId;
@@ -234,7 +364,6 @@ class VarianBarang {
     jumlah = json['jumlah'];
     memberId = json['member_id'];
     konversiKet = json['konversi_ket'] is String ? json['konversi_ket'] : null;
-
     barang = json['barang'] != null ? Barang.fromJson(json['barang']) : null;
     gudang = json['gudang'] != null ? Gudang.fromJson(json['gudang']) : null;
     blok = json['blok'] != null ? Blok.fromJson(json['blok']) : null;
@@ -640,7 +769,7 @@ class Gudang {
 
     sebagai = json['sebagai'] is String ? json['sebagai'] : null;
 
-    member = json['member'] != null ? Member.fromJson(json['member']) : null;
+    // member = json['member'] != null ? Member.fromJson(json['member']) : null;
 
     karyawan = json['karyawan'] is String ? json['karyawan'] : null;
     kendaraan = json['kendaraan'] is String ? json['kendaraan'] : null;

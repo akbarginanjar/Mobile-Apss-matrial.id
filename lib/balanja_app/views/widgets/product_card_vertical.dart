@@ -3,7 +3,7 @@ import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 
 class ProductCardVertical extends StatelessWidget {
   final VoidCallback? onPress;
-  final Produk produk;
+  final Map<String, dynamic> produk;
   const ProductCardVertical({super.key, this.onPress, required this.produk});
 
   @override
@@ -19,7 +19,7 @@ class ProductCardVertical extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
-        onTap: () => Get.to(() => ProductScreen(produk: produk)),
+        // onTap: () => Get.to(() => ProductScreen(produk: produk)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -31,7 +31,7 @@ class ProductCardVertical extends StatelessWidget {
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
                   ),
-                  child: produk.photo!.isEmpty
+                  child: produk['photo'].isEmpty
                       ? Image.network(
                           'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
                           height: 135,
@@ -39,7 +39,7 @@ class ProductCardVertical extends StatelessWidget {
                           fit: BoxFit.cover,
                         )
                       : Image.network(
-                          produk.photo![0].path.toString(),
+                          produk['photo'][0]['path'].toString(),
                           height: 135,
                           width: double.infinity,
                           fit: BoxFit.cover,
@@ -53,8 +53,8 @@ class ProductCardVertical extends StatelessWidget {
                   child: Row(
                     children: [
                       // BADGE PRE ORDER
-                      if (produk.varianBarang![0].jumlah == 0 &&
-                          produk.varianBarang![0].barang!.isPreOrder == false)
+                      if (produk['jumlah'] == 0 &&
+                          produk['is_pre_order'] == false)
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
@@ -73,7 +73,7 @@ class ProductCardVertical extends StatelessWidget {
                       const SizedBox(width: 5),
 
                       // BADGE READY STOCK
-                      if (produk.varianBarang![0].barang!.isPreOrder == true)
+                      if (produk['is_pre_order'] == true)
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
@@ -91,8 +91,8 @@ class ProductCardVertical extends StatelessWidget {
 
                       const SizedBox(width: 5),
 
-                      if (produk.varianBarang![0].jumlah != 0 &&
-                          produk.varianBarang![0].barang!.isPreOrder == true)
+                      if (produk['jumlah'] != 0 &&
+                          produk['is_pre_order'] == true)
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
@@ -108,8 +108,8 @@ class ProductCardVertical extends StatelessWidget {
                           ),
                         ),
 
-                      if (produk.varianBarang![0].jumlah != 0 &&
-                          produk.varianBarang![0].barang!.isPreOrder == false)
+                      if (produk['jumlah'] != 0 &&
+                          produk['is_pre_order'] == false)
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
@@ -135,7 +135,7 @@ class ProductCardVertical extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${produk.nama}',
+                    '${produk['nama']}',
                     softWrap: true,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -143,7 +143,7 @@ class ProductCardVertical extends StatelessWidget {
                   ),
                   const SizedBox(height: 3.0),
                   Text(
-                    toCurrency(produk.harga!),
+                    toCurrency(produk['harga']),
                     style: TextStyle(
                       fontSize: 14,
                       color: Theme.of(context).colorScheme.primary,
@@ -154,7 +154,9 @@ class ProductCardVertical extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: Text(
-                      produk.varianBarang![0].gudang!.alamat.toString(),
+                      produk['gudang'] == null
+                          ? '-'
+                          : produk['gudang']['alamat'].toString(),
                       softWrap: true,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

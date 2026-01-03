@@ -1,4 +1,5 @@
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
+import 'package:mobile_balanja_id/balanja_app/views/semua_produk_screen/produk_skeleton.dart';
 import 'package:mobile_balanja_id/balanja_app/views/semua_produk_screen/screen.dart';
 
 class ProductSection extends StatelessWidget {
@@ -16,6 +17,7 @@ class ProductSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ProdukController controllerProduk = Get.put(ProdukController());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -71,96 +73,51 @@ class ProductSection extends StatelessWidget {
             ],
           ),
         ),
-        FutureBuilder<List<dynamic>>(
-          future: ProdukController().getProduk(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return SizedBox(
-                height: 160,
-                child: Container(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(primary),
-                    ),
+        Obx(() {
+          return SizedBox(
+            height: 240,
+            child:
+                controllerProduk.isLoadingUntukKamu.value &&
+                    controllerProduk.produkUntukKamu.isEmpty
+                ? ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: 6,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        width: 190,
+                        margin: EdgeInsets.only(left: index == 0 ? 12 : 8),
+                        child: const ProdukSkeleton(),
+                      );
+                    },
+                  )
+                : ListView.builder(
+                    controller: controllerProduk.scrollCUntukKamu,
+                    scrollDirection: Axis.horizontal,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount:
+                        controllerProduk.produkUntukKamu.length +
+                        (controllerProduk.isMoreLoadingUntukKamu.value ? 2 : 0),
+                    itemBuilder: (context, index) {
+                      if (index < controllerProduk.produkUntukKamu.length) {
+                        final produk = controllerProduk.produkUntukKamu[index];
+                        return Container(
+                          width: 190,
+                          margin: EdgeInsets.only(left: index == 0 ? 12 : 3),
+                          child: ProductCardVertical(produk: produk),
+                        );
+                      } else {
+                        // 👇 skeleton saat lazyload
+                        return Container(
+                          width: 190,
+                          margin: const EdgeInsets.only(left: 8),
+                          child: const ProdukSkeleton(),
+                        );
+                      }
+                    },
                   ),
-                ),
-              );
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else {
-              return SizedBox(
-                height: 240,
-                child: ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.all(0),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(left: index == 0 ? 12.0 : 0),
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      width: 190,
-                      child: ProductCardVertical(produk: snapshot.data![index]),
-                    );
-                  },
-                ),
-              );
-            }
-          },
-        ),
-        // GetBuilder<GetProduk>(
-        //   init: Get.put(GetProduk()),
-        //   builder: (snapshot) {
-        //     if (snapshot.state is FilledProdukStates) {
-        //       FilledProdukStates filled =
-        //           (snapshot.state as FilledProdukStates);
-        //       if (filled.data!.isEmpty) {
-        //         return const Center(
-        //           child: Text(
-        //             "Data Tidak Ditemukan!",
-        //             style: TextStyle(color: Colors.grey),
-        //           ),
-        //         );
-        //       } else {
-        //         return SizedBox(
-        //           height: 260,
-        //           child: ListView.builder(
-        //             itemCount: filled.data!.length,
-        //             shrinkWrap: true,
-        //             padding: const EdgeInsets.all(0),
-        //             scrollDirection: Axis.horizontal,
-        //             itemBuilder: (context, index) {
-        //               // if (filled.data![index].barang != null) {
-        //               return Container(
-        //                 margin: EdgeInsets.only(left: index == 0 ? 12.0 : 0),
-        //                 width: 160,
-        //                 child: Padding(
-        //                   padding: const EdgeInsets.only(bottom: 10),
-        //                   child: ProductCardVertical(
-        //                     produk: filled.data![index],
-        //                   ),
-        //                 ),
-        //               );
-        //               // } else {
-        //               //   return Container();
-        //               // }
-        //             },
-        //           ),
-        //         );
-        //       }
-        //     } else {
-        //       return const SizedBox(
-        //         height: 170,
-        //         child: Center(
-        //           child: CircularProgressIndicator(
-        //             valueColor: AlwaysStoppedAnimation(primary),
-        //           ),
-        //         ),
-        //       );
-        //     }
-        //   },
-        // ),
+          );
+        }),
       ],
     );
   }

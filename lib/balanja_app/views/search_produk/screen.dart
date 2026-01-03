@@ -14,7 +14,7 @@ class SearchProduk extends StatefulWidget {
 class _SearchProdukState extends State<SearchProduk> {
   Future<void> fetchData() async {
     setState(() {
-      ProdukController().searchProduk(widget.search!);
+      ProdukService().searchProduk(widget.search!);
     });
   }
 
@@ -67,7 +67,7 @@ class _SearchProdukState extends State<SearchProduk> {
                         border: InputBorder.none,
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 8,
-                          horizontal: 10
+                          horizontal: 10,
                         ),
                         // prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
                         // suffix: SizedBox(
@@ -87,21 +87,17 @@ class _SearchProdukState extends State<SearchProduk> {
                         //   ),
                         // ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: textdark,
-                          ),
+                          borderSide: BorderSide(color: textdark),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(15),
-                            bottomLeft: Radius.circular(15)
+                            bottomLeft: Radius.circular(15),
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: textdark,
-                          ),
+                          borderSide: BorderSide(color: textdark),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(15),
-                            bottomLeft: Radius.circular(15)
+                            bottomLeft: Radius.circular(15),
                           ),
                         ),
                       ),
@@ -112,16 +108,16 @@ class _SearchProdukState extends State<SearchProduk> {
                       color: primary,
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(15),
-                        bottomRight: Radius.circular(15)
-                      )
+                        bottomRight: Radius.circular(15),
+                      ),
                     ),
                     child: IconButton(
-                      icon: Icon(Icons.search, color: dark, size: 24,), 
+                      icon: Icon(Icons.search, color: dark, size: 24),
                       onPressed: () {
                         changeData(search2.text);
-                      }
+                      },
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -149,7 +145,7 @@ class _SearchProdukState extends State<SearchProduk> {
                 ),
                 const SizedBox(height: 10),
                 FutureBuilder<List<dynamic>>(
-                  future: ProdukController().searchProduk(widget.search!),
+                  future: ProdukService().searchProduk(widget.search!),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return SizedBox(

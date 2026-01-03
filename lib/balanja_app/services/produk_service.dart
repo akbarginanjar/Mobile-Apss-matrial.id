@@ -2,7 +2,18 @@ import 'dart:io';
 
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 
-class ProdukController extends GetConnect {
+class ProdukService extends GetConnect {
+  final String tokens = GetStorage().read('tokens');
+  Future<Response> listProduk(params) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return get('${Base.url}/v1/products', headers: header, query: params);
+  }
+
   Future<List<Produk>> getProduk({int start = 0, int length = 6}) async {
     try {
       final String tokens = GetStorage().read('tokens');
