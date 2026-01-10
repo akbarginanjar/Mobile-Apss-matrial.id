@@ -21,10 +21,7 @@ class _CarouselState extends State<Carousel> {
             return SizedBox(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: Image.asset(
-                  item,
-                  fit: BoxFit.contain,
-                ),
+                child: Image.network(item, fit: BoxFit.contain),
               ),
             );
           }).toList(),
@@ -52,18 +49,16 @@ class _CarouselState extends State<Carousel> {
             final bool isSelected = _current == index;
 
             return GestureDetector(
-              onTap: () => {}, 
+              onTap: () => {},
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeOut,
-                width: isSelected ? 20.0 : 8.0, 
+                width: isSelected ? 20.0 : 8.0,
                 height: 8.0,
                 margin: const EdgeInsets.symmetric(horizontal: 3.0),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.0), 
-                  color: isSelected 
-                      ? primary
-                      : textdark,
+                  borderRadius: BorderRadius.circular(4.0),
+                  color: isSelected ? primary : textdark,
                 ),
               ),
             );
