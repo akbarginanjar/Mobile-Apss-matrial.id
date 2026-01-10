@@ -14,6 +14,30 @@ class ProdukService extends GetConnect {
     return get('${Base.url}/v1/products', headers: header, query: params);
   }
 
+  Future<Response> detailProduk(params, slug) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return get(
+      '${Base.url}/v1/toko-penyimpanan/$slug',
+      headers: header,
+      query: params,
+    );
+  }
+
+  Future<Response> ulasanProduk(params) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return get('${Base.url}/v1/ulasan', headers: header, query: params);
+  }
+
   Future<List<Produk>> getProduk({int start = 0, int length = 6}) async {
     try {
       final String tokens = GetStorage().read('tokens');

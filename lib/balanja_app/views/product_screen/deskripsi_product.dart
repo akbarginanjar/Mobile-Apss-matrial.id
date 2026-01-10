@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison, prefer_if_null_operators
 
+import 'package:flutter_html/flutter_html.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 
 class DeskripsiProduct extends StatelessWidget {
@@ -16,21 +17,25 @@ class DeskripsiProduct extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(color: Colors.grey[200], thickness: 1),
+          SizedBox(height: 8),
           Text(
             'Deskripsi Produk',
             style: Theme.of(
               context,
-            ).textTheme.bodyMedium!.apply(color: textdark),
+            ).textTheme.bodyMedium!.apply(color: textTheme),
           ),
           const SizedBox(height: 5),
-          Text(
-            produk!.varianBarang![0].barang!.deskripsi == null
-                ? '-'
-                : produk!.varianBarang![0].barang!.deskripsi.toString(),
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall!.apply(color: textdark),
+          Html(
+            data: produk!.varianBarang![0].barang!.deskripsi ?? '-',
+            style: {
+              "body": Style(
+                margin: Margins.zero,
+                padding: HtmlPaddings.zero,
+                fontSize: FontSize(12),
+                color: textTheme,
+                fontFamily: GoogleFonts.montserrat().fontFamily,
+              ),
+            },
           ),
           const SizedBox(height: 15),
         ],

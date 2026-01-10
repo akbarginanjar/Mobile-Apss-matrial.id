@@ -1,160 +1,169 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_balanja_id/balanja_app/config/theme.dart';
+import 'package:get/get.dart';
+import 'package:mobile_balanja_id/balanja_app/controllers/ulasan_controller.dart';
+import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 
-class RatingUlasanWidget extends StatelessWidget {
-  const RatingUlasanWidget({super.key});
+class UlasanView extends StatelessWidget {
+  final String barangId;
+  UlasanView({super.key, required this.barangId});
+
+  final controller = Get.put(UlasanController());
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: dark,
-      padding: const EdgeInsets.all(18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // TITLE
-          Text(
-            "Rating & Ulasan Produk",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-          ),
+    // LOAD SEKALI SAJA
+    controller.loadUlasan(barangId);
 
-          const SizedBox(height: 10),
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
 
-          // TOP RATING SUMMARY
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // BIG RATING NUMBER
-              Text(
-                "4.9",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.yellow[800],
-                ),
-              ),
-
-              const SizedBox(width: 12),
-
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: List.generate(5, (index) {
-                      return Icon(
-                        index < 4 ? Icons.star : Icons.star_half,
-                        size: 20,
-                        color: Colors.yellow[700],
-                      );
-                    }),
-                  ),
-                  const SizedBox(height: 5),
-                  Text("928 ulasan", style: TextStyle(fontSize: 13)),
-                ],
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 10),
-          Divider(color: Colors.grey.shade200, thickness: 1),
-          const SizedBox(height: 10),
-
-          // REVIEW LIST ITEMS
-          reviewItem(
-            context,
-            avatar: "https://i.pravatar.cc/150?img=11",
-            name: "Kidam Kusnandi",
-            rating: 5,
-            comment: "Barang sangat bagus, pengiriman cepat, packing rapi!",
-            time: "2 hari yang lalu",
-          ),
-
-          reviewItem(
-            context,
-            avatar: "https://i.pravatar.cc/150?img=33",
-            name: "Akbar Ginanjar",
-            rating: 4,
-            comment:
-                "Sesuai deskripsi, kualitas sesuai harga. Recommended seller!",
-            time: "1 minggu yang lalu",
-          ),
-
-          reviewItem(
-            context,
-            avatar: "https://i.pravatar.cc/150?img=45",
-            name: "Nandi Kuskidam",
-            rating: 3,
-            comment: "Good",
-            time: "3 minggu yang lalu",
-          ),
-        ],
-      ),
-    );
-  }
-
-  // 🟡 REVIEW ITEM WIDGET
-  Widget reviewItem(
-    BuildContext context, {
-    required String avatar,
-    required String name,
-    required int rating,
-    required String comment,
-    required String time,
-  }) {
-    return Card(
-      elevation: 0,
-      // color: dark2,
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 3),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+      return Container(
+        color: dark,
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// TITLE
+            Text(
+              'Rating & Ulasan Produk',
+              style: TextStyle(color: textTheme, fontSize: 18),
+            ),
+
+            const SizedBox(height: 12),
+
+            /// SUMMARY
             Row(
               children: [
-                // Avatar
-                SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: CircleAvatar(
-                    radius: 22,
-                    backgroundImage: NetworkImage(avatar),
+                Text(
+                  '${controller.summary['rata_rating'] ?? 0}.0',
+                  style: TextStyle(
+                    fontSize: 42,
+                    fontWeight: FontWeight.bold,
+                    color: textTheme,
                   ),
                 ),
-                const SizedBox(width: 10),
-                // Name
-                Text(
-                  name,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-                ),
+                const SizedBox(width: 6),
+                Text('/5', style: TextStyle(color: Colors.grey)),
+                const SizedBox(width: 12),
+                ratingStars(controller.summary['rata_rating'] ?? 0),
               ],
             ),
 
-            const SizedBox(height: 10),
-
-            // Rating stars
-            Row(
-              children: List.generate(5, (index) {
-                return Icon(
-                  index < rating ? Icons.star : Icons.star_border,
-                  size: 18,
-                  color: Colors.yellow[700],
-                );
-              }),
+            Text(
+              'Berdasarkan ${controller.summary['total_ulasan'] ?? 0} ulasan',
+              style: const TextStyle(color: Colors.grey),
             ),
 
-            const SizedBox(height: 4),
+            const SizedBox(height: 24),
 
-            // Comment
-            Text(comment, style: TextStyle(fontSize: 14)),
+            /// LIST ULASAN
+            ...controller.ulasans.map((ulasan) {
+              final member = ulasan['member'] ?? {};
+              final media = ulasan['media'] as List? ?? [];
 
-            const SizedBox(height: 6),
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// HEADER
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          child: Text(
+                            (member['nama_lengkap'] ?? 'A')[0],
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          member['nama_lengkap'] ?? '-',
+                          style: TextStyle(
+                            color: textTheme,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
 
-            // Time
-            Text(time, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                    const SizedBox(height: 6),
+
+                    /// STARS
+                    ratingStars(ulasan['rating'] ?? 0),
+
+                    const SizedBox(height: 6),
+
+                    /// COMMENT
+                    Text(
+                      ulasan['komentar'] ?? '-',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    /// MEDIA
+                    if (media.isNotEmpty)
+                      Row(
+                        children: media.map((m) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(6),
+                              child: Image.network(
+                                m['url'],
+                                width: 48,
+                                height: 48,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+
+                    const SizedBox(height: 6),
+
+                    /// TIME
+                    Text(
+                      timeAgo(ulasan['tanggal']),
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
           ],
         ),
-      ),
-    );
+      );
+    });
   }
+}
+
+String timeAgo(String date) {
+  final time = DateTime.parse(date);
+  final diff = DateTime.now().difference(time);
+
+  if (diff.inMinutes < 1) {
+    return 'Baru saja';
+  } else if (diff.inMinutes < 60) {
+    return '${diff.inMinutes} menit yang lalu';
+  } else if (diff.inHours < 24) {
+    return '${diff.inHours} jam yang lalu';
+  } else {
+    return '${diff.inDays} hari yang lalu';
+  }
+}
+
+Widget ratingStars(int rating) {
+  return Row(
+    children: List.generate(5, (index) {
+      return Icon(
+        index < rating ? Icons.star : Icons.star_border,
+        color: Colors.amber,
+        size: 16,
+      );
+    }),
+  );
 }

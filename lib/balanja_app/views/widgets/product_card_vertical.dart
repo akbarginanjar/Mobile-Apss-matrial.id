@@ -19,7 +19,7 @@ class ProductCardVertical extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
-        // onTap: () => Get.to(() => ProductScreen(produk: produk)),
+        onTap: () => Get.to(() => ProductScreen(slug: produk['slug'])),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -139,7 +139,7 @@ class ProductCardVertical extends StatelessWidget {
                     softWrap: true,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 13, color: textdark),
+                    style: TextStyle(fontSize: 13, color: textTheme),
                   ),
                   const SizedBox(height: 3.0),
                   Text(
@@ -160,7 +160,7 @@ class ProductCardVertical extends StatelessWidget {
                       softWrap: true,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 11, color: textdark),
+                      style: TextStyle(fontSize: 11, color: textTheme),
                     ),
                   ),
                 ],

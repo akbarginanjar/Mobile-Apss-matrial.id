@@ -1,23 +1,25 @@
 import 'package:flutter/cupertino.dart';
+import 'package:mobile_balanja_id/balanja_app/controllers/detail_produk_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/controllers/varian_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
+import 'package:mobile_balanja_id/balanja_app/views/product_screen/skeleton_detail_produk.dart';
 import 'package:mobile_balanja_id/balanja_app/views/product_screen/spesifikasi_product.dart';
 import 'package:mobile_balanja_id/balanja_app/views/product_screen/ulasan_product.dart';
 
 class ProductScreen extends StatefulWidget {
-  final Produk produk;
-  const ProductScreen({super.key, required this.produk});
+  final String slug;
+  const ProductScreen({super.key, required this.slug});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  final controller = Get.put(DetailProdukController());
   @override
   Widget build(BuildContext context) {
-    List<VarianBarang> filterId = widget.produk.varianBarang!
-        .where((item) => item.barang!.id == widget.produk.id)
-        .toList();
+    controller.loadDetailProduk(widget.slug);
+
     return Stack(
       children: [
         Scaffold(
@@ -31,50 +33,71 @@ class _ProductScreenState extends State<ProductScreen> {
             elevation: 10,
             title: Text(
               'Detail Produk',
-              style: GoogleFonts.montserrat(color: textdark),
+              style: GoogleFonts.montserrat(color: textTheme),
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.shopping_cart_outlined),
-                onPressed: () {
-                  Get.to(CartScreen());
-                },
+                icon: const Icon(Icons.share_rounded),
+                onPressed: () {},
               ),
               const SizedBox(width: 15),
             ],
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GetBuilder<VarianController>(
-                  init: VarianController(),
-                  builder: (c) {
-                    final selectedVariantPhoto = c.select != null
-                        ? widget.produk.varianBarang![c.select!].barang?.photo
-                        : null;
+          body: Obx(() {
+            if (controller.isLoading.value) {
+              return DetailProdukSkeleton();
+            }
 
-                    return Column(
-                      children: [
-                        const SizedBox(height: 50),
-                        if (c.select != null)
-                          (selectedVariantPhoto?.isNotEmpty == true)
+            if (controller.detailProduk.value == null) {
+              return const Center(child: Text('Data tidak ditemukan'));
+            }
+
+            final produk = controller.detailProduk.value!;
+            List<VarianBarang> filterId = produk.varianBarang!
+                .where((item) => item.barang!.id == produk.id)
+                .toList();
+
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GetBuilder<VarianController>(
+                    init: VarianController(),
+                    builder: (c) {
+                      final selectedVariantPhoto = c.select != null
+                          ? produk.varianBarang![c.select!].barang?.photo
+                          : null;
+
+                      return Column(
+                        children: [
+                          const SizedBox(height: 50),
+                          c.select != null
+                              ? (selectedVariantPhoto?.isNotEmpty == true &&
+                                        selectedVariantPhoto![0].path != null &&
+                                        selectedVariantPhoto![0]
+                                            .path!
+                                            .isNotEmpty)
+                                    ? Image.network(
+                                        selectedVariantPhoto![0].path!,
+                                        height: 350,
+                                        width: MediaQuery.of(
+                                          context,
+                                        ).size.width,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.network(
+                                        'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
+                                        height: 350,
+                                        width: MediaQuery.of(
+                                          context,
+                                        ).size.width,
+                                        fit: BoxFit.cover,
+                                      )
+                              : (produk.photo?.isNotEmpty == true &&
+                                    produk.photo![0].path != null &&
+                                    produk.photo![0].path!.isNotEmpty)
                               ? Image.network(
-                                  '${selectedVariantPhoto![0].path}',
-                                  height: 350,
-                                  width: MediaQuery.of(context).size.width,
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.network(
-                                  'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
-                                  height: 350,
-                                  width: MediaQuery.of(context).size.width,
-                                  fit: BoxFit.cover,
-                                )
-                        else
-                          widget.produk.photo?.isNotEmpty == true
-                              ? Image.network(
-                                  '${widget.produk.photo![0].path}',
+                                  produk.photo![0].path!,
                                   height: 350,
                                   width: MediaQuery.of(context).size.width,
                                   fit: BoxFit.cover,
@@ -85,178 +108,174 @@ class _ProductScreenState extends State<ProductScreen> {
                                   width: MediaQuery.of(context).size.width,
                                   fit: BoxFit.cover,
                                 ),
-                        VariantSection(produk: widget.produk),
-                        // const SizedBox(height: 9),
-                        Container(
-                          padding: const EdgeInsets.only(
-                            left: 12,
-                            right: 12,
-                            top: 5,
-                            bottom: 1.0,
-                          ),
-                          width: MediaQuery.of(context).size.width,
-                          color: dark,
-                          margin: const EdgeInsets.only(bottom: 9.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                c.select != null
-                                    ? toCurrency(
-                                        widget
-                                            .produk
-                                            .varianBarang![c.select!]
-                                            .harga!,
-                                      )
-                                    : toCurrency(
-                                        filterId.isEmpty
-                                            ? widget
-                                                  .produk
-                                                  .varianBarang![0]
-                                                  .harga!
-                                            : filterId[0].harga!,
-                                      ),
-                                style: Theme.of(context).textTheme.titleLarge
-                                    ?.apply(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                    ),
-                              ),
-                              const SizedBox(height: 5.0),
-                              Text(
-                                c.select != null
-                                    ? '${widget.produk.nama} - ${widget.produk.varianBarang![c.select!].barang!.varian}'
-                                    : '${widget.produk.nama} - ${filterId.isEmpty ? widget.produk.varianBarang![0].barang!.varian : filterId[0].barang!.varian}',
-                                style: TextStyle(fontSize: 16, color: textdark),
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  if (widget.produk.varianBarang![0].jumlah ==
-                                          0 &&
-                                      widget
-                                              .produk
-                                              .varianBarang![0]
-                                              .barang!
-                                              .isPreOrder ==
-                                          false)
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: danger,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: const Text(
-                                        "Stok Habis",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 11,
-                                        ),
-                                      ),
-                                    ),
-                                  const SizedBox(width: 5),
-                                  if (widget
-                                          .produk
-                                          .varianBarang![0]
-                                          .barang!
-                                          .isPreOrder ==
-                                      true)
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: CupertinoColors.activeOrange,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: const Text(
-                                        "Pre-Order",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 11,
-                                        ),
-                                      ),
-                                    ),
 
-                                  const SizedBox(width: 5),
-
-                                  if (widget.produk.varianBarang![0].jumlah !=
-                                          0 &&
-                                      widget
-                                              .produk
-                                              .varianBarang![0]
-                                              .barang!
-                                              .isPreOrder ==
-                                          true)
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 4,
+                          VariantSection(produk: produk),
+                          // const SizedBox(height: 9),
+                          Container(
+                            padding: const EdgeInsets.only(
+                              left: 12,
+                              right: 12,
+                              top: 5,
+                              bottom: 0,
+                            ),
+                            width: MediaQuery.of(context).size.width,
+                            color: dark,
+                            margin: const EdgeInsets.only(bottom: 9.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  c.select != null
+                                      ? toCurrency(
+                                          produk
+                                              .varianBarang![c.select!]
+                                              .harga!,
+                                        )
+                                      : toCurrency(
+                                          filterId.isEmpty
+                                              ? produk.varianBarang![0].harga!
+                                              : filterId[0].harga!,
+                                        ),
+                                  style: Theme.of(context).textTheme.titleLarge
+                                      ?.apply(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
                                       ),
-                                      decoration: BoxDecoration(
-                                        color: success,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: const Text(
-                                        "Ready Stok",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 11,
+                                ),
+                                const SizedBox(height: 5.0),
+                                Text(
+                                  c.select != null
+                                      ? '${produk.nama} - ${produk.varianBarang![c.select!].barang!.varian}'
+                                      : '${produk.nama} - ${filterId.isEmpty ? produk.varianBarang![0].barang!.varian : filterId[0].barang!.varian}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: textTheme,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    if (produk.varianBarang![0].jumlah == 0 &&
+                                        produk
+                                                .varianBarang![0]
+                                                .barang!
+                                                .isPreOrder ==
+                                            false)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 4,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: danger,
+                                          borderRadius: BorderRadius.circular(
+                                            15,
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          "Stok Habis",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 11,
+                                          ),
                                         ),
                                       ),
-                                    ),
-
-                                  if (widget.produk.varianBarang![0].jumlah !=
-                                          0 &&
-                                      widget
-                                              .produk
-                                              .varianBarang![0]
-                                              .barang!
-                                              .isPreOrder ==
-                                          false)
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: success,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: const Text(
-                                        "Ready Stok",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 11,
+                                    const SizedBox(width: 5),
+                                    if (produk
+                                            .varianBarang![0]
+                                            .barang!
+                                            .isPreOrder ==
+                                        true)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 4,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: CupertinoColors.activeOrange,
+                                          borderRadius: BorderRadius.circular(
+                                            15,
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          "Pre-Order",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 11,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Flexible(
-                                    flex: 3,
-                                    child: Text(
+
+                                    const SizedBox(width: 5),
+
+                                    if (produk.varianBarang![0].jumlah != 0 &&
+                                        produk
+                                                .varianBarang![0]
+                                                .barang!
+                                                .isPreOrder ==
+                                            true)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 4,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: success,
+                                          borderRadius: BorderRadius.circular(
+                                            15,
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          "Ready Stok",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 11,
+                                          ),
+                                        ),
+                                      ),
+
+                                    if (produk.varianBarang![0].jumlah != 0 &&
+                                        produk
+                                                .varianBarang![0]
+                                                .barang!
+                                                .isPreOrder ==
+                                            false)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 4,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: success,
+                                          borderRadius: BorderRadius.circular(
+                                            15,
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          "Ready Stok",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 11,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
                                       '332 Terjual',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium
-                                          ?.apply(color: textdark),
+                                          ?.apply(color: Colors.grey),
                                     ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Row(
+                                    Row(
                                       children: [
                                         IconButton(
                                           onPressed: () {},
@@ -267,37 +286,36 @@ class _ProductScreenState extends State<ProductScreen> {
                                           alignment: Alignment.centerRight,
                                           iconSize: 20,
                                         ),
-                                        IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(Icons.share),
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                          alignment: Alignment.centerRight,
-                                          iconSize: 20,
-                                        ),
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-                TokoInfo(produk: widget.produk),
-                const SizedBox(height: 9),
-                SpesifikasiProduct(produk: widget.produk),
-                DeskripsiProduct(produk: widget.produk),
-                const SizedBox(height: 9),
-                RatingUlasanWidget(),
-                const SizedBox(height: 100.0),
-              ],
-            ),
-          ),
+                        ],
+                      );
+                    },
+                  ),
+                  if (textTheme == Colors.black)
+                    Container(height: 8, color: Colors.grey[100]),
+                  TokoInfo(produk: produk),
+                  if (textTheme == Colors.black)
+                    Container(height: 8, color: Colors.grey[100]),
+                  if (textTheme == Colors.white) const SizedBox(height: 9),
+                  SpesifikasiProduct(produk: produk),
+                  DeskripsiProduct(produk: produk),
+                  if (textTheme == Colors.white) const SizedBox(height: 9),
+                  if (textTheme == Colors.black)
+                    Container(height: 8, color: Colors.grey[100]),
+                  UlasanView(
+                    barangId: produk.varianBarang![0].barangId!.toString(),
+                  ),
+                  const SizedBox(height: 100.0),
+                ],
+              ),
+            );
+          }),
         ),
         Positioned(
           child: Align(
@@ -328,57 +346,98 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                              side: BorderSide(
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 1.5,
+                      // SizedBox(
+                      //   height: 50,
+                      //   child: ElevatedButton(
+                      //     style: ElevatedButton.styleFrom(
+                      //       elevation: 0,
+                      //       shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(15.0),
+                      //         side: BorderSide(
+                      //           color: Theme.of(context).colorScheme.primary,
+                      //           width: 1.5,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     onPressed: () {},
+                      //     child: Text(
+                      //       'Keranjang',
+                      //       style: Theme.of(context).textTheme.bodyMedium!
+                      //           .apply(
+                      //             color: Theme.of(context).colorScheme.primary,
+                      //           ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(width: 7),
+                      Obx(() {
+                        if (controller.detailProduk.value == null) {
+                          return SizedBox(
+                            height: 50,
+
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                              ),
+                              onPressed: null,
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               ),
                             ),
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            'Keranjang',
-                            style: Theme.of(context).textTheme.bodyMedium!
-                                .apply(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 7),
-                      SizedBox(
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.primary,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
+                          );
+                          ;
+                        }
+
+                        final produk = controller.detailProduk.value!;
+                        return SizedBox(
+                          height: 50,
+
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.primary,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
                             ),
+                            onPressed: controller.isLoading.value
+                                ? null
+                                : () {
+                                    beliSekarang(produk);
+                                  },
+                            child: controller.isLoading.value
+                                ? SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : Text(
+                                    produk.varianBarang![0].jumlah == 0
+                                        ? 'Pre Order'
+                                        : 'Beli Sekarang',
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                           ),
-                          onPressed: () {
-                            beliSekarang();
-                          },
-                          child: Text(
-                            widget.produk.varianBarang![0].jumlah == 0
-                                ? 'Pre Order'
-                                : 'Beli Sekarang',
-                            style: GoogleFonts.montserrat(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
+                        );
+                      }),
                     ],
                   ),
                 ],
@@ -390,24 +449,38 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  beliSekarang() {
-    List<VarianBarang> filterId = widget.produk.varianBarang!
-        .where((item) => item.barang!.id == widget.produk.id)
+  beliSekarang(Produk produk) {
+    List<VarianBarang> filterId = produk.varianBarang!
+        .where((item) => item.barang!.id == produk.id)
         .toList();
     Get.bottomSheet(
       SizedBox(
-        height: 300,
+        height: 320,
         child: Container(
-          color: dark2,
+          decoration: BoxDecoration(
+            color: dark, // Gunakan warna tema Anda
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: ListView(
               children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
                 GetBuilder<VarianController>(
                   init: VarianController(),
                   builder: (c) {
                     final selectedVariantPhoto = c.select != null
-                        ? widget.produk.varianBarang![c.select!].barang?.photo
+                        ? produk.varianBarang![c.select!].barang?.photo
                         : null;
 
                     return Column(
@@ -420,9 +493,14 @@ class _ProductScreenState extends State<ProductScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                     child:
                                         (selectedVariantPhoto?.isNotEmpty ==
-                                            true)
+                                                true &&
+                                            selectedVariantPhoto![0].path !=
+                                                null &&
+                                            selectedVariantPhoto![0]
+                                                .path!
+                                                .isNotEmpty)
                                         ? Image.network(
-                                            '${selectedVariantPhoto![0].path}',
+                                            selectedVariantPhoto![0].path!,
                                             height: 100,
                                             width: 100,
                                             fit: BoxFit.cover,
@@ -437,9 +515,11 @@ class _ProductScreenState extends State<ProductScreen> {
                                 : ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child:
-                                        widget.produk.photo?.isNotEmpty == true
+                                        (produk.photo?.isNotEmpty == true &&
+                                            produk.photo![0].path != null &&
+                                            produk.photo![0].path!.isNotEmpty)
                                         ? Image.network(
-                                            '${widget.produk.photo![0].path}',
+                                            produk.photo![0].path!,
                                             height: 100,
                                             width: 100,
                                             fit: BoxFit.cover,
@@ -451,6 +531,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                             fit: BoxFit.cover,
                                           ),
                                   ),
+
                             const SizedBox(width: 30),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -458,17 +539,13 @@ class _ProductScreenState extends State<ProductScreen> {
                                 Text(
                                   c.select != null
                                       ? toCurrency(
-                                          widget
-                                              .produk
+                                          produk
                                               .varianBarang![c.select!]
                                               .harga!,
                                         )
                                       : toCurrency(
                                           filterId.isEmpty
-                                              ? widget
-                                                    .produk
-                                                    .varianBarang![0]
-                                                    .harga!
+                                              ? produk.varianBarang![0].harga!
                                               : filterId[0].harga!,
                                         ),
                                   style: Theme.of(context).textTheme.titleSmall
@@ -480,10 +557,10 @@ class _ProductScreenState extends State<ProductScreen> {
                                 ),
                                 Text(
                                   c.select != null
-                                      ? 'Stok : ${widget.produk.varianBarang![c.select!].jumlah}'
-                                      : 'Stok : ${filterId.isEmpty ? widget.produk.varianBarang![0].jumlah : filterId[0].jumlah}',
+                                      ? 'Stok : ${produk.varianBarang![c.select!].jumlah}'
+                                      : 'Stok : ${filterId.isEmpty ? produk.varianBarang![0].jumlah : filterId[0].jumlah}',
                                   style: TextStyle(
-                                    color: textdark,
+                                    color: textTheme,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -505,21 +582,17 @@ class _ProductScreenState extends State<ProductScreen> {
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.all(0),
                                     scrollDirection: Axis.horizontal,
-                                    itemCount:
-                                        widget.produk.varianBarang!.length + 1,
+                                    itemCount: produk.varianBarang!.length + 1,
                                     itemBuilder: (context, index) {
                                       final int idx = index + 1;
                                       if (idx !=
-                                          (widget.produk.varianBarang!.length +
-                                              1)) {
-                                        final currentVariantPhoto = widget
-                                            .produk
+                                          (produk.varianBarang!.length + 1)) {
+                                        final currentVariantPhoto = produk
                                             .varianBarang![index]
                                             .barang
                                             ?.photo;
                                         final isOutOfStock =
-                                            widget
-                                                .produk
+                                            produk
                                                 .varianBarang![index]
                                                 .jumlah ==
                                             0;
@@ -530,10 +603,16 @@ class _ProductScreenState extends State<ProductScreen> {
                                           ),
                                           child:
                                               (currentVariantPhoto
-                                                      ?.isNotEmpty ==
-                                                  true)
+                                                          ?.isNotEmpty ==
+                                                      true &&
+                                                  currentVariantPhoto![0]
+                                                          .path !=
+                                                      null &&
+                                                  currentVariantPhoto![0].path!
+                                                      .toString()
+                                                      .isNotEmpty)
                                               ? Image.network(
-                                                  currentVariantPhoto![0].path
+                                                  currentVariantPhoto![0].path!
                                                       .toString(),
                                                   height: 30,
                                                   width: 30,
@@ -546,6 +625,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                   fit: BoxFit.cover,
                                                 ),
                                         );
+
                                         return isOutOfStock
                                             ? InkWell(
                                                 onTap: () {
@@ -553,7 +633,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                 },
                                                 child: Card(
                                                   color: c.select == index
-                                                      ? primary
+                                                      ? Colors.green[50]
                                                       : dark,
                                                   surfaceTintColor:
                                                       Colors.white,
@@ -561,12 +641,12 @@ class _ProductScreenState extends State<ProductScreen> {
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                          5,
+                                                          10,
                                                         ),
                                                     side: BorderSide(
                                                       color: c.select == index
                                                           ? primary
-                                                          : dark,
+                                                          : Colors.grey[300]!,
                                                       width: 1,
                                                     ),
                                                   ),
@@ -592,16 +672,14 @@ class _ProductScreenState extends State<ProductScreen> {
                                                                 top: 5,
                                                               ),
                                                           child: Text(
-                                                            widget
-                                                                .produk
+                                                            produk
                                                                 .varianBarang![index]
                                                                 .barang!
                                                                 .varian!,
                                                             softWrap: true,
                                                             style: TextStyle(
                                                               fontSize: 12,
-                                                              color:
-                                                                  Colors.white,
+                                                              color: textTheme,
                                                             ),
                                                           ),
                                                         ),
@@ -616,7 +694,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                 },
                                                 child: Card(
                                                   color: c.select == index
-                                                      ? primary
+                                                      ? Colors.green[50]
                                                       : dark,
                                                   surfaceTintColor:
                                                       Colors.white,
@@ -629,7 +707,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                     side: BorderSide(
                                                       color: c.select == index
                                                           ? primary
-                                                          : Colors.grey[400]!,
+                                                          : Colors.grey[300]!,
                                                       width: 1,
                                                     ),
                                                   ),
@@ -655,8 +733,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                                 top: 5,
                                                               ),
                                                           child: Text(
-                                                            widget
-                                                                .produk
+                                                            produk
                                                                 .varianBarang![index]
                                                                 .barang!
                                                                 .varian!,
@@ -706,34 +783,28 @@ class _ProductScreenState extends State<ProductScreen> {
                           if (c.select == null) {
                             EasyLoading.showToast('Pilih Varian');
                           } else {
-                            if (widget
-                                    .produk
+                            if (produk
                                     .varianBarang![c.select!]
                                     .jumlah == //validator stok
                                 0) {
                               EasyLoading.showToast('Pre Order');
                               Get.to(
                                 CheckoutScreen(
-                                  varian:
-                                      widget.produk.varianBarang![c.select!],
+                                  varian: produk.varianBarang![c.select!],
                                 ),
                               );
                             } else {
                               Get.to(
                                 CheckoutScreen(
-                                  varian:
-                                      widget.produk.varianBarang![c.select!],
+                                  varian: produk.varianBarang![c.select!],
                                 ),
                               );
-                              // print(widget.produk.varianBarang![c.select!].id);
+                              // print(produk.varianBarang![c.select!].id);
                             }
                           }
                         },
                         child: Text(
-                          widget
-                                      .produk
-                                      .varianBarang![0]
-                                      .jumlah == //validator stok
+                          produk.varianBarang![0].jumlah == //validator stok
                                   0
                               ? 'Pre Order'
                               : 'Beli Sekarang',

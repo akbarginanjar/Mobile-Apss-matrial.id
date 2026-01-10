@@ -19,7 +19,7 @@ class CardSemuaProduk extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          // Get.to(ProductScreen(produk: produk));
+          Get.to(ProductScreen(slug: produk['slug']));
         },
         borderRadius: BorderRadius.circular(12),
         child: Column(
@@ -147,7 +147,7 @@ class CardSemuaProduk extends StatelessWidget {
                 children: [
                   // NAMA PRODUK
                   Text(
-                    produk['nama'],
+                    produk['nama'] ?? '-',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 13, color: textTheme),
@@ -157,7 +157,7 @@ class CardSemuaProduk extends StatelessWidget {
 
                   if (produk['harga_coret'] != 0)
                     Text(
-                      toCurrency(produk['harga_coret']),
+                      toCurrency(produk['harga_coret'] ?? 0),
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.grey,
@@ -169,7 +169,7 @@ class CardSemuaProduk extends StatelessWidget {
 
                   // HARGA UTAMA
                   Text(
-                    toCurrency(produk['harga']),
+                    toCurrency(produk['harga'] ?? 0),
                     style: TextStyle(
                       fontSize: 16,
                       color: Theme.of(context).colorScheme.primary,
@@ -183,9 +183,9 @@ class CardSemuaProduk extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: Text(
-                      produk['gudang'] == null
+                      produk['gudang']['alamat'] == null
                           ? '-'
-                          : produk['gudang']['alamat'],
+                          : produk['gudang']['alamat'].toString(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 11, color: textdark),

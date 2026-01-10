@@ -34,7 +34,7 @@ class VariantSection extends StatelessWidget {
                     'Varian Produk',
                     style: Theme.of(
                       context,
-                    ).textTheme.bodyMedium!.apply(color: textdark),
+                    ).textTheme.bodyMedium!.apply(color: textTheme),
                   ),
                 ),
                 // Flexible(
