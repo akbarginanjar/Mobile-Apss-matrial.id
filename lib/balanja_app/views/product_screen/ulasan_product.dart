@@ -56,7 +56,7 @@ class UlasanView extends StatelessWidget {
               style: const TextStyle(color: Colors.grey),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 15),
 
             /// LIST ULASAN
             ...controller.ulasans.map((ulasan) {
@@ -64,10 +64,16 @@ class UlasanView extends StatelessWidget {
               final media = ulasan['media'] as List? ?? [];
 
               return Padding(
-                padding: const EdgeInsets.only(bottom: 24),
+                padding: const EdgeInsets.only(bottom: 5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (textTheme == Colors.white)
+                      Divider(color: Colors.grey[800])
+                    else
+                      Divider(color: Colors.grey[300]),
+                    SizedBox(height: 5),
+
                     /// HEADER
                     Row(
                       children: [
@@ -107,16 +113,31 @@ class UlasanView extends StatelessWidget {
                     /// MEDIA
                     if (media.isNotEmpty)
                       Row(
-                        children: media.map((m) {
+                        children: media.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final m = entry.value;
+
                           return Padding(
                             padding: const EdgeInsets.only(right: 8),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(6),
-                              child: Image.network(
-                                m['url'],
-                                width: 48,
-                                height: 48,
-                                fit: BoxFit.cover,
+                            child: GestureDetector(
+                              onTap: () {
+                                showUlasanPreview(
+                                  context: context,
+                                  media: media,
+                                  initialIndex: index,
+                                  nama: ulasan['member']['nama_lengkap'] ?? '-',
+                                  rating: ulasan['rating'] ?? 0,
+                                  komentar: ulasan['komentar'] ?? '',
+                                );
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(6),
+                                child: Image.network(
+                                  m['url'],
+                                  width: 60,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           );
@@ -133,12 +154,136 @@ class UlasanView extends StatelessWidget {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       );
     });
   }
+}
+
+void showUlasanPreview({
+  required BuildContext context,
+  required List media,
+  required int initialIndex,
+  required String nama,
+  required int rating,
+  required String komentar,
+}) {
+  final pageController = PageController(initialPage: initialIndex);
+  final currentIndex = 0.obs;
+
+  showDialog(
+    context: context,
+    builder: (_) {
+      return Dialog(
+        backgroundColor: Colors.black,
+        insetPadding: EdgeInsets.zero,
+        child: Stack(
+          children: [
+            /// IMAGE VIEWER
+            PageView.builder(
+              controller: pageController,
+              itemCount: media.length,
+              onPageChanged: (i) => currentIndex.value = i,
+              itemBuilder: (_, index) {
+                return InteractiveViewer(
+                  child: Image.network(
+                    media[index]['url'],
+                    fit: BoxFit.contain,
+                  ),
+                );
+              },
+            ),
+
+            /// TOP BAR
+            Positioned(
+              top: 40,
+              left: 16,
+              right: 16,
+              child: Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    /// FOTO COUNT
+                    Text(
+                      '${currentIndex.value + 1} / ${media.length}',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+
+                    /// CLOSE
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            /// BOTTOM INFO
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.transparent, Colors.black87],
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    /// NAMA
+                    Text(
+                      nama,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    /// STARS
+                    Row(
+                      children: List.generate(
+                        5,
+                        (i) => Icon(
+                          i < rating ? Icons.star : Icons.star_border,
+                          color: Colors.amber,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    /// KOMENTAR
+                    Text(
+                      komentar,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 13,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }
 
 String timeAgo(String date) {

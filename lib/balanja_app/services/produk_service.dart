@@ -14,6 +14,16 @@ class ProdukService extends GetConnect {
     return get('${Base.url}/v1/products', headers: header, query: params);
   }
 
+  Future<Response> cariProduk(params) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return get('${Base.url}/v1/products', headers: header, query: params);
+  }
+
   Future<Response> detailProduk(params, slug) {
     final header = {
       'secret':

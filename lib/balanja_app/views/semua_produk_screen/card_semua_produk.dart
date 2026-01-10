@@ -188,7 +188,7 @@ class CardSemuaProduk extends StatelessWidget {
                           : produk['gudang']['alamat'].toString(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 11, color: textdark),
+                      style: TextStyle(fontSize: 11, color: textTheme),
                     ),
                   ),
                 ],

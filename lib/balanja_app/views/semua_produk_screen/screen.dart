@@ -86,14 +86,14 @@ class _SemuaProdukScreenState extends State<SemuaProdukScreen> {
             Text(
               'Semua Produk',
               style: GoogleFonts.montserrat(
-                color: textdark,
+                color: textTheme,
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
             ),
             Text(
               'di Kategori dan Merek terpilih',
-              style: GoogleFonts.montserrat(color: textdark, fontSize: 12),
+              style: GoogleFonts.montserrat(fontSize: 12),
             ),
           ],
         ),
@@ -129,32 +129,19 @@ class _SemuaProdukScreenState extends State<SemuaProdukScreen> {
                           vertical: 8,
                           horizontal: 10,
                         ),
-                        // prefixIcon: Icon(Icons.search, color: dark),
-                        // suffix: SizedBox(
-                        //   height: 28,
-                        //   child: ElevatedButton(
-                        //     style: ElevatedButton.styleFrom(
-                        //       backgroundColor: primary,
-                        //       elevation: 0,
-                        //     ),
-                        //     onPressed: () {
-                        //       Get.to(SearchProduk(search: search.text));
-                        //     },
-                        //     child: const Text(
-                        //       'Cari',
-                        //       style: TextStyle(color: Colors.white),
-                        //     ),
-                        //   ),
-                        // ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: textdark),
+                          borderSide: BorderSide(color: primary),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(15),
                             bottomLeft: Radius.circular(15),
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: textdark),
+                          borderSide: BorderSide(
+                            color: nameApp == 'balanja.id'
+                                ? Colors.grey[300]!
+                                : Colors.grey[700]!,
+                          ),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(15),
                             bottomLeft: Radius.circular(15),

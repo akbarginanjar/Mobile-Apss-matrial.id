@@ -101,3 +101,4 @@ Color dark2 = HexColor('#262626');
 Color textdark = HexColor('#949492');
 
 Color textTheme = Colors.white;
+String nameApp = 'matrial.id';

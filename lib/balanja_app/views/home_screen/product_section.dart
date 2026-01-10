@@ -75,7 +75,7 @@ class ProductSection extends StatelessWidget {
         ),
         Obx(() {
           return SizedBox(
-            height: 240,
+            height: 270,
             child:
                 controllerProduk.isLoadingUntukKamu.value &&
                     controllerProduk.produkUntukKamu.isEmpty

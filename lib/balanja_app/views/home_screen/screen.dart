@@ -3,12 +3,12 @@ import 'package:mobile_balanja_id/balanja_app/views/notifikasi_screen/screen.dar
 import 'package:mobile_balanja_id/balanja_app/views/profile_screen/screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/search_produk/screen.dart';
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController search = TextEditingController();
     return Scaffold(
       body: RefreshIndicator(
         color: primary,
@@ -70,6 +70,7 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            controller: search,
                             decoration: InputDecoration(
                               hintText: 'Cari produk...',
                               hintStyle: TextStyle(
@@ -85,17 +86,17 @@ class HomeScreen extends StatelessWidget {
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15)
+                                  bottomLeft: Radius.circular(15),
                                 ),
-                                borderSide: BorderSide(color: textdark)
+                                borderSide: BorderSide(color: textdark),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15)
+                                  bottomLeft: Radius.circular(15),
                                 ),
-                                borderSide: BorderSide(color: textdark)
-                              )
+                                borderSide: BorderSide(color: textdark),
+                              ),
                             ),
                           ),
                         ),
@@ -109,7 +110,9 @@ class HomeScreen extends StatelessWidget {
                           ),
                           child: IconButton(
                             icon: Icon(Icons.search, color: dark, size: 24),
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.to(SearchProduk(search: search.text));
+                            },
                           ),
                         ),
                       ],

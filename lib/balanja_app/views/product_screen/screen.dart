@@ -304,6 +304,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     Container(height: 8, color: Colors.grey[100]),
                   if (textTheme == Colors.white) const SizedBox(height: 9),
                   SpesifikasiProduct(produk: produk),
+                  if (nameApp == 'balanja.id') Divider(color: Colors.grey[200]),
                   DeskripsiProduct(produk: produk),
                   if (textTheme == Colors.white) const SizedBox(height: 9),
                   if (textTheme == Colors.black)
@@ -633,7 +634,10 @@ class _ProductScreenState extends State<ProductScreen> {
                                                 },
                                                 child: Card(
                                                   color: c.select == index
-                                                      ? Colors.green[50]
+                                                      ? (nameApp ==
+                                                                'balanja.id')
+                                                            ? Colors.green[50]
+                                                            : primary
                                                       : dark,
                                                   surfaceTintColor:
                                                       Colors.white,
@@ -694,7 +698,10 @@ class _ProductScreenState extends State<ProductScreen> {
                                                 },
                                                 child: Card(
                                                   color: c.select == index
-                                                      ? Colors.green[50]
+                                                      ? (nameApp ==
+                                                                'balanja.id')
+                                                            ? Colors.green[50]
+                                                            : primary
                                                       : dark,
                                                   surfaceTintColor:
                                                       Colors.white,
