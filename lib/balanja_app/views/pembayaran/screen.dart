@@ -8,8 +8,10 @@ import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/utils/value_formatter.dart';
 import 'package:mobile_balanja_id/balanja_app/views/main_screen/screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/pembayaran/komplain_screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/pembayaran/pembayaran_skeleton.dart';
 import 'package:mobile_balanja_id/balanja_app/views/pembayaran/screen_old.dart';
 import 'package:mobile_balanja_id/balanja_app/views/pembayaran/tracking_web_screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/pembayaran/ulasan_screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/widgets/button.dart';
 
 class PembayaranScreen extends StatelessWidget {
@@ -48,7 +50,7 @@ class PembayaranScreen extends StatelessWidget {
       body: Obx(() {
         // TAMPILAN LOADING
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return PembayaranSkeleton();
         }
 
         // TAMPILAN ERROR & TOMBOL MUAT ULANG
@@ -643,12 +645,16 @@ class PembayaranScreen extends StatelessWidget {
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF3BA55D),
+                                color: shipmentStatusColor(
+                                  data['shipment_info']['status'],
+                                ),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
-                                '${data['shipment_info']['status']}',
-                                style: TextStyle(
+                                shipmentStatusLabel(
+                                  data['shipment_info']['status'],
+                                ),
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -787,6 +793,70 @@ class PembayaranScreen extends StatelessWidget {
                   ),
                 ),
               if (data['status'] == 'dikirim') SizedBox(height: 10),
+              if (data['ulasan'].isEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                    bottom: 10,
+                  ),
+                  child: DefaultButtonOutline(
+                    text: 'Berikan Penilaian Produk',
+                    press: () {
+                      Get.bottomSheet(
+                        UlasanWidget(
+                          idTransaksi: 1,
+                          noInvoice: data['no_invoice'],
+                          item: data['item'],
+                        ),
+                        isScrollControlled: true,
+                      );
+                    },
+                  ),
+                )
+              else
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: dark,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      /// ⭐ Rating
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(5, (index) {
+                          return Icon(
+                            index < data['ulasan'][0]['rating']
+                                ? Icons.star
+                                : Icons.star_border_outlined,
+                            size: 24,
+                            color: index < data['ulasan'][0]['rating']
+                                ? Colors.orange
+                                : Colors.orange,
+                          );
+                        }),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      /// 💬 Komentar
+                      Text(
+                        '"${data['ulasan'][0]['komentar']}"',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.grey.shade300,
+                          fontSize: 14,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               Container(
                 color: dark,
                 child: Padding(
@@ -1370,5 +1440,39 @@ class CountDownProsesOrderWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+String shipmentStatusLabel(String status) {
+  switch (status) {
+    case 'confirmed':
+      return 'Terkonfirmasi';
+    case 'allocated':
+      return 'Teralokasi';
+    case 'picking_up':
+      return 'Dalam Proses Penjemputan';
+    case 'picked':
+      return 'Sudah diambil oleh kurir';
+    case 'dropping_off':
+      return 'Dalam Proses Pengantaran';
+    default:
+      return status;
+  }
+}
+
+Color shipmentStatusColor(String status) {
+  switch (status) {
+    case 'confirmed':
+      return const Color(0xFF3BA55D); // hijau
+    case 'allocated':
+      return Colors.blue;
+    case 'picking_up':
+      return Colors.orange;
+    case 'picked':
+      return Colors.green.shade700;
+    case 'dropping_off':
+      return Colors.deepOrange;
+    default:
+      return Colors.grey;
   }
 }

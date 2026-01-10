@@ -319,4 +319,86 @@ class TransaksiController extends GetxController {
       EasyLoading.showError('Terjadi kesalahan');
     }
   }
+
+  //ULASAN
+  final service = TransaksiService();
+
+  final rating = 0.obs;
+  final komentar = ''.obs;
+  final fotos = <File>[].obs;
+  final videos = <File>[].obs;
+
+  final isLoadingUlasan = false.obs;
+
+  final picker = ImagePicker();
+
+  void setRating(int value) {
+    rating.value = value;
+  }
+
+  Future<void> pickFoto() async {
+    if (fotos.length >= 2) return;
+
+    final result = await picker.pickImage(source: ImageSource.gallery);
+    if (result != null) {
+      fotos.add(File(result.path));
+    }
+  }
+
+  Future<void> pickVideo() async {
+    if (videos.length >= 2) return;
+
+    final result = await picker.pickVideo(source: ImageSource.gallery);
+    if (result != null) {
+      videos.add(File(result.path));
+    }
+  }
+
+  /// 🔥 INI KUNCINYA
+  Future<void> simpanUlasan(List item, String noInvoice) async {
+    try {
+      isLoadingUlasan.value = true;
+      EasyLoading.show(status: 'Mengirim ulasan...');
+
+      for (var data in item) {
+        final form = FormData({
+          'transaksi_rincian_id': data['id'].toString(),
+          'rating': rating.value.toString(),
+          'komentar': komentar.value,
+          'member_id': '${GetStorage().read('member_id')}',
+        });
+
+        for (var foto in fotos) {
+          form.files.add(
+            MapEntry(
+              'foto[]',
+              MultipartFile(foto, filename: foto.path.split('/').last),
+            ),
+          );
+        }
+
+        for (var video in videos) {
+          form.files.add(
+            MapEntry(
+              'video[]',
+              MultipartFile(video, filename: video.path.split('/').last),
+            ),
+          );
+        }
+
+        final res = await service.simpanUlasan(form);
+
+        if (!res.isOk) {
+          throw Exception(res.body['message'] ?? 'Gagal mengirim ulasan');
+        }
+      }
+
+      EasyLoading.showSuccess('Komplain Berhasil Terkirim');
+      getInvoice(noInvoice);
+    } catch (e) {
+      EasyLoading.showError(e.toString());
+    } finally {
+      isLoadingUlasan.value = false;
+    }
+  }
 }

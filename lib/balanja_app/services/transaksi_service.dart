@@ -62,4 +62,14 @@ class TransaksiService extends GetConnect {
     };
     return post('${Base.url}/v1/request-refund', headers: header, body);
   }
+
+  Future<Response> simpanUlasan(body) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return post('${Base.url}/v1/ulasan', headers: header, body);
+  }
 }
