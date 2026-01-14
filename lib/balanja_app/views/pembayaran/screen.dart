@@ -792,6 +792,95 @@ class PembayaranScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+              if (data['refunds'].isNotEmpty)
+                Container(
+                  margin: const EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                    bottom: 10,
+                  ),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: dark,
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: primary, width: 1.5),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// Header
+                      Row(
+                        children: [
+                          Icon(Icons.refresh, color: primary, size: 20),
+                          SizedBox(width: 8),
+                          Text(
+                            'Pengajuan Refund',
+                            style: TextStyle(
+                              color: primary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 5),
+
+                      /// Kategori
+                      const Text('Kategori', style: TextStyle(fontSize: 10)),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${data['refunds'][0]['kategori_refund']}',
+                        style: TextStyle(color: textTheme),
+                      ),
+
+                      const SizedBox(height: 5),
+
+                      /// Nominal
+                      const Text('Nominal', style: TextStyle(fontSize: 10)),
+                      const SizedBox(height: 4),
+                      Text(
+                        toCurrency(data['refunds'][0]['nominal']),
+                        style: TextStyle(
+                          color: textTheme,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 5),
+
+                      /// Alasan
+                      const Text('Alasan', style: TextStyle(fontSize: 10)),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${data['refunds'][0]['alasan']}',
+                        style: TextStyle(color: textTheme),
+                      ),
+
+                      const SizedBox(height: 15),
+
+                      /// Status
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: primary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          '${data['refunds'][0]['status']}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               if (data['status'] == 'dikirim') SizedBox(height: 10),
               if (data['ulasan'].isEmpty && data['status'] == 'selesai')
                 Padding(
