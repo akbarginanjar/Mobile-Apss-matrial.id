@@ -793,7 +793,7 @@ class PembayaranScreen extends StatelessWidget {
                   ),
                 ),
               if (data['status'] == 'dikirim') SizedBox(height: 10),
-              if (data['ulasan'].isEmpty)
+              if (data['ulasan'].isEmpty && data['status'] == 'selesai')
                 Padding(
                   padding: const EdgeInsets.only(
                     left: 10,
@@ -814,9 +814,13 @@ class PembayaranScreen extends StatelessWidget {
                     },
                   ),
                 )
-              else
+              else if (data['ulasan'].isNotEmpty)
                 Container(
-                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  margin: const EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                    bottom: 10,
+                  ),
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -835,9 +839,7 @@ class PembayaranScreen extends StatelessWidget {
                                 ? Icons.star
                                 : Icons.star_border_outlined,
                             size: 24,
-                            color: index < data['ulasan'][0]['rating']
-                                ? Colors.orange
-                                : Colors.orange,
+                            color: Colors.orange,
                           );
                         }),
                       ),
@@ -856,7 +858,9 @@ class PembayaranScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
+                )
+              else
+                const SizedBox(),
               Container(
                 color: dark,
                 child: Padding(
