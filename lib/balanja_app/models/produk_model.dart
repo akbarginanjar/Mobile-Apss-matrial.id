@@ -1,3 +1,232 @@
+// class Produk {
+//   final int? id;
+//   final String? nama;
+//   final Kategori? kategori;
+//   final String? slug;
+//   final int? harga;
+//   final List<VarianBarang> varianBarang;
+
+//   Produk({
+//     this.id,
+//     this.nama,
+//     this.kategori,
+//     this.slug,
+//     this.harga,
+//     this.varianBarang = const [],
+//   });
+
+//   factory Produk.fromJson(Map<String, dynamic>? json) {
+//     if (json == null) return Produk();
+
+//     return Produk(
+//       id: json['id'],
+//       nama: json['nama'],
+//       slug: json['slug'],
+//       harga: json['harga'],
+//       kategori: json['kategori'] != null
+//           ? Kategori.fromJson(json['kategori'])
+//           : null,
+//       varianBarang: (json['varian_barang'] as List?)
+//               ?.map((e) => VarianBarang.fromJson(e))
+//               .toList() ??
+//           [],
+//     );
+//   }
+// }
+
+// class Kategori {
+//   final int? id;
+//   final String? kategori;
+
+//   Kategori({this.id, this.kategori});
+
+//   factory Kategori.fromJson(Map<String, dynamic>? json) {
+//     if (json == null) return Kategori();
+
+//     return Kategori(
+//       id: json['id'],
+//       kategori: json['kategori'],
+//     );
+//   }
+// }
+
+// class VarianBarang {
+//   final int? id;
+//   final int? jumlah;
+//   final int? barangId;
+//   final int? gudangId;
+//   final Gudang? gudang;
+//   final String? nama;
+//   final String? kode;
+//   final String? varian;
+//   final String? deskripsi;
+//   final String? slug;
+//   final String? productType;
+//   final List<Photo> photo;
+//   final int? hargaCoret;
+//   final int? harga;
+//   final Satuan? satuan;
+//   final Kategori? kategori;
+//   final bool? isPreOrder;
+//   final int? preOrderDay;
+//   final String? berat;
+//   final bool? isWishlist;
+
+//   VarianBarang({
+//     this.id,
+//     this.jumlah,
+//     this.barangId,
+//     this.gudangId,
+//     this.gudang,
+//     this.nama,
+//     this.kode,
+//     this.varian,
+//     this.deskripsi,
+//     this.slug,
+//     this.productType,
+//     this.photo = const [],
+//     this.hargaCoret,
+//     this.harga,
+//     this.satuan,
+//     this.kategori,
+//     this.isPreOrder,
+//     this.preOrderDay,
+//     this.berat,
+//     this.isWishlist,
+//   });
+
+//   factory VarianBarang.fromJson(Map<String, dynamic>? json) {
+//     if (json == null) return VarianBarang();
+
+//     return VarianBarang(
+//       id: json['id'],
+//       jumlah: json['jumlah'],
+//       barangId: json['barang_id'],
+//       gudangId: json['gudang_id'],
+//       nama: json['nama'],
+//       kode: json['kode'],
+//       varian: json['varian'],
+//       deskripsi: json['deskripsi'],
+//       slug: json['slug'],
+//       productType: json['product_type'],
+//       hargaCoret: json['harga_coret'],
+//       harga: json['harga'],
+//       berat: json['berat'],
+//       isPreOrder: json['is_pre_order'],
+//       preOrderDay: json['pre_order_day'],
+//       isWishlist: json['is_wishlist'],
+//       gudang:
+//           json['gudang'] != null ? Gudang.fromJson(json['gudang']) : null,
+//       satuan:
+//           json['satuan'] != null ? Satuan.fromJson(json['satuan']) : null,
+//       kategori:
+//           json['kategori'] != null ? Kategori.fromJson(json['kategori']) : null,
+//       photo: (json['photo'] as List?)
+//               ?.map((e) => Photo.fromJson(e))
+//               .toList() ??
+//           [],
+//     );
+//   }
+// }
+
+// class Gudang {
+//   final int? id;
+//   final String? namaGudang;
+//   final String? alamat;
+//   final String? keterangan;
+//   final int? memberId;
+//   final String? sebagai;
+//   final Member? member;
+
+//   Gudang({
+//     this.id,
+//     this.namaGudang,
+//     this.alamat,
+//     this.keterangan,
+//     this.memberId,
+//     this.sebagai,
+//     this.member,
+//   });
+
+//   factory Gudang.fromJson(Map<String, dynamic>? json) {
+//     if (json == null) return Gudang();
+
+//     return Gudang(
+//       id: json['id'],
+//       namaGudang: json['nama_gudang'],
+//       alamat: json['alamat'],
+//       keterangan: json['keterangan'],
+//       memberId: json['member_id'],
+//       sebagai: json['sebagai'],
+//       member:
+//           json['member'] != null ? Member.fromJson(json['member']) : null,
+//     );
+//   }
+// }
+
+// class Member {
+//   final int? id;
+//   final String? namaLengkap;
+
+//   Member({this.id, this.namaLengkap});
+
+//   factory Member.fromJson(Map<String, dynamic>? json) {
+//     if (json == null) return Member();
+
+//     return Member(
+//       id: json['id'],
+//       namaLengkap: json['nama_lengkap'],
+//     );
+//   }
+// }
+
+// class Photo {
+//   final int? id;
+//   final int? barangId;
+//   final String? photo;
+//   final int? tipe;
+//   final String? path;
+//   final String? tipeLabel;
+
+//   Photo({
+//     this.id,
+//     this.barangId,
+//     this.photo,
+//     this.tipe,
+//     this.path,
+//     this.tipeLabel,
+//   });
+
+//   factory Photo.fromJson(Map<String, dynamic>? json) {
+//     if (json == null) return Photo();
+
+//     return Photo(
+//       id: json['id'],
+//       barangId: json['barang_id'],
+//       photo: json['photo'],
+//       tipe: json['tipe'],
+//       path: json['path'],
+//       tipeLabel: json['tipe_label'],
+//     );
+//   }
+// }
+
+// class Satuan {
+//   final int? id;
+//   final String? satuan;
+
+//   Satuan({this.id, this.satuan});
+
+//   factory Satuan.fromJson(Map<String, dynamic>? json) {
+//     if (json == null) return Satuan();
+
+//     return Satuan(
+//       id: json['id'],
+//       satuan: json['satuan'],
+//     );
+//   }
+// }
+
 class ProdukModel {
   int id;
   int jumlah;
@@ -11,6 +240,7 @@ class ProdukModel {
   String productType;
 
   bool isPreOrder;
+  bool isWishlist;
   int preOrderDay;
 
   int harga;
@@ -32,6 +262,7 @@ class ProdukModel {
     this.slug = '',
     this.productType = '',
     this.isPreOrder = false,
+    this.isWishlist = false,
     this.preOrderDay = 0,
     this.harga = 0,
     this.hargaCoret = 0,
@@ -58,6 +289,7 @@ class ProdukModel {
       productType: json['product_type']?.toString() ?? '',
 
       isPreOrder: json['is_pre_order'] == true,
+      isWishlist: json['is_pre_order'] == true,
       preOrderDay: json['pre_order_day'] is int ? json['pre_order_day'] : 0,
 
       harga: json['harga'] is int ? json['harga'] : 0,
@@ -134,6 +366,7 @@ class Produk {
   int? memberId;
   String? nama;
   String? slug;
+  bool? isWishlist;
   List<Photo>? photo;
   List<HargaJual>? hargaJual;
   int? harga;
@@ -146,6 +379,7 @@ class Produk {
     this.memberId,
     this.nama,
     this.slug,
+    this.isWishlist,
     this.photo,
     this.hargaJual,
     this.harga,
@@ -159,6 +393,7 @@ class Produk {
     memberId = json['member_id'];
     nama = json['nama'] is String ? json['nama'] : null;
     slug = json['slug'] is String ? json['slug'] : null;
+    isWishlist = json['is_wishlist'] is bool ? json['is_wishlist'] : null;
 
     if (json['photo'] != null) {
       photo = <Photo>[];
@@ -189,6 +424,7 @@ class Produk {
     data['member_id'] = memberId;
     data['nama'] = nama;
     data['slug'] = slug;
+    data['is_wishlist'] = isWishlist;
     if (photo != null) {
       data['photo'] = photo!.map((v) => v.toJson()).toList();
     }

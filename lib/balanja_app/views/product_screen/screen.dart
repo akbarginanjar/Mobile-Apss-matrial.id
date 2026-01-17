@@ -277,19 +277,71 @@ class _ProductScreenState extends State<ProductScreen> {
                                     ),
                                     Row(
                                       children: [
-                                        IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(Icons.favorite),
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                          alignment: Alignment.centerRight,
-                                          iconSize: 20,
+                                        Obx(
+                                          () => GestureDetector(
+                                            onTap:
+                                                controller
+                                                    .isLoadingWishlist
+                                                    .value
+                                                ? null
+                                                : () async {
+                                                    await controller
+                                                        .toggleWishlistAction(
+                                                          barangId: produk.id!,
+                                                          memberId: GetStorage()
+                                                              .read(
+                                                                'member_id',
+                                                              ),
+                                                        );
+
+                                                    showWishlistSnackBar(
+                                                      context,
+                                                      isAdded: controller
+                                                          .isWishlist
+                                                          .value,
+                                                    );
+                                                  },
+
+                                            child: AnimatedSwitcher(
+                                              duration: const Duration(
+                                                milliseconds: 250,
+                                              ),
+                                              transitionBuilder:
+                                                  (child, animation) {
+                                                    return ScaleTransition(
+                                                      scale: Tween<double>(
+                                                        begin: 0.8,
+                                                        end: 1.0,
+                                                      ).animate(animation),
+                                                      child: FadeTransition(
+                                                        opacity: animation,
+                                                        child: child,
+                                                      ),
+                                                    );
+                                                  },
+                                              child: Icon(
+                                                controller.isWishlist.value
+                                                    ? Icons.favorite
+                                                    : Icons.favorite_border,
+                                                key: ValueKey(
+                                                  controller.isWishlist.value,
+                                                ),
+                                                color:
+                                                    controller.isWishlist.value
+                                                    ? Colors.red
+                                                    : Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
+                                                size: 25,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ],
                                 ),
+                                SizedBox(height: 8),
                               ],
                             ),
                           ),
@@ -831,4 +883,31 @@ class _ProductScreenState extends State<ProductScreen> {
       ),
     );
   }
+}
+
+void showWishlistSnackBar(BuildContext context, {required bool isAdded}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.black87,
+      duration: const Duration(seconds: 2),
+      content: Row(
+        children: [
+          Icon(
+            isAdded ? Icons.favorite : Icons.favorite_border,
+            size: 16,
+            color: Colors.white,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            isAdded
+                ? 'Produk ditambahkan ke wishlist'
+                : 'Produk dihapus dari wishlist',
+            style: const TextStyle(color: Colors.white),
+          ),
+        ],
+      ),
+    ),
+  );
 }

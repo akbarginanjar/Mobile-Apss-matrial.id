@@ -1,8 +1,8 @@
 import 'package:mobile_balanja_id/balanja_app/controllers/home_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/views/notifikasi_screen/screen.dart';
-import 'package:mobile_balanja_id/balanja_app/views/profile_screen/screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/search_produk/screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/wishlist_produk_screen/screen.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -48,9 +48,9 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.person_outline_outlined, color: primary),
+                  icon: Icon(Icons.favorite_border_rounded, color: primary),
                   onPressed: () {
-                    Get.to(const ProfileScreen());
+                    Get.to(WishlistProdukScreen());
                   },
                 ),
                 const SizedBox(width: 10),

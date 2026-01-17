@@ -16,10 +16,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     // checkoutController.loadAlamatToko(1);
-    checkoutController.loadAlamatToko(
-      widget.varian!.barang!.memberId.toString(),
-    );
-    checkoutController.loadTransaksiFee(widget.varian!.memberId.toString());
+    // checkoutController.loadAlamatToko(
+    //   widget.varian!.barang!.memberId.toString(),
+    // );
+    // checkoutController.loadTransaksiFee(widget.varian!.memberId.toString());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: dark2,

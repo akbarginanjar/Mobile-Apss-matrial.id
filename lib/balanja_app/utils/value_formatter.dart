@@ -52,6 +52,21 @@ void copyToClipboard(BuildContext context, String text) {
   );
 }
 
+void snackbarBottom(BuildContext context, String text) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      elevation: 0,
+      content: Row(
+        children: [
+          Icon(Icons.copy, size: 14, color: Colors.white),
+          SizedBox(width: 6),
+          Text(text),
+        ],
+      ),
+    ),
+  );
+}
+
 void openWhatsApp({required String phoneNumber}) async {
   String url = "https://wa.me/$phoneNumber";
   // ignore: deprecated_member_use

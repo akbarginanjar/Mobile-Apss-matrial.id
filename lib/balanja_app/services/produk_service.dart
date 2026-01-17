@@ -48,6 +48,16 @@ class ProdukService extends GetConnect {
     return get('${Base.url}/v1/ulasan', headers: header, query: params);
   }
 
+  Future<Response> toggleWishlist(body) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return post('${Base.url}/v1/wishlist/toggle', headers: header, body);
+  }
+
   Future<List<Produk>> getProduk({int start = 0, int length = 6}) async {
     try {
       final String tokens = GetStorage().read('tokens');
