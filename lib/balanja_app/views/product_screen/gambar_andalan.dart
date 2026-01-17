@@ -17,7 +17,7 @@ class _GambarAndalanState extends State<GambarAndalan> {
       itemCount: widget.produk!.varianBarang!.length,
       itemBuilder: (BuildContext context, int index, int realIndex) {
         return Image.network(
-          '${widget.produk!.varianBarang![index].barang!.photo![0].path}',
+          '${widget.produk!.varianBarang[index].photo[0].path}',
           fit: BoxFit.cover,
           width: MediaQuery.of(context).size.width,
         );

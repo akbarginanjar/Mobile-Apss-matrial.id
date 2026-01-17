@@ -31,11 +31,7 @@ class ProdukService extends GetConnect {
       'Author': 'bearer $tokens',
       'device': 'mobile',
     };
-    return get(
-      '${Base.url}/v1/toko-penyimpanan/$slug',
-      headers: header,
-      query: params,
-    );
+    return get('${Base.url}/v1/products/$slug', headers: header, query: params);
   }
 
   Future<Response> ulasanProduk(params) {

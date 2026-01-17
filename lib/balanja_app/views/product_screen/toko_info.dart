@@ -38,7 +38,8 @@ class TokoInfo extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        produk!.varianBarang![0].gudang!.namaGudang.toString(),
+                        produk!.varianBarang[0].gudang!.member!.namaLengkap
+                            .toString(),
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,

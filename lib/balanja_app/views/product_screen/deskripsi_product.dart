@@ -26,7 +26,7 @@ class DeskripsiProduct extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Html(
-            data: produk!.varianBarang![0].barang!.deskripsi ?? '-',
+            data: produk!.varianBarang[0].deskripsi ?? '-',
             style: {
               "body": Style(
                 margin: Margins.zero,

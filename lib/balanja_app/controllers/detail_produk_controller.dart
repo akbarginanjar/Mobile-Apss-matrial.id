@@ -16,17 +16,13 @@ class DetailProdukController extends GetxController {
       final params = {
         'harga': 'retail',
         'show_as_product': '1',
-        // 'konsumen_member_id': '180',
+        'konsumen_member_id': '${GetStorage().read('member_id')}',
       };
 
       final response = await service.detailProduk(params, slug);
-
-      print('${response.statusCode}');
-      print('wishlist ${response.body}');
-
       if (response.statusCode == 200 && response.body != null) {
         detailProduk.value = Produk.fromJson(response.body);
-        // initWishlist(response.body['is_wishlist']);
+        initWishlist(response.body['varian_barang'][0]['is_wishlist']);
       } else {
         Get.snackbar(
           'Error',

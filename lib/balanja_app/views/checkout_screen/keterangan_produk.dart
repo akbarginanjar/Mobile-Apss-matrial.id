@@ -16,12 +16,12 @@ class KetProduk extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.setProdukUtama({
         "id": varian!.id,
-        "nama": varian!.barang!.nama,
+        "nama": varian!.nama,
         "barang_id": varian!.barangId,
-        "berat": varian!.barang!.berat,
+        "berat": varian!.berat,
         "harga": varian!.harga,
         "photo": [
-          {"path": varian!.barang!.photo![0].path},
+          {"path": varian!.photo[0].path},
         ],
       });
     });

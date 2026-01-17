@@ -53,8 +53,8 @@ class _ProductScreenState extends State<ProductScreen> {
             }
 
             final produk = controller.detailProduk.value!;
-            List<VarianBarang> filterId = produk.varianBarang!
-                .where((item) => item.barang!.id == produk.id)
+            List<VarianBarang> filterId = produk.varianBarang
+                .where((item) => item.id == produk.id)
                 .toList();
 
             return SingleChildScrollView(
@@ -65,7 +65,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     init: VarianController(),
                     builder: (c) {
                       final selectedVariantPhoto = c.select != null
-                          ? produk.varianBarang![c.select!].barang?.photo
+                          ? produk.varianBarang[c.select!].photo
                           : null;
 
                       return Column(
@@ -74,11 +74,11 @@ class _ProductScreenState extends State<ProductScreen> {
                           c.select != null
                               ? (selectedVariantPhoto?.isNotEmpty == true &&
                                         selectedVariantPhoto![0].path != null &&
-                                        selectedVariantPhoto![0]
+                                        selectedVariantPhoto[0]
                                             .path!
                                             .isNotEmpty)
                                     ? Image.network(
-                                        selectedVariantPhoto![0].path!,
+                                        selectedVariantPhoto[0].path!,
                                         height: 350,
                                         width: MediaQuery.of(
                                           context,
@@ -93,11 +93,16 @@ class _ProductScreenState extends State<ProductScreen> {
                                         ).size.width,
                                         fit: BoxFit.cover,
                                       )
-                              : (produk.photo?.isNotEmpty == true &&
-                                    produk.photo![0].path != null &&
-                                    produk.photo![0].path!.isNotEmpty)
+                              : (produk.varianBarang.isNotEmpty == true &&
+                                    produk.varianBarang[0].photo[0].path !=
+                                        null &&
+                                    produk
+                                        .varianBarang[0]
+                                        .photo[0]
+                                        .path!
+                                        .isNotEmpty)
                               ? Image.network(
-                                  produk.photo![0].path!,
+                                  produk.varianBarang[0].photo[0].path!,
                                   height: 350,
                                   width: MediaQuery.of(context).size.width,
                                   fit: BoxFit.cover,
@@ -127,13 +132,11 @@ class _ProductScreenState extends State<ProductScreen> {
                                 Text(
                                   c.select != null
                                       ? toCurrency(
-                                          produk
-                                              .varianBarang![c.select!]
-                                              .harga!,
+                                          produk.varianBarang[c.select!].harga!,
                                         )
                                       : toCurrency(
                                           filterId.isEmpty
-                                              ? produk.varianBarang![0].harga!
+                                              ? produk.varianBarang[0].harga!
                                               : filterId[0].harga!,
                                         ),
                                   style: Theme.of(context).textTheme.titleLarge
@@ -146,8 +149,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                 const SizedBox(height: 5.0),
                                 Text(
                                   c.select != null
-                                      ? '${produk.nama} - ${produk.varianBarang![c.select!].barang!.varian}'
-                                      : '${produk.nama} - ${filterId.isEmpty ? produk.varianBarang![0].barang!.varian : filterId[0].barang!.varian}',
+                                      ? '${produk.nama} - ${produk.varianBarang[c.select!].varian}'
+                                      : '${produk.nama} - ${filterId.isEmpty ? produk.varianBarang[0].varian : filterId[0].varian}',
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: textTheme,
@@ -156,11 +159,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                 const SizedBox(height: 10),
                                 Row(
                                   children: [
-                                    if (produk.varianBarang![0].jumlah == 0 &&
-                                        produk
-                                                .varianBarang![0]
-                                                .barang!
-                                                .isPreOrder ==
+                                    if (produk.varianBarang[0].jumlah == 0 &&
+                                        produk.varianBarang[0].isPreOrder ==
                                             false)
                                       Container(
                                         padding: const EdgeInsets.symmetric(
@@ -182,10 +182,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                         ),
                                       ),
                                     const SizedBox(width: 5),
-                                    if (produk
-                                            .varianBarang![0]
-                                            .barang!
-                                            .isPreOrder ==
+                                    if (produk.varianBarang[0].isPreOrder ==
                                         true)
                                       Container(
                                         padding: const EdgeInsets.symmetric(
@@ -209,11 +206,8 @@ class _ProductScreenState extends State<ProductScreen> {
 
                                     const SizedBox(width: 5),
 
-                                    if (produk.varianBarang![0].jumlah != 0 &&
-                                        produk
-                                                .varianBarang![0]
-                                                .barang!
-                                                .isPreOrder ==
+                                    if (produk.varianBarang[0].jumlah != 0 &&
+                                        produk.varianBarang[0].isPreOrder ==
                                             true)
                                       Container(
                                         padding: const EdgeInsets.symmetric(
@@ -235,11 +229,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                         ),
                                       ),
 
-                                    if (produk.varianBarang![0].jumlah != 0 &&
-                                        produk
-                                                .varianBarang![0]
-                                                .barang!
-                                                .isPreOrder ==
+                                    if (produk.varianBarang[0].jumlah != 0 &&
+                                        produk.varianBarang[0].isPreOrder ==
                                             false)
                                       Container(
                                         padding: const EdgeInsets.symmetric(
@@ -252,7 +243,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                             15,
                                           ),
                                         ),
-                                        child: const Text(
+                                        child: Text(
                                           "Ready Stok",
                                           style: TextStyle(
                                             color: Colors.white,
@@ -294,14 +285,12 @@ class _ProductScreenState extends State<ProductScreen> {
                                                               ),
                                                         );
 
-                                                    showWishlistSnackBar(
-                                                      context,
+                                                    showWishlistEasyLoading(
                                                       isAdded: controller
                                                           .isWishlist
                                                           .value,
                                                     );
                                                   },
-
                                             child: AnimatedSwitcher(
                                               duration: const Duration(
                                                 milliseconds: 250,
@@ -362,7 +351,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   if (textTheme == Colors.black)
                     Container(height: 8, color: Colors.grey[100]),
                   UlasanView(
-                    barangId: produk.varianBarang![0].barangId!.toString(),
+                    barangId: produk.varianBarang[0].barangId!.toString(),
                   ),
                   const SizedBox(height: 100.0),
                 ],
@@ -448,7 +437,6 @@ class _ProductScreenState extends State<ProductScreen> {
                               ),
                             ),
                           );
-                          ;
                         }
 
                         final produk = controller.detailProduk.value!;
@@ -479,7 +467,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                     ),
                                   )
                                 : Text(
-                                    produk.varianBarang![0].jumlah == 0
+                                    produk.varianBarang[0].jumlah == 0
                                         ? 'Pre Order'
                                         : 'Beli Sekarang',
                                     style: GoogleFonts.montserrat(
@@ -503,8 +491,8 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   beliSekarang(Produk produk) {
-    List<VarianBarang> filterId = produk.varianBarang!
-        .where((item) => item.barang!.id == produk.id)
+    List<VarianBarang> filterId = produk.varianBarang
+        .where((item) => item.id == produk.id)
         .toList();
     Get.bottomSheet(
       SizedBox(
@@ -533,7 +521,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   init: VarianController(),
                   builder: (c) {
                     final selectedVariantPhoto = c.select != null
-                        ? produk.varianBarang![c.select!].barang?.photo
+                        ? produk.varianBarang[c.select!].photo
                         : null;
 
                     return Column(
@@ -549,11 +537,11 @@ class _ProductScreenState extends State<ProductScreen> {
                                                 true &&
                                             selectedVariantPhoto![0].path !=
                                                 null &&
-                                            selectedVariantPhoto![0]
+                                            selectedVariantPhoto[0]
                                                 .path!
                                                 .isNotEmpty)
                                         ? Image.network(
-                                            selectedVariantPhoto![0].path!,
+                                            selectedVariantPhoto[0].path!,
                                             height: 100,
                                             width: 100,
                                             fit: BoxFit.cover,
@@ -568,11 +556,26 @@ class _ProductScreenState extends State<ProductScreen> {
                                 : ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child:
-                                        (produk.photo?.isNotEmpty == true &&
-                                            produk.photo![0].path != null &&
-                                            produk.photo![0].path!.isNotEmpty)
+                                        (produk
+                                                    .varianBarang[0]
+                                                    .photo
+                                                    .isNotEmpty ==
+                                                true &&
+                                            produk
+                                                    .varianBarang[0]
+                                                    .photo![0]
+                                                    .path !=
+                                                null &&
+                                            produk
+                                                .varianBarang[0]
+                                                .photo![0]
+                                                .path!
+                                                .isNotEmpty)
                                         ? Image.network(
-                                            produk.photo![0].path!,
+                                            produk
+                                                .varianBarang[0]
+                                                .photo![0]
+                                                .path!,
                                             height: 100,
                                             width: 100,
                                             fit: BoxFit.cover,
@@ -592,13 +595,11 @@ class _ProductScreenState extends State<ProductScreen> {
                                 Text(
                                   c.select != null
                                       ? toCurrency(
-                                          produk
-                                              .varianBarang![c.select!]
-                                              .harga!,
+                                          produk.varianBarang[c.select!].harga!,
                                         )
                                       : toCurrency(
                                           filterId.isEmpty
-                                              ? produk.varianBarang![0].harga!
+                                              ? produk.varianBarang[0].harga!
                                               : filterId[0].harga!,
                                         ),
                                   style: Theme.of(context).textTheme.titleSmall
@@ -610,8 +611,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                 ),
                                 Text(
                                   c.select != null
-                                      ? 'Stok : ${produk.varianBarang![c.select!].jumlah}'
-                                      : 'Stok : ${filterId.isEmpty ? produk.varianBarang![0].jumlah : filterId[0].jumlah}',
+                                      ? 'Stok : ${produk.varianBarang[c.select!].jumlah}'
+                                      : 'Stok : ${filterId.isEmpty ? produk.varianBarang[0].jumlah : filterId[0].jumlah}',
                                   style: TextStyle(
                                     color: textTheme,
                                     fontSize: 14,
@@ -635,19 +636,15 @@ class _ProductScreenState extends State<ProductScreen> {
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.all(0),
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: produk.varianBarang!.length + 1,
+                                    itemCount: produk.varianBarang.length + 1,
                                     itemBuilder: (context, index) {
                                       final int idx = index + 1;
                                       if (idx !=
-                                          (produk.varianBarang!.length + 1)) {
-                                        final currentVariantPhoto = produk
-                                            .varianBarang![index]
-                                            .barang
-                                            ?.photo;
+                                          (produk.varianBarang.length + 1)) {
+                                        final currentVariantPhoto =
+                                            produk.varianBarang[index].photo;
                                         final isOutOfStock =
-                                            produk
-                                                .varianBarang![index]
-                                                .jumlah ==
+                                            produk.varianBarang[index].jumlah ==
                                             0;
 
                                         final safeImageWidget = ClipRRect(
@@ -655,17 +652,15 @@ class _ProductScreenState extends State<ProductScreen> {
                                             5,
                                           ),
                                           child:
-                                              (currentVariantPhoto
-                                                          ?.isNotEmpty ==
+                                              (currentVariantPhoto.isNotEmpty ==
                                                       true &&
-                                                  currentVariantPhoto![0]
-                                                          .path !=
+                                                  currentVariantPhoto[0].path !=
                                                       null &&
-                                                  currentVariantPhoto![0].path!
+                                                  currentVariantPhoto[0].path!
                                                       .toString()
                                                       .isNotEmpty)
                                               ? Image.network(
-                                                  currentVariantPhoto![0].path!
+                                                  currentVariantPhoto[0].path!
                                                       .toString(),
                                                   height: 30,
                                                   width: 30,
@@ -729,8 +724,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                               ),
                                                           child: Text(
                                                             produk
-                                                                .varianBarang![index]
-                                                                .barang!
+                                                                .varianBarang[index]
                                                                 .varian!,
                                                             softWrap: true,
                                                             style: TextStyle(
@@ -793,8 +787,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                               ),
                                                           child: Text(
                                                             produk
-                                                                .varianBarang![index]
-                                                                .barang!
+                                                                .varianBarang[index]
                                                                 .varian!,
                                                             softWrap: true,
                                                             style:
@@ -843,19 +836,19 @@ class _ProductScreenState extends State<ProductScreen> {
                             EasyLoading.showToast('Pilih Varian');
                           } else {
                             if (produk
-                                    .varianBarang![c.select!]
+                                    .varianBarang[c.select!]
                                     .jumlah == //validator stok
                                 0) {
                               EasyLoading.showToast('Pre Order');
                               Get.to(
                                 CheckoutScreen(
-                                  varian: produk.varianBarang![c.select!],
+                                  varian: produk.varianBarang[c.select!],
                                 ),
                               );
                             } else {
                               Get.to(
                                 CheckoutScreen(
-                                  varian: produk.varianBarang![c.select!],
+                                  varian: produk.varianBarang[c.select!],
                                 ),
                               );
                               // print(produk.varianBarang![c.select!].id);
@@ -863,7 +856,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           }
                         },
                         child: Text(
-                          produk.varianBarang![0].jumlah == //validator stok
+                          produk.varianBarang[0].jumlah == //validator stok
                                   0
                               ? 'Pre Order'
                               : 'Beli Sekarang',
@@ -885,29 +878,10 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 }
 
-void showWishlistSnackBar(BuildContext context, {required bool isAdded}) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.black87,
-      duration: const Duration(seconds: 2),
-      content: Row(
-        children: [
-          Icon(
-            isAdded ? Icons.favorite : Icons.favorite_border,
-            size: 16,
-            color: Colors.white,
-          ),
-          const SizedBox(width: 6),
-          Text(
-            isAdded
-                ? 'Produk ditambahkan ke wishlist'
-                : 'Produk dihapus dari wishlist',
-            style: const TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
-    ),
+void showWishlistEasyLoading({required bool isAdded}) {
+  EasyLoading.showToast(
+    isAdded ? 'Produk ditambahkan ke wishlist' : 'Produk dihapus dari wishlist',
+    toastPosition: EasyLoadingToastPosition.bottom,
+    duration: const Duration(seconds: 2),
   );
 }

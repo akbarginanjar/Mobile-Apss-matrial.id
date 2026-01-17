@@ -11,9 +11,9 @@ class SpesifikasiProduct extends StatelessWidget {
       child: InkWell(
         onTap: () {
           spesifikasi(
-            produk!.varianBarang![0].barang!.satuan!.satuan.toString(),
-            produk!.varianBarang![0].barang!.kategori!.kategori.toString(),
-            produk!.varianBarang![0].barang!.berat.toString(),
+            produk!.varianBarang![0].satuan!.satuan.toString(),
+            produk!.varianBarang![0].kategori!.kategori.toString(),
+            produk!.varianBarang![0].berat.toString(),
           );
         },
         child: Padding(

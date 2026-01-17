@@ -108,12 +108,10 @@ class VariantSection extends StatelessWidget {
                           }
 
                           // Jika index valid
-                          final photoList =
-                              produk!.varianBarang![index].barang!.photo;
+                          final photoList = produk!.varianBarang![index].photo;
 
                           return VariantCardVertical(
-                            namaVarian:
-                                produk!.varianBarang![index].barang!.varian!,
+                            namaVarian: produk!.varianBarang![index].varian!,
                             photoVarian:
                                 (photoList != null &&
                                     photoList.isNotEmpty &&
