@@ -1,4 +1,5 @@
 import 'package:mobile_balanja_id/balanja_app/config/theme.dart';
+import 'package:mobile_balanja_id/balanja_app/controllers/detail_produk_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 
 class TokoInfo extends StatelessWidget {
@@ -7,6 +8,7 @@ class TokoInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(DetailProdukController());
     return Container(
       color: dark,
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 11.0),
@@ -45,11 +47,12 @@ class TokoInfo extends StatelessWidget {
                         maxLines: 2,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
+                          color: textTheme,
                           fontSize: 17,
                         ),
                       ),
                       Text(
-                        produk!.varianBarang![0].gudang!.alamat.toString(),
+                        produk!.varianBarang[0].gudang!.alamat ?? '-',
                         maxLines: 1,
                         softWrap: true,
                         style: Theme.of(context).textTheme.bodyMedium?.apply(),
@@ -71,12 +74,13 @@ class TokoInfo extends StatelessWidget {
                         softWrap: true,
                         style: Theme.of(context).textTheme.bodySmall?.apply(),
                       ),
+                      SizedBox(height: 2),
                       Row(
                         children: [
                           Icon(Icons.star, color: Colors.orangeAccent),
                           SizedBox(width: 5),
                           Text(
-                            '4.8',
+                            '${produk!.varianBarang[0].gudang!.rating!.rating}',
                             maxLines: 1,
                             textAlign: TextAlign.center,
                             softWrap: true,
@@ -92,65 +96,84 @@ class TokoInfo extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        '130+ ',
-                        maxLines: 1,
-                        softWrap: true,
-                        style: Theme.of(context).textTheme.bodyMedium?.apply(
-                          color: Theme.of(context).colorScheme.primary,
+              // Column(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     Row(
+              //       mainAxisAlignment: MainAxisAlignment.start,
+              //       crossAxisAlignment: CrossAxisAlignment.end,
+              //       children: [
+              //         Text(
+              //           '130+ ',
+              //           maxLines: 1,
+              //           softWrap: true,
+              //           style: Theme.of(context).textTheme.bodyMedium?.apply(
+              //             color: Theme.of(context).colorScheme.primary,
+              //           ),
+              //         ),
+              //         Text(
+              //           'Produk',
+              //           maxLines: 1,
+              //           softWrap: true,
+              //           style: Theme.of(
+              //             context,
+              //           ).textTheme.bodyMedium?.apply(color: textdark),
+              //         ),
+              //       ],
+              //     ),
+              //   ],
+              // ),
+              SizedBox.shrink(),
+              Obx(
+                () => TextButton(
+                  onPressed: controller.isLoadingFollowingToko.value
+                      ? null
+                      : () {
+                          if (controller.isFollowingToko.value) {
+                            // kalau sudah mengikuti → dialog
+                            showUnfollowDialog(
+                              onConfirm: () {
+                                controller.toggleFollow(
+                                  tokoId:
+                                      produk!.varianBarang[0].gudang!.memberId!,
+                                  memberId: GetStorage().read('member_id'),
+                                );
+                              },
+                            );
+                          } else {
+                            // kalau belum mengikuti → langsung follow
+                            controller.toggleFollow(
+                              tokoId: produk!.varianBarang[0].gudang!.memberId!,
+                              memberId: GetStorage().read('member_id'),
+                            );
+                          }
+                        },
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.primary.withOpacity(0.2),
+                  ),
+                  child: controller.isLoadingFollowingToko.value
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(
+                          controller.isFollowingToko.value
+                              ? 'Mengikuti'
+                              : 'Ikuti Toko',
+                          style: Theme.of(context).textTheme.bodyLarge!.apply(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Produk',
-                        maxLines: 1,
-                        softWrap: true,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.apply(color: textdark),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.to(TokoScreen());
-                },
-                style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  backgroundColor: Theme.of(
-                    context,
-                  ).colorScheme.primary.withOpacity(0.2),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Buka Toko',
-                      softWrap: true,
-                      style: Theme.of(context).textTheme.bodyLarge!.apply(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    const SizedBox(width: 5.0),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 16.0,
-                    ),
-                  ],
                 ),
               ),
             ],

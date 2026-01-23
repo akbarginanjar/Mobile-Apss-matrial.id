@@ -353,7 +353,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   UlasanView(
                     barangId: produk.varianBarang[0].barangId!.toString(),
                   ),
-                  const SizedBox(height: 100.0),
+                  const SizedBox(height: 80.0),
                 ],
               ),
             );
@@ -496,15 +496,17 @@ class _ProductScreenState extends State<ProductScreen> {
         .toList();
     Get.bottomSheet(
       SizedBox(
-        height: 320,
+        height:
+            420, // Tinggi tetap seperti sebelumnya, sedikit ditambah untuk ruang varian
         child: Container(
           decoration: BoxDecoration(
-            color: dark, // Gunakan warna tema Anda
+            color: dark,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Padding(
             padding: const EdgeInsets.all(20),
-            child: ListView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Center(
                   child: Container(
@@ -524,123 +526,129 @@ class _ProductScreenState extends State<ProductScreen> {
                         ? produk.varianBarang[c.select!].photo
                         : null;
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            c.select != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child:
-                                        (selectedVariantPhoto?.isNotEmpty ==
-                                                true &&
-                                            selectedVariantPhoto![0].path !=
-                                                null &&
-                                            selectedVariantPhoto[0]
-                                                .path!
-                                                .isNotEmpty)
-                                        ? Image.network(
-                                            selectedVariantPhoto[0].path!,
-                                            height: 100,
-                                            width: 100,
-                                            fit: BoxFit.cover,
+                    return Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              c.select != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child:
+                                          (selectedVariantPhoto?.isNotEmpty ==
+                                                  true &&
+                                              selectedVariantPhoto![0].path !=
+                                                  null &&
+                                              selectedVariantPhoto[0]
+                                                  .path!
+                                                  .isNotEmpty)
+                                          ? Image.network(
+                                              selectedVariantPhoto[0].path!,
+                                              height: 100,
+                                              width: 100,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.network(
+                                              'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
+                                              height: 100,
+                                              width: 100,
+                                              fit: BoxFit.cover,
+                                            ),
+                                    )
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child:
+                                          (produk
+                                                      .varianBarang[0]
+                                                      .photo
+                                                      .isNotEmpty ==
+                                                  true &&
+                                              produk
+                                                      .varianBarang[0]
+                                                      .photo![0]
+                                                      .path !=
+                                                  null &&
+                                              produk
+                                                  .varianBarang[0]
+                                                  .photo![0]
+                                                  .path!
+                                                  .isNotEmpty)
+                                          ? Image.network(
+                                              produk
+                                                  .varianBarang[0]
+                                                  .photo![0]
+                                                  .path!,
+                                              height: 100,
+                                              width: 100,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.network(
+                                              'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
+                                              height: 100,
+                                              width: 100,
+                                              fit: BoxFit.cover,
+                                            ),
+                                    ),
+                              const SizedBox(width: 30),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    c.select != null
+                                        ? toCurrency(
+                                            produk
+                                                .varianBarang[c.select!]
+                                                .harga!,
                                           )
-                                        : Image.network(
-                                            'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
-                                            height: 100,
-                                            width: 100,
-                                            fit: BoxFit.cover,
+                                        : toCurrency(
+                                            filterId.isEmpty
+                                                ? produk.varianBarang[0].harga!
+                                                : filterId[0].harga!,
                                           ),
-                                  )
-                                : ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child:
-                                        (produk
-                                                    .varianBarang[0]
-                                                    .photo
-                                                    .isNotEmpty ==
-                                                true &&
-                                            produk
-                                                    .varianBarang[0]
-                                                    .photo![0]
-                                                    .path !=
-                                                null &&
-                                            produk
-                                                .varianBarang[0]
-                                                .photo![0]
-                                                .path!
-                                                .isNotEmpty)
-                                        ? Image.network(
-                                            produk
-                                                .varianBarang[0]
-                                                .photo![0]
-                                                .path!,
-                                            height: 100,
-                                            width: 100,
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image.network(
-                                            'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
-                                            height: 100,
-                                            width: 100,
-                                            fit: BoxFit.cover,
-                                          ),
-                                  ),
-
-                            const SizedBox(width: 30),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  c.select != null
-                                      ? toCurrency(
-                                          produk.varianBarang[c.select!].harga!,
-                                        )
-                                      : toCurrency(
-                                          filterId.isEmpty
-                                              ? produk.varianBarang[0].harga!
-                                              : filterId[0].harga!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.apply(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
                                         ),
-                                  style: Theme.of(context).textTheme.titleSmall
-                                      ?.apply(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
-                                      ),
-                                ),
-                                Text(
-                                  c.select != null
-                                      ? 'Stok : ${produk.varianBarang[c.select!].jumlah}'
-                                      : 'Stok : ${filterId.isEmpty ? produk.varianBarang[0].jumlah : filterId[0].jumlah}',
-                                  style: TextStyle(
-                                    color: textTheme,
-                                    fontSize: 14,
                                   ),
-                                ),
-                              ],
+                                  Text(
+                                    c.select != null
+                                        ? 'Stok : ${produk.varianBarang[c.select!].jumlah}'
+                                        : 'Stok : ${filterId.isEmpty ? produk.varianBarang[0].jumlah : filterId[0].jumlah}',
+                                    style: TextStyle(
+                                      color: textTheme,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          Text(
+                            'Pilih Varian:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: textTheme,
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 30),
-                        GetBuilder<VarianController>(
-                          init: VarianController(),
-                          builder: (c) {
-                            return Column(
-                              children: [
-                                SizedBox(
-                                  height: 50,
-                                  child: ListView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    padding: const EdgeInsets.all(0),
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: produk.varianBarang.length + 1,
-                                    itemBuilder: (context, index) {
-                                      final int idx = index + 1;
-                                      if (idx !=
-                                          (produk.varianBarang.length + 1)) {
+                          ),
+                          const SizedBox(height: 10),
+                          Expanded(
+                            child: GetBuilder<VarianController>(
+                              init: VarianController(),
+                              builder: (c) {
+                                return SingleChildScrollView(
+                                  child: Wrap(
+                                    spacing: 2,
+                                    runSpacing: 2,
+                                    children: List.generate(
+                                      produk.varianBarang.length,
+                                      (index) {
                                         final currentVariantPhoto =
                                             produk.varianBarang[index].photo;
                                         final isOutOfStock =
@@ -662,165 +670,102 @@ class _ProductScreenState extends State<ProductScreen> {
                                               ? Image.network(
                                                   currentVariantPhoto[0].path!
                                                       .toString(),
-                                                  height: 30,
-                                                  width: 30,
+                                                  height: 25,
+                                                  width: 25,
                                                   fit: BoxFit.cover,
                                                 )
                                               : Image.network(
-                                                  'https://removal.ai/wp-content/uploads/2021/02/no-img.png',
-                                                  height: 30,
-                                                  width: 30,
+                                                  'https://remusal.ai/wp-content/uploads/2021/02/no-img.png',
+                                                  height: 25,
+                                                  width: 25,
                                                   fit: BoxFit.cover,
                                                 ),
                                         );
 
-                                        return isOutOfStock
-                                            ? InkWell(
-                                                onTap: () {
-                                                  c.changeSelect(index);
-                                                },
-                                                child: Card(
+                                        return InkWell(
+                                          onTap: () {
+                                            c.changeSelect(index);
+                                          },
+                                          child: Container(
+                                            constraints: BoxConstraints(
+                                              maxWidth:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.width *
+                                                  0.35,
+                                            ),
+                                            child: Card(
+                                              color: c.select == index
+                                                  ? (nameApp == 'balanja.id')
+                                                        ? Colors.green[50]
+                                                        : primary
+                                                  : dark,
+                                              surfaceTintColor: Colors.white,
+                                              elevation: 0,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                side: BorderSide(
                                                   color: c.select == index
-                                                      ? (nameApp ==
-                                                                'balanja.id')
-                                                            ? Colors.green[50]
-                                                            : primary
-                                                      : dark,
-                                                  surfaceTintColor:
-                                                      Colors.white,
-                                                  elevation: 0,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          10,
-                                                        ),
-                                                    side: BorderSide(
-                                                      color: c.select == index
-                                                          ? primary
-                                                          : Colors.grey[300]!,
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                          left: 5,
-                                                          right: 10,
-                                                          top: 5,
-                                                        ),
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        safeImageWidget,
-                                                        const SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets.only(
-                                                                top: 5,
-                                                              ),
-                                                          child: Text(
-                                                            produk
-                                                                .varianBarang[index]
-                                                                .varian!,
-                                                            softWrap: true,
-                                                            style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: textTheme,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
+                                                      ? primary
+                                                      : Colors.grey[300]!,
+                                                  width: 1,
                                                 ),
-                                              )
-                                            : InkWell(
-                                                onTap: () {
-                                                  c.changeSelect(index);
-                                                },
-                                                child: Card(
-                                                  color: c.select == index
-                                                      ? (nameApp ==
-                                                                'balanja.id')
-                                                            ? Colors.green[50]
-                                                            : primary
-                                                      : dark,
-                                                  surfaceTintColor:
-                                                      Colors.white,
-                                                  elevation: 0,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          5,
-                                                        ),
-                                                    side: BorderSide(
-                                                      color: c.select == index
-                                                          ? primary
-                                                          : Colors.grey[300]!,
-                                                      width: 1,
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 6,
+                                                      vertical: 6,
                                                     ),
-                                                  ),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                          left: 5,
-                                                          right: 10,
-                                                          top: 5,
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    safeImageWidget,
+                                                    const SizedBox(width: 6),
+                                                    Flexible(
+                                                      child: Text(
+                                                        produk
+                                                            .varianBarang[index]
+                                                            .varian!,
+                                                        softWrap: true,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: isOutOfStock
+                                                              ? Colors.grey
+                                                              : textTheme,
                                                         ),
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        safeImageWidget,
-                                                        const SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets.only(
-                                                                top: 5,
-                                                              ),
-                                                          child: Text(
-                                                            produk
-                                                                .varianBarang[index]
-                                                                .varian!,
-                                                            softWrap: true,
-                                                            style:
-                                                                const TextStyle(
-                                                                  fontSize: 12,
-                                                                ),
-                                                          ),
-                                                        ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
+                                                  ],
                                                 ),
-                                              );
-                                      } else {
-                                        return const SizedBox();
-                                      }
-                                    },
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ],
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 GetBuilder<VarianController>(
                   init: VarianController(),
                   builder: (c) {
                     return SizedBox(
                       height: 45,
+                      width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(
@@ -835,10 +780,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           if (c.select == null) {
                             EasyLoading.showToast('Pilih Varian');
                           } else {
-                            if (produk
-                                    .varianBarang[c.select!]
-                                    .jumlah == //validator stok
-                                0) {
+                            if (produk.varianBarang[c.select!].jumlah == 0) {
                               EasyLoading.showToast('Pre Order');
                               Get.to(
                                 CheckoutScreen(
@@ -851,13 +793,11 @@ class _ProductScreenState extends State<ProductScreen> {
                                   varian: produk.varianBarang[c.select!],
                                 ),
                               );
-                              // print(produk.varianBarang![c.select!].id);
                             }
                           }
                         },
                         child: Text(
-                          produk.varianBarang[0].jumlah == //validator stok
-                                  0
+                          produk.varianBarang[0].jumlah == 0
                               ? 'Pre Order'
                               : 'Beli Sekarang',
                           style: GoogleFonts.montserrat(
@@ -874,6 +814,7 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
         ),
       ),
+      isScrollControlled: true,
     );
   }
 }
