@@ -54,6 +54,16 @@ class ProdukService extends GetConnect {
     return post('${Base.url}/v1/wishlist/toggle', headers: header, body);
   }
 
+  Future<Response> toggleFollowToko(body) {
+    final header = {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer $tokens',
+      'device': 'mobile',
+    };
+    return post('${Base.url}/v1/follow-toko/toggle', headers: header, body);
+  }
+
   Future<List<Produk>> getProduk({int start = 0, int length = 6}) async {
     try {
       final String tokens = GetStorage().read('tokens');

@@ -23,6 +23,7 @@ class DetailProdukController extends GetxController {
       if (response.statusCode == 200 && response.body != null) {
         detailProduk.value = Produk.fromJson(response.body);
         initWishlist(response.body['varian_barang'][0]['is_wishlist']);
+        initFollowingToko(response.body['varian_barang'][0]['is_follow_toko']);
       } else {
         Get.snackbar(
           'Error',
@@ -42,6 +43,10 @@ class DetailProdukController extends GetxController {
 
   void initWishlist(bool value) {
     isWishlist.value = value;
+  }
+
+  void initFollowingToko(bool value) {
+    isFollowingToko.value = value;
   }
 
   Future<void> toggleWishlistAction({
@@ -77,4 +82,62 @@ class DetailProdukController extends GetxController {
       isLoadingWishlist.value = false;
     }
   }
+
+  final isFollowingToko = false.obs;
+  final isLoadingFollowingToko = false.obs;
+
+  Future<void> toggleFollow({
+    required int tokoId,
+    required int memberId,
+  }) async {
+    try {
+      isLoading.value = true;
+      EasyLoading.show(status: 'Memproses...');
+
+      final response = await ProdukService().toggleFollowToko({
+        'toko_id': tokoId,
+        'member_id': memberId,
+      });
+
+      if (response.statusCode == 200) {
+        isFollowingToko.value = !isFollowingToko.value;
+
+        showFollowToast(isAdded: isFollowingToko.value);
+      } else {
+        EasyLoading.showError('Gagal memproses');
+      }
+    } catch (e) {
+      EasyLoading.showError('Terjadi kesalahan');
+    } finally {
+      isLoading.value = false;
+      EasyLoading.dismiss();
+    }
+  }
+}
+
+void showFollowToast({required bool isAdded}) {
+  EasyLoading.showToast(
+    isAdded ? 'Berhasil mengikuti toko' : 'Berhenti mengikuti toko',
+    toastPosition: EasyLoadingToastPosition.bottom,
+    duration: const Duration(seconds: 2),
+  );
+}
+
+void showUnfollowDialog({required VoidCallback onConfirm}) {
+  Get.dialog(
+    AlertDialog(
+      title: const Text('Konfirmasi'),
+      content: const Text('Kamu akan berhenti mengikuti toko ini ya?'),
+      actions: [
+        TextButton(onPressed: () => Get.back(), child: const Text('Tutup')),
+        TextButton(
+          onPressed: () {
+            Get.back();
+            onConfirm();
+          },
+          child: const Text('Batal Ikuti', style: TextStyle(color: Colors.red)),
+        ),
+      ],
+    ),
+  );
 }

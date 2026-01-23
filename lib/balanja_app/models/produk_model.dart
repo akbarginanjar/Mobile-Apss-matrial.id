@@ -48,6 +48,28 @@ class Kategori {
   }
 }
 
+class Rating {
+  final int jumlah;
+  final double rating;
+
+  Rating({this.jumlah = 0, this.rating = 0.0});
+
+  factory Rating.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return Rating();
+    }
+
+    return Rating(
+      jumlah: json['jumlah'] as int? ?? 0,
+      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'jumlah': jumlah, 'rating': rating};
+  }
+}
+
 class VarianBarang {
   final int? id;
   final int? jumlah;
@@ -136,6 +158,7 @@ class Gudang {
   final int? memberId;
   final String? sebagai;
   final Member? member;
+  final Rating? rating;
 
   Gudang({
     this.id,
@@ -145,6 +168,7 @@ class Gudang {
     this.memberId,
     this.sebagai,
     this.member,
+    this.rating,
   });
 
   factory Gudang.fromJson(Map<String, dynamic>? json) {
@@ -158,6 +182,7 @@ class Gudang {
       memberId: json['member_id'],
       sebagai: json['sebagai'],
       member: json['member'] != null ? Member.fromJson(json['member']) : null,
+      rating: json['rating'] != null ? Rating.fromJson(json['rating']) : null,
     );
   }
 }
