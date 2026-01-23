@@ -15,7 +15,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final CheckoutController checkoutController = Get.put(CheckoutController());
   @override
   Widget build(BuildContext context) {
-    checkoutController.loadAlamatToko(1);
     checkoutController.loadAlamatToko(
       widget.varian!.gudang!.memberId.toString(),
     );

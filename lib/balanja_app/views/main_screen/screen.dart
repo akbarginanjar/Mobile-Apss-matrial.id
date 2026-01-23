@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/button_views/screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/pesanan_screen/screen.dart';
+import 'package:mobile_balanja_id/balanja_app/views/profile_screen/screen.dart';
 import 'package:mobile_balanja_id/balanja_app/views/transaksi/screen.dart';
-import 'package:mobile_balanja_id/expreship_app/views/profil/screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     const HomeScreen(),
     PilihTransaksiScreen(),
     const CartScreen(),
-    const ProfilScreen(),
+    ProfileScreen(),
   ];
 
   @override
