@@ -293,7 +293,6 @@ class CheckoutController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadProduk(); // load pertama
     ever(cart, (_) {
       getSelectedProducts(); // hitung ulang setiap cart berubah
     });
@@ -321,7 +320,7 @@ class CheckoutController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isMoreLoading = false.obs;
 
-  int length = 9; // jumlah data per load
+  int length = 10; // jumlah data per load
   int start = 0; // offset untuk lazyload
 
   String token = "";
@@ -336,12 +335,16 @@ class CheckoutController extends GetxController {
     });
   }
 
-  Future<void> loadProduk() async {
+  Future<void> loadProduk(memberId, search) async {
     isLoading.value = true;
 
     final params = {
       "harga": "retail",
       "show_as_product": "1",
+      "order": "desc",
+      "search": "$search",
+      "product_type": "barang",
+      "member_id": memberId,
       "length": length.toString(),
       "start": start.toString(),
     };
@@ -388,6 +391,16 @@ class CheckoutController extends GetxController {
   RxMap<String, int> cart = <String, int>{}.obs;
   var showAllProducts = false.obs;
 
+  int getStok(String idProduk) {
+    final produk = findProdukById(idProduk);
+    return produk?['jumlah'] ?? 0;
+  }
+
+  bool isPreOrder(String idProduk) {
+    final produk = findProdukById(idProduk);
+    return produk?['is_pre_order'] == true;
+  }
+
   // Mendapatkan qty berdasarkan id produk
   int getQty(String idProduk) {
     return cart[idProduk] ?? 0;
@@ -395,11 +408,34 @@ class CheckoutController extends GetxController {
 
   // Menambah qty
   void increment(String idProduk) {
-    cart[idProduk] = (cart[idProduk] ?? 0) + 1;
+    final currentQty = cart[idProduk] ?? 0;
+    final stok = getStok(idProduk);
+    final preOrder = isPreOrder(idProduk);
 
-    // Recalculate total setiap ada perubahan qty
+    // ❌ BUKAN pre-order → batasi stok
+    if (!preOrder && currentQty >= stok) {
+      return; // atau tampilkan snackbar
+    }
+
+    cart[idProduk] = currentQty + 1;
+
     getSelectedProducts();
+    update();
+  }
 
+  void setQty(String idProduk, int value) {
+    if (value < 1) value = 1;
+
+    final stok = getStok(idProduk);
+    final preOrder = isPreOrder(idProduk);
+
+    if (!preOrder && value > stok) {
+      value = stok;
+    }
+
+    cart[idProduk] = value;
+
+    getSelectedProducts();
     update();
   }
 
@@ -409,29 +445,13 @@ class CheckoutController extends GetxController {
 
     int currentQty = cart[idProduk] ?? 0;
 
-    // PRODUK UTAMA → minimal qty = 1
-    if (idProduk == idProdukUtama) {
-      if (currentQty > 1) {
-        cart[idProduk] = currentQty - 1;
-      }
-
-      // Recalculate total
-      getSelectedProducts();
-
-      update();
-      return;
-    }
-
-    // PRODUK BIASA
     if (currentQty <= 1) {
       cart.remove(idProduk);
     } else {
       cart[idProduk] = currentQty - 1;
     }
 
-    // Recalculate total
     getSelectedProducts();
-
     update();
   }
 

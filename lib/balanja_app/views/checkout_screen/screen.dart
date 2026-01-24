@@ -28,7 +28,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         shadowColor: Colors.black38,
         elevation: 3,
         centerTitle: true,
-        title: Text('Checkout', style: GoogleFonts.montserrat(color: textdark)),
+        title: Text(
+          'Checkout',
+          style: GoogleFonts.montserrat(color: textTheme),
+        ),
         iconTheme: IconThemeData(
           color: primary, // Ubah warna ikon kembali di sini
         ),
