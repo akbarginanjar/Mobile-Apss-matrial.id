@@ -24,7 +24,7 @@ class ShipmentScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
+        title: Text(
           "Pilih Metode Pengiriman",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
@@ -104,11 +104,11 @@ class ShipmentScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Icon(
-                                Icons.chevron_right,
-                                color: Colors.white.withOpacity(0.8),
-                                size: 26,
-                              ),
+                              // Icon(
+                              //   Icons.chevron_right,
+                              //   color: Colors.white.withOpacity(0.8),
+                              //   size: 26,
+                              // ),
                             ],
                           ),
                         ),

@@ -43,27 +43,51 @@ class GantiKurir extends StatelessWidget {
                           context,
                         ).textTheme.bodySmall?.apply(color: Colors.grey[600]),
                       ),
-                      Text(
-                        metodeController.courierDescription != null
-                            ? metodeController.courierDescription!
-                            : '-',
-                      ),
+                      if (metodeController.selectShipment == 'kurir_toko')
+                        Text(
+                          metodeController.namaKurirToko != null
+                              ? 'Dikirim langsung oleh toko'
+                              : '-',
+                        )
+                      else
+                        Text(
+                          metodeController.courierDescription != null
+                              ? metodeController.courierDescription!
+                              : '-',
+                        ),
                     ],
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        metodeController.courierName != null
-                            ? metodeController.courierName!
-                            : 'Pilih Opsi Kurir',
-                      ),
-                      Text(
-                        metodeController.courierDuration != null
-                            ? metodeController.courierDuration!
-                            : '-',
-                        style: TextStyle(fontSize: 10),
-                      ),
+                      if (metodeController.selectShipment == 'kurir_toko')
+                        Text(
+                          metodeController.namaKurirToko != null
+                              ? metodeController.namaKurirToko!
+                              : 'Pilih Opsi Kurir',
+                        )
+                      else
+                        Text(
+                          metodeController.courierName != null
+                              ? metodeController.courierName!
+                              : 'Pilih Opsi Kurir',
+                        ),
+                      if (metodeController.selectShipment == 'kurir_toko')
+                        Text(
+                          metodeController.hargaOngkirKurirToko != null
+                              ? toCurrency(
+                                  metodeController.hargaOngkirKurirToko!,
+                                )
+                              : '-',
+                          style: TextStyle(color: primary),
+                        )
+                      else
+                        Text(
+                          metodeController.courierDuration != null
+                              ? metodeController.courierDuration!
+                              : '-',
+                          style: TextStyle(fontSize: 10),
+                        ),
                       if (metodeController.courierPrice.value != 0)
                         Text(
                           metodeController.courierPrice.value != 0

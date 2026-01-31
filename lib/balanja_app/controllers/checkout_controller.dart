@@ -48,6 +48,7 @@ class CheckoutController extends GetxController {
   String? selectShipment;
   String? namaShipment;
   String? deskripsiShipment;
+  String? valueShipmentOption;
 
   int? selectKurir;
   String? courierCode;
@@ -57,6 +58,11 @@ class CheckoutController extends GetxController {
   String? courierDescription;
   String? courierDuration;
   RxInt courierPrice = 0.obs;
+
+  int? selectKurirToko;
+  String? namaKurirToko;
+  int? hargaOngkirKurirToko;
+  bool? isActiveKurirToko;
 
   RxInt transaksiBiayaLayanan = 0.obs;
   RxInt transaksiBiayaAplikasi = 0.obs;
@@ -107,6 +113,7 @@ class CheckoutController extends GetxController {
     selectShipment = value;
     namaShipment = nama;
     deskripsiShipment = deskripsi;
+    valueShipmentOption = deskripsi;
     update();
     Get.back();
     courierCode = null;
@@ -136,6 +143,19 @@ class CheckoutController extends GetxController {
     courierDescription = description;
     courierDuration = duration;
     courierPrice.value = price;
+    update();
+  }
+
+  void changeSelectKurirToko(
+    int value,
+    String namaKurir,
+    int hargaOngkir,
+    bool isActive,
+  ) {
+    selectKurirToko = value;
+    namaKurirToko = namaKurir;
+    hargaOngkirKurirToko = hargaOngkir;
+    isActiveKurirToko = isActive;
     update();
   }
 
