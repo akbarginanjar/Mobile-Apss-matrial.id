@@ -25,7 +25,7 @@ class AlamatSayaScreen extends StatelessWidget {
               }
             },
             child: Text(
-              "Tambah Baru +",
+              "+ Tambah Baru",
               style: TextStyle(color: primary),
             ),
           ),
