@@ -14,7 +14,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cart', style: TextStyle(color: textdark),),
+        title: Text('Keranjang', style: TextStyle(color: textdark)),
         backgroundColor: dark,
         iconTheme: IconThemeData(color: primary),
         actions: [
@@ -28,15 +28,7 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: 8,
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(horizontal: 7.0),
-        itemBuilder: (context, index) => Padding(
-          padding: EdgeInsets.only(top: index == 0 ? 4.0 : 0, bottom: 4.0),
-          child: const CartCard(),
-        ),
-      ),
+      body: Center(child: Text('Fitur Belum Tersedia')),
     );
   }
 }

@@ -3,10 +3,10 @@ import 'package:mobile_balanja_id/balanja_app/config/theme.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/models/kurir_model.dart';
 
-class KurirCard extends StatelessWidget {
-  final Kurir item;
+class KurirTokoCard extends StatelessWidget {
+  final KurirToko item;
 
-  const KurirCard(this.item, {super.key});
+  const KurirTokoCard(this.item, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +16,11 @@ class KurirCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       child: InkWell(
         onTap: () {
-          checkoutController.changeSelectKurir(
-            item.courierCode,
-            item.courierName,
-            item.courierServiceCode,
-            item.serviceName,
-            item.description,
-            item.duration,
-            item.price,
+          checkoutController.changeSelectKurirToko(
+            item.id,
+            item.namaKurir,
+            item.hargaOngkir,
+            item.isActive,
           );
           Get.back();
         },
@@ -37,7 +34,7 @@ class KurirCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      item.serviceName,
+                      item.namaKurir,
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -45,7 +42,7 @@ class KurirCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      "${item.courierName} • ${item.description} • ${item.duration}",
+                      "Dikirim langsung oleh toko",
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 12,
@@ -53,7 +50,7 @@ class KurirCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      toCurrency(item.price),
+                      toCurrency(item.hargaOngkir),
                       style: TextStyle(
                         color: primary,
                         fontWeight: FontWeight.w600,

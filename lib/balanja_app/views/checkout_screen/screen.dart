@@ -28,7 +28,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         shadowColor: Colors.black38,
         elevation: 3,
         centerTitle: true,
-        title: Text('Checkout', style: GoogleFonts.montserrat(color: textdark)),
+        title: Text(
+          'Checkout',
+          style: GoogleFonts.montserrat(color: textTheme),
+        ),
         iconTheme: IconThemeData(
           color: primary, // Ubah warna ikon kembali di sini
         ),
@@ -202,9 +205,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             "uang_masuk": checkoutController
                                                 .totalSemuaProduk
                                                 .value,
-                                            "ongkir": checkoutController
-                                                .courierPrice
-                                                .value,
+                                            if (checkoutController
+                                                    .selectShipment ==
+                                                'kurir_toko')
+                                              "ongkir": checkoutController
+                                                  .hargaOngkirKurirToko
+                                            else
+                                              "ongkir": checkoutController
+                                                  .courierPrice
+                                                  .value,
                                             "biaya_layanan": checkoutController
                                                 .transaksiBiayaLayanan
                                                 .value,
@@ -243,6 +252,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             "transaction_type": "barang",
                                             "shipment_option": 'dikirim',
                                             if (checkoutController
+                                                    .selectShipment ==
+                                                'kurir_toko')
+                                              "shipment": {
+                                                "mode": "latlong",
+                                                "latitude":
+                                                    checkoutController
+                                                        .latAlamat ??
+                                                    '',
+                                                "longitude":
+                                                    checkoutController
+                                                        .longAlamat ??
+                                                    '',
+                                                "courier_company":
+                                                    checkoutController
+                                                        .namaKurirToko,
+                                                "courier_type":
+                                                    checkoutController
+                                                        .selectShipment,
+                                                "order_note": "-",
+                                              }
+                                            else if (checkoutController
                                                     .courierServiceCode ==
                                                 'instant')
                                               "shipment": {
@@ -305,7 +335,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                   .transaksiDonasi
                                                   .value,
                                           };
-                                          print(payload);
                                           checkoutController.doCheckout(
                                             payload,
                                           );

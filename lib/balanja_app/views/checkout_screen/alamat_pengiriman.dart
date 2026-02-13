@@ -26,7 +26,7 @@ class AlamatPengiriman extends StatelessWidget {
                 "Alamat Pengiriman",
                 style: Theme.of(
                   context,
-                ).textTheme.bodyMedium!.apply(color: textdark),
+                ).textTheme.bodyMedium!.apply(color: textTheme),
               ),
             ],
           ),

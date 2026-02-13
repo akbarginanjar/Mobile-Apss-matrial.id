@@ -19,4 +19,21 @@ class KurirController extends GetxController {
 
     isLoading.value = false;
   }
+
+  var isLoadingKurirToko = false.obs;
+  var listKurirToko = <KurirToko>[].obs;
+
+  Future<void> loadKurirToko(idToko) async {
+    isLoadingKurirToko.value = true;
+
+    final res = await CheckoutService().getKurirToko({"toko_id": '$idToko'});
+    print(res.body);
+    if (res.statusCode == 200) {
+      listKurirToko.value = (res.body['data'] as List)
+          .map((e) => KurirToko.fromJson(e))
+          .toList();
+    }
+
+    isLoadingKurirToko.value = false;
+  }
 }

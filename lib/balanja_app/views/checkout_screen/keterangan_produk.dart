@@ -20,6 +20,8 @@ class KetProduk extends StatelessWidget {
         "barang_id": varian!.barangId,
         "berat": varian!.berat,
         "harga": varian!.harga,
+        "is_pre_order": varian!.isPreOrder,
+        "jumlah": varian!.jumlah,
         "photo": [
           {"path": varian!.photo[0].path},
         ],
@@ -42,7 +44,10 @@ class KetProduk extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(width: 6.0),
-              Text(varian!.gudang!.namaGudang!),
+              Text(
+                varian!.gudang!.namaGudang!,
+                style: TextStyle(color: textTheme),
+              ),
             ],
           ),
           Obx(() {
@@ -64,6 +69,9 @@ class KetProduk extends StatelessWidget {
                 ...displayedItems.map((e) {
                   String idProduk = e.key;
                   int qty = e.value;
+                  final qtyController = TextEditingController(
+                    text: qty.toString(),
+                  );
 
                   var produk;
 
@@ -126,8 +134,61 @@ class KetProduk extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 14,
-                                        color: Colors.white,
+                                        color: textTheme,
                                       ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      'Berat : ${produk['berat']}',
+                                      softWrap: true,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: 10),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        if (produk['is_pre_order'] == true)
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 7,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.orange,
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: const Text(
+                                              "Pre Order",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                          ),
+                                        if (produk['is_pre_order'] == true)
+                                          SizedBox(width: 5),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 7,
+                                            vertical: 2,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue[800],
+                                            borderRadius: BorderRadius.circular(
+                                              15,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "Stok : ${produk['jumlah']}",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(height: 5),
                                     Text(
@@ -147,49 +208,140 @@ class KetProduk extends StatelessWidget {
                           const SizedBox(height: 10),
 
                           // QTY BUTTON
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const SizedBox(),
-                              SizedBox(
-                                height: 40,
-                                child: Card(
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // MINUS BUTTON
+                                Material(
+                                  color: dark,
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: InkWell(
                                     borderRadius: BorderRadius.circular(10),
-                                    side: const BorderSide(
-                                      color: Colors.black26,
-                                      width: 1.5,
+                                    splashColor: primary.withOpacity(0.3),
+                                    highlightColor: primary.withOpacity(0.15),
+                                    onTap: () => controller.decrement(idProduk),
+                                    child: const SizedBox(
+                                      height: 35,
+                                      width: 35,
+                                      child: Icon(
+                                        Icons.remove,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                  child: Row(
-                                    children: <Widget>[
-                                      IconButton(
-                                        icon: const Icon(Icons.remove),
-                                        iconSize: 18,
-                                        onPressed: () {
-                                          controller.decrement(idProduk);
-                                        },
-                                      ),
-                                      Text(
-                                        '$qty',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: primary,
+                                ),
+
+                                const SizedBox(width: 7),
+
+                                // QTY INPUT
+                                Container(
+                                  height: 35,
+                                  width: 70,
+                                  decoration: BoxDecoration(
+                                    color: dark2,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Colors.white24,
+                                      width: 1.2,
+                                    ),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: TextField(
+                                    controller: qtyController,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    textAlign: TextAlign.center,
+                                    keyboardType: TextInputType.number,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                    decoration: const InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
                                         ),
                                       ),
-                                      IconButton(
-                                        icon: const Icon(Icons.add),
-                                        iconSize: 18,
-                                        onPressed: () {
-                                          controller.increment(idProduk);
-                                        },
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                        ),
                                       ),
-                                    ],
+                                      border: InputBorder.none,
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                    ),
+                                    onChanged: (value) {
+                                      final parsed = int.tryParse(value);
+                                      if (parsed == null) return;
+
+                                      final stok = produk['jumlah'];
+                                      final isPreOrder =
+                                          produk['is_pre_order'] == true;
+
+                                      int finalQty = parsed;
+
+                                      if (!isPreOrder && parsed > stok) {
+                                        finalQty = stok;
+                                        qtyController.value = TextEditingValue(
+                                          text: stok.toString(),
+                                          selection: TextSelection.collapsed(
+                                            offset: stok.toString().length,
+                                          ),
+                                        );
+                                      }
+
+                                      if (finalQty < 1) {
+                                        finalQty = 1;
+                                        qtyController
+                                            .value = const TextEditingValue(
+                                          text: '1',
+                                          selection: TextSelection.collapsed(
+                                            offset: 1,
+                                          ),
+                                        );
+                                      }
+
+                                      controller.setQty(idProduk, finalQty);
+                                    },
                                   ),
                                 ),
-                              ),
-                            ],
+
+                                const SizedBox(width: 7),
+
+                                // PLUS BUTTON
+                                Material(
+                                  color: dark,
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(10),
+                                    splashColor: primary.withOpacity(0.3),
+                                    highlightColor: primary.withOpacity(0.15),
+                                    onTap:
+                                        (!produk['is_pre_order'] &&
+                                            qty >= produk['jumlah'])
+                                        ? null
+                                        : () => controller.increment(idProduk),
+                                    child: SizedBox(
+                                      height: 35,
+                                      width: 35,
+                                      child: Icon(
+                                        Icons.add,
+                                        color:
+                                            (!produk['is_pre_order'] &&
+                                                qty >= produk['jumlah'])
+                                            ? Colors.grey
+                                            : primary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -225,7 +377,7 @@ class KetProduk extends StatelessWidget {
               SizedBox(),
               TextButton(
                 onPressed: () {
-                  Get.to(TambahProduk());
+                  Get.to(TambahProduk(memberId: '${varian!.gudang!.memberId}'));
                 },
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(

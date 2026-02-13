@@ -29,3 +29,43 @@ class Kurir {
     );
   }
 }
+
+class KurirToko {
+  final int id;
+  final int tokoId;
+  final String namaKurir;
+  final int hargaOngkir;
+  final bool isActive;
+  final DateTime createdAt;
+
+  KurirToko({
+    required this.id,
+    required this.tokoId,
+    required this.namaKurir,
+    required this.hargaOngkir,
+    required this.isActive,
+    required this.createdAt,
+  });
+
+  factory KurirToko.fromJson(Map<String, dynamic> json) {
+    return KurirToko(
+      id: json['id'],
+      tokoId: json['toko_id'],
+      namaKurir: json['nama_kurir'],
+      hargaOngkir: json['harga_ongkir'],
+      isActive: json['is_active'],
+      createdAt: DateTime.parse(json['created_at']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'toko_id': tokoId,
+      'nama_kurir': namaKurir,
+      'harga_ongkir': hargaOngkir,
+      'is_active': isActive,
+      'created_at': createdAt.toIso8601String(),
+    };
+  }
+}
