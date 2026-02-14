@@ -1,8 +1,10 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/models/alamat_model.dart';
+import 'package:mobile_balanja_id/balanja_app/services/alamat_service.dart';
 
 class AlamatController extends GetxController {
+  final AlamatService _service = AlamatService();
   var provinces = <Province>[].obs;
   var kabkots = <KabKot>[].obs;
   var kecamatans = <Kacamatan>[].obs;
@@ -15,6 +17,9 @@ class AlamatController extends GetxController {
 
   var lat = "".obs;
   var long = "".obs;
+
+  var alamatList = <Alamat>[].obs;
+  var isLoadingAlamat = false.obs;
 
   final latC = TextEditingController();
   final longC = TextEditingController();
@@ -67,6 +72,7 @@ class AlamatController extends GetxController {
     ever(long, (_) {
       longC.text = long.value;
     });
+    fetchAlamatList(GetStorage().read('member_id'));
   }
 
   Future<void> getLocation() async {
@@ -253,4 +259,90 @@ class AlamatController extends GetxController {
     }
     return Alamat();
   }
+  Future<void> fetchAlamatList(int memberId) async {
+    try {
+      isLoadingAlamat.value = true;
+      final list = await _service.fetchAlamatList(memberId);
+      alamatList.value = list;
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoadingAlamat.value = false;
+    }
+  }
+
+  Future<void> deleteAlamat(int idAlamat) async {
+    try {
+      isLoadingAlamat.value = true;
+      final success = await _service.deleteAlamat(idAlamat);
+      if (success) {
+        alamatList.removeWhere((a) => a.id == idAlamat);
+        Get.snackbar("Berhasil", "Alamat telah dihapus");
+      } else {
+        Get.snackbar("Error", "Gagal menghapus alamat");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoadingAlamat.value = false;
+    }
+  }
+  Future<void> updateAlamat({
+  required int idAlamat,
+  required String labelAlamat,
+  required int idProvinsi,
+  required int idKabKot,
+  required int idKecamatan,
+  required int idKelurahan,
+  required String detailAlamat,
+  required String nomorHp,
+  required String namaLengkap,
+  required String jenisAlamat,
+  required String catatan,
+  required String lat,
+  required String long,
+  required String kodepos,
+  required String jenisKelamin,
+  }) async {
+    var body = {
+      "id": idAlamat,
+      "member_id": GetStorage().read('member_id'),
+      "label_alamat": labelAlamat,
+      "provinsi_id": idProvinsi,
+      "kab_kota_id": idKabKot,
+      "kecamatan_id": idKecamatan,
+      "desa_id": idKelurahan,
+      "alamat": detailAlamat,
+      "nomor_kontak": nomorHp,
+      "nama_kontak": namaLengkap,
+      "jenis_kelamin": jenisKelamin,
+      "jenis_alamat": jenisAlamat,
+      "catatan": catatan,
+      "latitude": lat,
+      "longitude": long,
+      "postal_code": kodepos,
+    };
+
+  EasyLoading.show(status: 'Loading...');
+
+  final response = await GetConnect().post(
+    '${Base.url}/v1/member/input-alamat',
+    body,
+    headers: {
+      'secret':
+          'aKndsan23928h98hKJbkjwlKHD9dsbjwiobqUJGHBDWHvkHSJQUBSQOPSAJHVwoihdapq',
+      'Author': 'bearer ${GetStorage().read('tokens')}',
+      'device': 'mobile',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    EasyLoading.showSuccess('Alamat berhasil diperbarui');
+    Get.back(result: 'success');
+  } else if (response.statusCode == null) {
+    EasyLoading.showInfo('Periksa koneksi internet');
+  } else {
+    EasyLoading.showError(response.body['message'] ?? 'Gagal update alamat');
+  }
+}
 }

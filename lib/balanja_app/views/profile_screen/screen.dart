@@ -19,17 +19,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ListView(
         padding: const EdgeInsets.all(8.0),
         children: [
-          ElevatedButton(
-            onPressed: () {
-              Get.to(
-                PembayaranScreen(
-                  idTransakti: 590,
-                  noInvoice: 'INVMTIDT-0313-201225-422',
-                ),
-              );
-            },
-            child: Text('data'),
-          ),
           SizedBox(
             height: 100,
             width: double.maxFinite,
@@ -125,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: InkWell(
               borderRadius: BorderRadius.circular(8),
               onTap: (){
-                // Get.to(AlamatSayaScreen());
+                Get.to(AlamatSayaScreen());
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
