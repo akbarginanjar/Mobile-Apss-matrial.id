@@ -42,3 +42,7 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    implementation("org.slf4j:slf4j-android:1.7.36")
+}

@@ -22,7 +22,12 @@ class ProductCardVertical extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
-        onTap: () => Get.to(() => ProductScreen(slug: produk['slug'])),
+        onTap: () => Get.to(
+          () => ProductScreen(
+            slug: produk['slug'],
+            tokoId: produk['gudang']['member_id'],
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

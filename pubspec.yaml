@@ -50,6 +50,7 @@ dependencies:
   webview_flutter: ^4.13.0
   flutter_html: ^3.0.0
   skeletonizer: ^2.1.2
+  pusher_channels_flutter: ^2.6.0
 
 dev_dependencies:
   flutter_test:

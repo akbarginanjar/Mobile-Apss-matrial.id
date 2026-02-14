@@ -19,7 +19,12 @@ class CardSemuaProduk extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Get.to(ProductScreen(slug: produk['slug']));
+          Get.to(
+            ProductScreen(
+              slug: produk['slug'],
+              tokoId: produk['gudang']['member_id'],
+            ),
+          );
         },
         borderRadius: BorderRadius.circular(12),
         child: Column(

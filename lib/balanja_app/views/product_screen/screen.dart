@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:mobile_balanja_id/balanja_app/controllers/chat_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/controllers/detail_produk_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/controllers/varian_controller.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
@@ -8,7 +9,8 @@ import 'package:mobile_balanja_id/balanja_app/views/product_screen/ulasan_produc
 
 class ProductScreen extends StatefulWidget {
   final String slug;
-  const ProductScreen({super.key, required this.slug});
+  final int tokoId;
+  const ProductScreen({super.key, required this.slug, required this.tokoId});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -376,42 +378,107 @@ class _ProductScreenState extends State<ProductScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      openWhatsApp(phoneNumber: "6285861345339");
+                  GetBuilder<VarianController>(
+                    init: VarianController(),
+                    builder: (c) {
+                      return SizedBox(
+                        height: 50,
+                        child: Obx(() {
+                          if (controller.detailProduk.value == null) {
+                            return SizedBox(
+                              height: 50,
+
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.primary,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                ),
+                                onPressed: null,
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          return ElevatedButton(
+                            onPressed: controller.isLoadingChat.value
+                                ? null
+                                : () {
+                                    final produk =
+                                        controller.detailProduk.value!;
+                                    List<VarianBarang> filterId = produk
+                                        .varianBarang
+                                        .where(
+                                          (item) => item.barangId == produk.id,
+                                        )
+                                        .toList();
+                                    if (c.select == null) {
+                                      controller.createRoom(
+                                        buyerId: GetStorage().read('member_id'),
+                                        sellerId: widget.tokoId,
+                                        produk: filterId[0],
+                                        showProduk: true,
+                                      );
+                                    } else {
+                                      controller.createRoom(
+                                        buyerId: GetStorage().read('member_id'),
+                                        sellerId: widget.tokoId,
+                                        produk: produk.varianBarang[c.select!],
+                                        showProduk: true,
+                                      );
+                                    }
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: dark,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                side: BorderSide(color: dark2),
+                              ),
+                            ),
+                            child: controller.isLoadingChat.value
+                                ? const SizedBox(
+                                    width: 22,
+                                    height: 22,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.chat_rounded,
+                                        size: 25,
+                                        color: textTheme,
+                                      ),
+                                      const SizedBox(width: 7),
+                                      Text(
+                                        'Chat',
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 17,
+                                          color: textTheme,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                          );
+                        }),
+                      );
                     },
-                    icon: SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: Image.asset('assets/icon-wa.png'),
-                    ),
                   ),
+
                   Row(
                     children: [
-                      // SizedBox(
-                      //   height: 50,
-                      //   child: ElevatedButton(
-                      //     style: ElevatedButton.styleFrom(
-                      //       elevation: 0,
-                      //       shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(15.0),
-                      //         side: BorderSide(
-                      //           color: Theme.of(context).colorScheme.primary,
-                      //           width: 1.5,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     onPressed: () {},
-                      //     child: Text(
-                      //       'Keranjang',
-                      //       style: Theme.of(context).textTheme.bodyMedium!
-                      //           .apply(
-                      //             color: Theme.of(context).colorScheme.primary,
-                      //           ),
-                      //     ),
-                      //   ),
-                      // ),
-                      // SizedBox(width: 7),
                       Obx(() {
                         if (controller.detailProduk.value == null) {
                           return SizedBox(
@@ -566,18 +633,18 @@ class _ProductScreenState extends State<ProductScreen> {
                                                   true &&
                                               produk
                                                       .varianBarang[0]
-                                                      .photo![0]
+                                                      .photo[0]
                                                       .path !=
                                                   null &&
                                               produk
                                                   .varianBarang[0]
-                                                  .photo![0]
+                                                  .photo[0]
                                                   .path!
                                                   .isNotEmpty)
                                           ? Image.network(
                                               produk
                                                   .varianBarang[0]
-                                                  .photo![0]
+                                                  .photo[0]
                                                   .path!,
                                               height: 100,
                                               width: 100,

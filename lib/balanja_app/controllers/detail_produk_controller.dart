@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:mobile_balanja_id/balanja_app/global_resource.dart';
 import 'package:mobile_balanja_id/balanja_app/models/produk_model.dart';
+import 'package:mobile_balanja_id/balanja_app/services/chat_service.dart';
 import 'package:mobile_balanja_id/balanja_app/services/produk_service.dart';
+import 'package:mobile_balanja_id/balanja_app/views/chat_screen/chat_screen.dart';
 
 class DetailProdukController extends GetxController {
   final ProdukService service = ProdukService();
@@ -32,7 +34,7 @@ class DetailProdukController extends GetxController {
         );
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+      // Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading.value = false;
     }
@@ -111,6 +113,51 @@ class DetailProdukController extends GetxController {
     } finally {
       isLoading.value = false;
       EasyLoading.dismiss();
+    }
+  }
+
+  var isLoadingChat = false.obs;
+  var roomId = 0.obs;
+  var namaToko = ''.obs;
+
+  Future<void> createRoom({
+    required int buyerId,
+    required int sellerId,
+    required bool showProduk,
+    VarianBarang? produk,
+  }) async {
+    try {
+      isLoadingChat.value = true;
+
+      final response = await ChatService().createRoomChat({
+        "buyer_id": buyerId,
+        "seller_id": sellerId,
+      });
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        roomId.value = response.body['id'];
+        namaToko.value = response.body['seller']['nama_lengkap'];
+
+        /// pindah ke halaman chat
+        Get.to(
+          () => ChatScreen(
+            roomId: roomId.value.toString(),
+            namaToko: namaToko.value,
+            userId: GetStorage().read('member_id'),
+            produk: produk!,
+            showProduk: showProduk,
+          ),
+        );
+      } else {
+        Get.snackbar(
+          'Gagal',
+          response.body['message'] ?? 'Gagal membuat room chat',
+        );
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isLoadingChat.value = false;
     }
   }
 }
