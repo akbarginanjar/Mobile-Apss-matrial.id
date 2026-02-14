@@ -14,12 +14,6 @@ class TransaksiProdukController extends GetxController {
 
   var isLoading = false.obs;
 
-  var isDiprosesLoaded = false.obs;
-  var isDikirimLoaded = false.obs;
-  var isDiterimaLoaded = false.obs;
-  var isSelesaiLoaded = false.obs;
-  var isDibatalkanLoaded = false.obs;
-
   Future<void> loadPending() async {
     try {
       isLoading.value = true;
@@ -33,12 +27,10 @@ class TransaksiProdukController extends GetxController {
   }
 
   Future<void> loadDiproses({bool force = false}) async {
-    if (isDiprosesLoaded.value && !force) return;
     try {
       isLoading.value = true;
       final result = await _service.getTransaksiProdukByStatus("diproses");
       transaksiDiproses.assignAll(result);
-      isDiprosesLoaded.value = true;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
@@ -47,12 +39,10 @@ class TransaksiProdukController extends GetxController {
   }
 
   Future<void> loadDikirim({bool force = false}) async {
-    if (isDikirimLoaded.value && !force) return;
     try {
       isLoading.value = true;
       final result = await _service.getTransaksiProdukByStatus("dikirim");
       transaksiDikirim.assignAll(result);
-      isDikirimLoaded.value = true;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
@@ -61,12 +51,10 @@ class TransaksiProdukController extends GetxController {
   }
 
   Future<void> loadDiterima({bool force = false}) async {
-    if (isDiterimaLoaded.value && !force) return;
     try {
       isLoading.value = true;
       final result = await _service.getTransaksiProdukByStatus("diterima");
       transaksiDiterima.assignAll(result);
-      isDiterimaLoaded.value = true;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
@@ -75,12 +63,10 @@ class TransaksiProdukController extends GetxController {
   }
 
   Future<void> loadSelesai({bool force = false}) async {
-    if (isSelesaiLoaded.value && !force) return;
     try {
       isLoading.value = true;
       final result = await _service.getTransaksiProdukByStatus("selesai");
       transaksiSelesai.assignAll(result);
-      isSelesaiLoaded.value = true;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
@@ -89,12 +75,10 @@ class TransaksiProdukController extends GetxController {
   }
 
   Future<void> loadDibatalkan({bool force = false}) async {
-    if (isDibatalkanLoaded.value && !force) return;
     try {
       isLoading.value = true;
       final result = await _service.getTransaksiProdukByStatus("dibatalkan");
       transaksiDibatalkan.assignAll(result);
-      isDibatalkanLoaded.value = true;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {

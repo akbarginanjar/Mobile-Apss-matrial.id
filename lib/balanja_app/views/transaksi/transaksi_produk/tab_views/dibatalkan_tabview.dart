@@ -11,7 +11,7 @@ class DibatalkanTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(TransaksiProdukController());
 
-    if (controller.transaksiDibatalkan.isEmpty) {
+    if (controller.transaksiDibatalkan.isEmpty || controller.transaksiDibatalkan.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         controller.loadDibatalkan();
       });

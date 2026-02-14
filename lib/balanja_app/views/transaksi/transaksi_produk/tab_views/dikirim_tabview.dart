@@ -23,7 +23,7 @@ class DikirimTabView extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (controller.transaksiDikirim.isEmpty) {
+        if (controller.transaksiDikirim.isEmpty || controller.transaksiDikirim.isNotEmpty) {
           return const Center(child: Text("Tidak ada transaksi Dikirim"));
         }
 

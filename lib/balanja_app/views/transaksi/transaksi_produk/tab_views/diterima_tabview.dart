@@ -11,7 +11,7 @@ class DiterimaTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(TransaksiProdukController());
 
-    if (controller.transaksiDiterima.isEmpty) {
+    if (controller.transaksiDiterima.isEmpty || controller.transaksiDiterima.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         controller.loadDiterima();
       });

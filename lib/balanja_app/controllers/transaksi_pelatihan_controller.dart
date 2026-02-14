@@ -12,10 +12,6 @@ class TransaksiPelatihanController extends GetxController {
 
   var isLoading = false.obs;
 
-  var isExpiredLoaded = false.obs;
-  var isSelesaiLoaded = false.obs;
-  var isDibatalkanLoaded = false.obs;
-
   Future<void> loadPending() async {
     try {
       isLoading.value = true;
@@ -29,12 +25,10 @@ class TransaksiPelatihanController extends GetxController {
   }
 
   Future<void> loadExpired({bool force = false}) async {
-    if (isSelesaiLoaded.value && !force) return;
     try {
       isLoading.value = true;
       final result = await _service.getTransaksiPelatihanByStatus("expired");
       transaksiSelesai.assignAll(result);
-      isSelesaiLoaded.value = true;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
@@ -43,12 +37,10 @@ class TransaksiPelatihanController extends GetxController {
   }
 
   Future<void> loadSelesai({bool force = false}) async {
-    if (isSelesaiLoaded.value && !force) return;
     try {
       isLoading.value = true;
       final result = await _service.getTransaksiPelatihanByStatus("selesai");
       transaksiSelesai.assignAll(result);
-      isSelesaiLoaded.value = true;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
@@ -57,12 +49,10 @@ class TransaksiPelatihanController extends GetxController {
   }
 
   Future<void> loadDibatalkan({bool force = false}) async {
-    if (isDibatalkanLoaded.value && !force) return;
     try {
       isLoading.value = true;
       final result = await _service.getTransaksiPelatihanByStatus("dibatalkan");
       transaksiDibatalkan.assignAll(result);
-      isDibatalkanLoaded.value = true;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {

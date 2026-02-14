@@ -11,7 +11,7 @@ class SelesaiTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(TransaksiProdukController());
 
-    if (controller.transaksiSelesai.isEmpty) {
+    if (controller.transaksiSelesai.isEmpty || controller.transaksiSelesai.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         controller.loadSelesai();
       });

@@ -11,6 +11,12 @@ class PendingTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(TransaksiProdukController());
 
+    if (controller.transaksiPending.isEmpty || controller.transaksiPending.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.loadPending();
+      });
+    }
+
     return Scaffold(
       body: Obx(() {
         if (controller.isLoading.value) {
